@@ -1,129 +1,72 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMTEA HUB | 全球商用情报终端</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #0a0a0a; color: #eee; font-family: 'Inter', sans-serif; }
-        .premium-glow { border: 1px solid rgba(249, 115, 22, 0.2); box-shadow: 0 0 20px rgba(249, 115, 22, 0.05); }
-        .data-dot { height: 8px; width: 8px; background: #f97316; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-    </style>
-</head>
-<body class="bg-black">
+<div id="authStatus" class="flex items-center gap-2">
+    <span class="px-2 py-1 rounded bg-zinc-800 text-[10px] text-gray-400 font-mono" id="statusLabel">GUEST_MODE</span>
+</div>
 
-    <nav class="border-b border-white/5 p-5 flex justify-between items-center sticky top-0 bg-black/90 backdrop-blur">
-        <div class="font-black text-xl tracking-tighter text-orange-500">YMTEA HUB <span class="text-white text-xs opacity-50">PRO</span></div>
-        <div id="authStatus" class="text-xs font-mono text-gray-500">GUEST_MODE</div>
-    </nav>
-
-    <main class="max-w-6xl mx-auto p-6 space-y-12">
-        <section class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5">
-            <div class="flex items-center gap-3 mb-6">
-                <span class="data-dot"></span>
-                <h2 class="text-lg font-bold">实时全球贸易雷达 (公开)</h2>
+<div id="payModal" class="fixed inset-0 bg-black/98 hidden items-center justify-center z-[100] p-6 backdrop-blur-xl">
+    <div class="max-w-md w-full">
+        <div class="text-center mb-8">
+            <div class="inline-block p-4 rounded-full bg-orange-500/10 mb-4">
+                <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
             </div>
-            <div id="trendList" class="space-y-4">
-                <div class="animate-pulse text-gray-700">正在接入全球数据流...</div>
-            </div>
-        </section>
-
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="premium-glow p-8 rounded-3xl bg-zinc-900/30">
-                <h3 class="text-xl font-bold mb-4">核心情报深度拆解</h3>
-                <p class="text-sm text-gray-500 mb-6">内含各行业套利机会、海关封号预警及选品逻辑。</p>
-                <div class="space-y-3">
-                    <button onclick="accessContent('report_2026_tea')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
-                        <span>2026 东南亚贸易白皮书</span>
-                        <span class="text-xs text-orange-500">VIP</span>
-                    </button>
-                    <button onclick="accessContent('report_tiktok_ads')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
-                        <span>TikTok 高转化投放参数库</span>
-                        <span class="text-xs text-orange-500">VIP</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="premium-glow p-8 rounded-3xl bg-zinc-900/30">
-                <h3 class="text-xl font-bold mb-4">生产力工具 & 模板</h3>
-                <p class="text-sm text-gray-500 mb-6">直接下载即可使用的自动化脚本与营销物料。</p>
-                <div class="space-y-3">
-                    <button onclick="accessContent('tool_scraper_v1')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
-                        <span>万能外贸客户抓取脚本 (Python)</span>
-                        <span class="text-xs text-orange-500">VIP</span>
-                    </button>
-                    <button onclick="accessContent('template_email_cold')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
-                        <span>高回复率开发信模版 (12系)</span>
-                        <span class="text-xs text-orange-500">VIP</span>
-                    </button>
-                </div>
-            </div>
+            <h2 class="text-3xl font-black">解锁专业版权限</h2>
+            <p class="text-gray-500 mt-2 text-sm">当前处于访客模式，请订阅以获取即时情报</p>
         </div>
-    </main>
 
-    <div id="payModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[100] p-6">
-        <div class="max-w-md w-full text-center space-y-6">
-            <div class="text-5xl">🔒</div>
-            <h2 class="text-2xl font-bold">该内容仅限专业订阅者</h2>
-            <p class="text-gray-400">加入 YMTEA HUB，获取每日更新的行业情报与生产力工具。</p>
-            <div class="bg-zinc-900 p-6 rounded-2xl border border-orange-500/30">
-                <div class="text-sm text-gray-500">年度专业版</div>
-                <div class="text-3xl font-black my-2">$199 <span class="text-sm font-normal text-gray-600">/ 年</span></div>
-                <ul class="text-left text-xs text-gray-400 space-y-2 my-4">
-                    <li>✓ 每日实时贸易雷达推送</li>
-                    <li>✓ 核心情报库永久访问权限</li>
-                    <li>✓ 生产力工具集全量下载</li>
-                </ul>
-                <button onclick="alert('支付对接即将上线...')" class="w-full py-4 bg-orange-600 rounded-xl font-bold hover:bg-orange-500">立即解锁专业权限</button>
+        <div class="bg-zinc-900 border-2 border-orange-500 rounded-[2.5rem] p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 bg-orange-500 text-black text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase">推荐</div>
+            <div class="mb-6">
+                <span class="text-4xl font-black text-white">$29</span>
+                <span class="text-gray-500"> / 每月</span>
             </div>
-            <button onclick="closePayModal()" class="text-gray-600 text-sm">稍后再说</button>
+            <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                <li class="flex items-center gap-2">✅ 实时全球贸易雷达全量推送</li>
+                <li class="flex items-center gap-2">✅ 深度情报库 (AI & 选品) 访问</li>
+                <li class="flex items-center gap-2">✅ 生产力脚本与模板库下载</li>
+                <li class="flex items-center gap-2">✅ 优先专家技术支持</li>
+            </ul>
+            <button onclick="simulateMonthlyPay()" class="w-full py-4 bg-orange-500 hover:bg-orange-400 text-black font-black rounded-2xl transition-all transform hover:scale-[1.02]">
+                立即开启按月订阅
+            </button>
+            <p class="text-[10px] text-gray-600 text-center mt-4">支持随时取消，续费自动提醒</p>
         </div>
+        <button onclick="closePayModal()" class="w-full mt-6 text-gray-500 text-xs hover:text-white transition">继续以访客身份浏览</button>
     </div>
+</div>
 
-    <script>
-        const API_BASE = "https://tea.asasasxzc.workers.dev";
+<script>
+    // 模拟按月付费开通逻辑
+    async function simulateMonthlyPay() {
+        const email = prompt("请输入您的订阅邮箱：");
+        if (!email) return;
 
-        // 加载公开趋势数据
-        async function loadTrends() {
-            try {
-                const res = await fetch(`${API_BASE}/api/public/trends`);
-                const data = await res.json();
-                const container = document.getElementById('trendList');
-                container.innerHTML = data.map(item => `
-                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
-                        <div>
-                            <div class="text-sm font-bold text-gray-200">${item.title}</div>
-                            <div class="text-xs text-gray-500">${item.summary}</div>
-                        </div>
-                        <div class="text-[10px] font-mono text-gray-600">${new Date(item.update_time).toLocaleDateString()}</div>
-                    </div>
-                `).join('');
-            } catch (e) { console.error("数据加载失败"); }
+        // 调用我们在上几步写的支付成功接口，增加 months: 1 参数
+        const res = await fetch(`${API_BASE}/api/pay/success`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, auth_mask: 1, months: 1 })
+        });
+        
+        const data = await res.json();
+        if (data.success) {
+            localStorage.setItem('ymtea_token', data.token);
+            alert("支付成功！您的 31 天专业版权限已生效。");
+            location.reload();
         }
+    }
 
-        // 访问内容鉴权
-        async function accessContent(key) {
-            const token = localStorage.getItem('ymtea_token');
-            const res = await fetch(`${API_BASE}/api/fetch/${key}`, {
-                headers: { 'Authorization': token }
-            });
-            
-            if (res.status === 403) {
-                document.getElementById('payModal').style.display = 'flex';
-            } else {
-                const result = await res.json();
-                alert("内容已解锁：\n" + result.data);
-            }
+    // 页面加载逻辑：检查 Token 状态
+    window.onload = async () => {
+        loadTrends();
+        const token = localStorage.getItem('ymtea_token');
+        const label = document.getElementById('statusLabel');
+        
+        if (token) {
+            // 可以在这里加一个静默校验请求
+            label.innerText = "PRO_SUBSCRIBER";
+            label.classList.replace('bg-zinc-800', 'bg-orange-500/20');
+            label.classList.replace('text-gray-400', 'text-orange-500');
         }
-
-        function closePayModal() { document.getElementById('payModal').style.display = 'none'; }
-
-        window.onload = () => {
-            loadTrends();
-            if(localStorage.getItem('ymtea_token')) document.getElementById('authStatus').innerText = "PRO_SUBSCRIBER";
-        };
-    </script>
-</body>
-</html>
+    };
+</script>
