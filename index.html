@@ -1,72 +1,57 @@
-<div id="authStatus" class="flex items-center gap-2">
-    <span class="px-2 py-1 rounded bg-zinc-800 text-[10px] text-gray-400 font-mono" id="statusLabel">GUEST_MODE</span>
-</div>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YMTEA HUB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 强制背景色，防止内容溢出时变白 */
+        html, body { background-color: #000; color: #fff; margin: 0; padding: 0; }
+        /* 解决移动端滚动条导致的变形 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
 
-<div id="payModal" class="fixed inset-0 bg-black/98 hidden items-center justify-center z-[100] p-6 backdrop-blur-xl">
-    <div class="max-w-md w-full">
-        <div class="text-center mb-8">
-            <div class="inline-block p-4 rounded-full bg-orange-500/10 mb-4">
-                <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-            </div>
-            <h2 class="text-3xl font-black">解锁专业版权限</h2>
-            <p class="text-gray-500 mt-2 text-sm">当前处于访客模式，请订阅以获取即时情报</p>
-        </div>
+    <nav class="h-16 border-b border-white/10 px-6 flex justify-between items-center bg-black/80 backdrop-blur sticky top-0 z-40">
+        <div class="font-black text-orange-500">YMTEA HUB</div>
+        <div id="authStatus" class="text-[10px] bg-zinc-800 px-2 py-1 rounded">GUEST_MODE</div>
+    </nav>
 
-        <div class="bg-zinc-900 border-2 border-orange-500 rounded-[2.5rem] p-8 relative overflow-hidden">
-            <div class="absolute top-0 right-0 bg-orange-500 text-black text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase">推荐</div>
-            <div class="mb-6">
-                <span class="text-4xl font-black text-white">$29</span>
-                <span class="text-gray-500"> / 每月</span>
-            </div>
-            <ul class="space-y-4 mb-8 text-sm text-gray-300">
-                <li class="flex items-center gap-2">✅ 实时全球贸易雷达全量推送</li>
-                <li class="flex items-center gap-2">✅ 深度情报库 (AI & 选品) 访问</li>
-                <li class="flex items-center gap-2">✅ 生产力脚本与模板库下载</li>
-                <li class="flex items-center gap-2">✅ 优先专家技术支持</li>
-            </ul>
-            <button onclick="simulateMonthlyPay()" class="w-full py-4 bg-orange-500 hover:bg-orange-400 text-black font-black rounded-2xl transition-all transform hover:scale-[1.02]">
-                立即开启按月订阅
-            </button>
-            <p class="text-[10px] text-gray-600 text-center mt-4">支持随时取消，续费自动提醒</p>
-        </div>
-        <button onclick="closePayModal()" class="w-full mt-6 text-gray-500 text-xs hover:text-white transition">继续以访客身份浏览</button>
-    </div>
-</div>
-
-<script>
-    // 模拟按月付费开通逻辑
-    async function simulateMonthlyPay() {
-        const email = prompt("请输入您的订阅邮箱：");
-        if (!email) return;
-
-        // 调用我们在上几步写的支付成功接口，增加 months: 1 参数
-        const res = await fetch(`${API_BASE}/api/pay/success`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, auth_mask: 1, months: 1 })
-        });
+    <main class="flex-grow max-w-6xl w-full mx-auto p-6 space-y-8">
         
-        const data = await res.json();
-        if (data.success) {
-            localStorage.setItem('ymtea_token', data.token);
-            alert("支付成功！您的 31 天专业版权限已生效。");
-            location.reload();
-        }
-    }
+        <section class="bg-zinc-900/50 rounded-2xl p-6 border border-white/5">
+            <h2 class="text-sm font-bold mb-4 text-orange-400">● 实时全球贸易雷达</h2>
+            <div id="trendList" class="space-y-3 min-h-[100px]">
+                <div class="text-gray-600 text-xs italic">正在连接安全数据源...</div>
+            </div>
+        </section>
 
-    // 页面加载逻辑：检查 Token 状态
-    window.onload = async () => {
-        loadTrends();
-        const token = localStorage.getItem('ymtea_token');
-        const label = document.getElementById('statusLabel');
-        
-        if (token) {
-            // 可以在这里加一个静默校验请求
-            label.innerText = "PRO_SUBSCRIBER";
-            label.classList.replace('bg-zinc-800', 'bg-orange-500/20');
-            label.classList.replace('text-gray-400', 'text-orange-500');
-        }
-    };
-</script>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
+            <div class="bg-zinc-900/30 border border-white/5 p-6 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold mb-2">核心情报库</h3>
+                    <p class="text-xs text-gray-500 mb-6">内含 AI 选品与行业套利逻辑</p>
+                </div>
+                <button onclick="accessContent('report_pro')" class="w-full py-3 bg-zinc-800 rounded-xl text-sm hover:bg-orange-700 transition">查看权限内容</button>
+            </div>
+
+            <div class="bg-zinc-900/30 border border-white/5 p-6 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold mb-2">生产力工具</h3>
+                    <p class="text-xs text-gray-500 mb-6">营销脚本与自动化模版下载</p>
+                </div>
+                <button onclick="accessContent('tool_pro')" class="w-full py-3 bg-zinc-800 rounded-xl text-sm hover:bg-orange-700 transition">下载 PRO 工具</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="payModal" class="fixed inset-0 bg-black/95 z-50 hidden flex-col items-center justify-center p-6 backdrop-blur-md">
+        <div class="bg-zinc-900 border border-orange-500/50 rounded-[2rem] p-8 max-w-sm w-full text-center">
+            <h2 class="text-2xl font-black mb-2">PRO 订阅解锁</h2>
+            <p class="text-gray-500 text-xs mb-8">按月付费，随时取消。享受完整情报数据。</p>
+            
+            <div class="text-3xl font-black mb-6">$29<span class="text-xs text-gray-500">/月</span></div>
+            
+            <button onclick="simulateMonthlyPay()" class="w-full py
