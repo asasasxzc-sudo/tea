@@ -52,24 +52,45 @@
             <div id="trendList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
-            <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[450px]">
-                <h3 class="font-bold text-xl mb-3 text-white">🌐 核心情报目录</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[400px]">
+                <h3 class="font-bold text-xl mb-3 text-white">🌐 核心情报</h3>
                 <div id="reportList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll"></div>
             </div>
-            <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[450px]">
+            <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[400px]">
                 <h3 class="font-bold text-xl mb-3 text-white">🛠️ 生产力工具</h3>
                 <div id="toolList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll"></div>
-                <button onclick="showPayModal()" id="proBtn" class="mt-6 w-full py-4 bg-zinc-900 border border-white/5 rounded-2xl text-xs font-bold hover:bg-orange-700 transition-all text-white">升级 PRO 解锁全部下载</button>
+                <button onclick="showPayModal()" id="proBtn" class="mt-6 w-full py-4 bg-zinc-900 border border-white/5 rounded-2xl text-xs font-bold hover:bg-orange-700 transition-all text-white">升级 PRO 解锁全部</button>
             </div>
         </div>
     </main>
+
+    <footer class="w-full border-t border-white/5 bg-black/50 py-10 mt-10">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-zinc-500">
+            <div class="space-y-4">
+                <div class="text-lg font-black"><span class="gold-text">YMTEA</span> HUB</div>
+                <p class="text-xs">专注跨境贸易自动化与商业情报。基于 Cloudflare 构建的超轻量级私密终端。</p>
+            </div>
+            <div class="grid grid-cols-2 gap-4 md:col-span-2 text-[11px]">
+                <div class="space-y-3">
+                    <div class="text-xs font-bold text-white uppercase tracking-widest">旗下站点</div>
+                    <a href="https://ymtea.club" target="_blank" class="block hover:text-orange-500 transition">YMtea Shop</a>
+                    <a href="https://vip.ymtea.club" target="_blank" class="block hover:text-orange-500 transition">云茗荟 VIP</a>
+                </div>
+                <div class="space-y-3">
+                    <div class="text-xs font-bold text-white uppercase tracking-widest">支持</div>
+                    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" target="_blank" class="block hover:text-orange-500 transition">在线客服</a>
+                    <span class="block cursor-help opacity-50">管理员登录 (双击LOGO)</span>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">
         <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md shadow-2xl">
             <div class="flex justify-between items-center mb-6 text-white"><h2 class="font-black text-sm tracking-widest">SYSTEM TERMINAL</h2><button onclick="toggleAdmin()" class="text-zinc-500">✕</button></div>
             <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="ADMIN_ACCESS_KEY" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500 font-mono">
+                <input type="password" id="adminPass" placeholder="需输入管理员密码才能操作" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500 font-mono">
                 
                 <div class="flex gap-2">
                     <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">发情报</button>
@@ -77,19 +98,18 @@
                 </div>
 
                 <input type="text" id="quickTitle" placeholder="标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500">
-                <textarea id="quickContent" rows="3" placeholder="正文或下载链接..." class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500"></textarea>
+                <textarea id="quickContent" rows="3" placeholder="正文或内容" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500"></textarea>
                 
                 <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 rounded-2xl font-black text-xs text-white hover:bg-orange-600 transition tracking-widest uppercase">Sync to Cloud</button>
 
                 <div class="pt-4 border-t border-white/5 space-y-2">
-                    <p class="text-[9px] text-zinc-600 uppercase font-bold text-center">生成并显示激活码</p>
+                    <p class="text-[9px] text-zinc-600 uppercase font-bold text-center">VIP Code Result (可长按复制)</p>
+                    <input type="text" id="codeOutput" readonly placeholder="生成的激活码将显示在这里" class="w-full bg-orange-500/10 border border-orange-500/20 p-3 rounded-xl text-center text-orange-500 font-bold font-mono text-sm select-all">
                     <div class="grid grid-cols-2 gap-2">
                         <button onclick="generateTestCode('monthly')" class="py-2 bg-zinc-800 border border-white/5 rounded-xl text-[9px] text-zinc-400 hover:text-white transition uppercase font-bold">生成月码</button>
                         <button onclick="generateTestCode('yearly')" class="py-2 bg-zinc-800 border border-white/5 rounded-xl text-[9px] text-zinc-400 hover:text-white transition uppercase font-bold">生成年码</button>
                     </div>
                 </div>
-
-                <button onclick="clearTestUser()" class="w-full py-2 bg-red-900/20 border border-red-500/20 rounded-xl text-[9px] text-red-500 font-bold uppercase mt-2">Reset Session</button>
             </div>
         </div>
     </div>
@@ -105,34 +125,23 @@
     </div>
 
     <div id="payModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-xl items-center justify-center p-4">
-        <div class="max-w-xl w-full fade-in">
-            <div class="text-center mb-8"><h2 class="text-2xl font-black text-white uppercase tracking-tighter">Upgrade to Pro</h2></div>
+        <div class="max-w-xl w-full">
+            <div class="text-center mb-8 text-white font-black text-2xl uppercase tracking-tighter">Upgrade to Pro</div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-zinc-900 border border-white/5 p-8 rounded-[2rem] text-center hover:bg-zinc-800 transition cursor-pointer" onclick="startPay('monthly')">
-                    <div class="text-3xl font-black text-white">¥38</div>
-                    <div class="text-[10px] mt-2 text-zinc-500 uppercase tracking-widest font-bold">Monthly Access</div>
+                    <div class="text-3xl font-black text-white">¥38</div><div class="text-[10px] mt-2 text-zinc-500 font-bold uppercase">Monthly</div>
                 </div>
                 <div class="bg-zinc-900 border-2 border-orange-600 p-8 rounded-[2rem] text-center hover:bg-orange-600/5 transition cursor-pointer" onclick="startPay('yearly')">
-                    <div class="text-3xl font-black text-white">¥199</div>
-                    <div class="text-[10px] mt-2 text-orange-500 uppercase tracking-widest font-bold">Annual Pass</div>
+                    <div class="text-3xl font-black text-white">¥199</div><div class="text-[10px] mt-2 text-orange-500 font-bold uppercase">Annual</div>
                 </div>
             </div>
-            <button onclick="closeModal('payModal')" class="w-full mt-8 text-zinc-700 text-[10px] font-bold uppercase tracking-widest hover:text-zinc-500 transition">Cancel</button>
+            <button onclick="closeModal('payModal')" class="w-full mt-8 text-zinc-700 text-[10px] font-bold uppercase hover:text-zinc-500">Cancel</button>
         </div>
     </div>
 
     <script>
         const API_BASE = "https://tea.asasasxzc.workers.dev";
-        const ADMIN_PWD_DEFAULT = "ym916916"; 
         let currentCategory = 'report';
-
-        const radarPool = [{ t: "🚢 美线运费监测", s: "ON_TRACK", c: "text-green-500" },{ t: "🤖 AI 选品更新", s: "SYNCED", c: "text-orange-500" },{ t: "📦 东南亚海外仓扩容", s: "LIVE", c: "text-blue-500" },{ t: "💡 TikTok Shop 政策预警", s: "URGENT", c: "text-red-500" }];
-
-        function refreshRadar() {
-            const trendList = document.getElementById('trendList');
-            const selected = [...radarPool].sort(() => 0.5 - Math.random()).slice(0, 4);
-            trendList.innerHTML = selected.map(item => `<div class="p-3 border border-white/5 rounded-xl bg-white/5 flex justify-between items-center fade-in"><span class="text-[11px] text-zinc-400 font-medium">${item.t}</span><span class="text-[10px] ${item.c} font-mono font-bold">${item.s}</span></div>`).join('');
-        }
 
         async function loadContent() {
             try {
@@ -141,9 +150,9 @@
                 const reports = data.filter(i => i.category !== 'tool');
                 const tools = data.filter(i => i.category === 'tool');
 
-                document.getElementById('reportList').innerHTML = reports.map(r => `<div onclick="openReport(${r.id}, '${r.title}')" class="flex justify-between items-center p-4 glass rounded-2xl cursor-pointer hover:border-orange-500/30 border border-white/5 group transition-all"><span class="text-xs text-zinc-300 group-hover:text-orange-400 transition-colors">${r.title}</span><span class="text-[9px] text-zinc-700 font-mono">${new Date(r.created_at).toLocaleDateString()}</span></div>`).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">情报库为空</div>';
-                document.getElementById('toolList').innerHTML = tools.map(r => `<div onclick="openReport(${r.id}, '${r.title}')" class="flex items-center gap-4 p-4 glass rounded-2xl cursor-pointer hover:bg-orange-600/10 border border-white/5 group transition-all"><div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all">🚀</div><div class="flex-grow"><div class="text-[11px] text-zinc-200 font-bold group-hover:text-orange-400">${r.title}</div><div class="text-[9px] text-zinc-600 italic">PRO 工具下载</div></div></div>`).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">工具库为空</div>';
-            } catch (e) { console.error("Sync Error"); }
+                document.getElementById('reportList').innerHTML = reports.map(r => `<div onclick="openReport(${r.id}, '${r.title}')" class="flex justify-between items-center p-4 glass rounded-2xl cursor-pointer border border-white/5 hover:border-orange-500/30 group transition-all"><span class="text-xs text-zinc-300 group-hover:text-orange-400">${r.title}</span><span class="text-[9px] text-zinc-700 font-mono">${new Date(r.created_at).toLocaleDateString()}</span></div>`).join('') || '<p class="text-center text-zinc-800 py-10">暂无内容</p>';
+                document.getElementById('toolList').innerHTML = tools.map(r => `<div onclick="openReport(${r.id}, '${r.title}')" class="flex items-center gap-4 p-4 glass rounded-2xl cursor-pointer border border-white/5 hover:bg-orange-600/5 group transition-all"><div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-orange-500">🚀</div><div class="flex-grow"><div class="text-[11px] text-zinc-200 font-bold">${r.title}</div><div class="text-[9px] text-zinc-600 italic">PRO 工具下载</div></div></div>`).join('') || '<p class="text-center text-zinc-800 py-10">暂无工具</p>';
+            } catch (e) { console.error("加载失败"); }
         }
 
         async function openReport(id, title) {
@@ -154,84 +163,87 @@
                 if (res.status === 403) return showPayModal();
                 const result = await res.json();
                 document.getElementById('readerTitle').innerText = title;
-                document.getElementById('readerBody').innerText = result.data || "内容已加密或已失效。";
+                document.getElementById('readerBody').innerText = result.data;
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
                 document.body.classList.add('modal-active');
-            } catch (e) { alert("网络异常，请重试"); }
+            } catch (e) { alert("获取详情失败"); }
         }
 
-        async function startPay(type) {
-            const email = prompt("请输入会员邮箱：");
-            const code = prompt("请输入激活码 (Code)：");
-            if (!email || !code) return;
-            try {
-                const res = await fetch(`${API_BASE}/api/pay/success`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email.trim(), type, code: code.trim() })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    localStorage.setItem('ymtea_token', data.token);
-                    alert("激活成功！Enjoy Pro.");
-                    location.reload();
-                } else {
-                    alert(data.msg || "激活失败");
-                }
-            } catch (e) { alert("请求失败"); }
-        }
-
-        // --- 管理员核心功能：生成并直显激活码 ---
+        // --- 管理功能核心逻辑 ---
         async function generateTestCode(type) {
-            const adminKey = document.getElementById('adminPass').value || ADMIN_PWD_DEFAULT;
+            const pass = document.getElementById('adminPass').value;
+            if (!pass) return alert("请先输入管理员密码"); // 强制要求输入
+            
             const tempCode = `T-${Math.random().toString(36).substring(7).toUpperCase()}`;
-            
-            // 使用 RETURNING 语法确保数据库返回刚生成的 code
             const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('${tempCode}', '${type}', 0) RETURNING code;`;
-            
-            try {
-                const res = await fetch(`${API_BASE}/api/admin/publish`, {
-                    method: 'POST',
-                    headers: { 'Admin-Key': adminKey, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sql })
-                });
-                
-                const result = await res.json();
-                if (res.ok && result.success && result.results.length > 0) {
-                    const finalCode = result.results[0].code;
-                    alert(`✅ 生成成功！\n\n卡种：${type === 'monthly' ? '月卡' : '年卡'}\n卡密：${finalCode}\n\n请复制并提供给用户。`);
-                } else {
-                    alert("生成失败：可能是密钥错误或代码重复");
-                }
-            } catch (e) { alert("生成异常"); }
-        }
 
-        async function quickPublish() {
-            const pass = document.getElementById('adminPass').value || ADMIN_PWD_DEFAULT;
-            const title = document.getElementById('quickTitle').value;
-            const content = document.getElementById('quickContent').value;
-            if (!title || !content) return alert("标题和内容不能为空");
-
-            const sql = `INSERT INTO reports (title, content, category) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}');`;
-            
             try {
                 const res = await fetch(`${API_BASE}/api/admin/publish`, {
                     method: 'POST',
                     headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ sql })
                 });
-                if (res.ok) { alert("同步成功"); location.reload(); } else { alert("同步失败：密钥错误"); }
-            } catch (e) { alert("网络错误"); }
+                const result = await res.json();
+                if (res.ok && result.success) {
+                    const finalCode = result.results[0].code;
+                    // 在文本框中显示结果，并全选内容方便手机复制
+                    const out = document.getElementById('codeOutput');
+                    out.value = finalCode;
+                    out.select();
+                    alert("生成成功！卡密已填入下方显示区，请复制。");
+                } else {
+                    alert("密码错误或生成失败");
+                }
+            } catch (e) { alert("生成异常"); }
         }
 
-        function setCategory(cat) {
-            currentCategory = cat;
+        async function quickPublish() {
+            const pass = document.getElementById('adminPass').value;
+            const title = document.getElementById('quickTitle').value;
+            const content = document.getElementById('quickContent').value;
+            if (!pass) return alert("请输入管理员密码");
+            if (!title || !content) return alert("标题内容不能为空");
+
+            const sql = `INSERT INTO reports (title, content, category) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}');`;
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                    method: 'POST',
+                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sql })
+                });
+                if (res.ok) { alert("发布成功"); location.reload(); } else { alert("同步失败：密码错误"); }
+            } catch (e) { alert("网络异常"); }
+        }
+
+        async function startPay(type) {
+            const email = prompt("请输入会员邮箱：");
+            const code = prompt("请输入激活码：");
+            if (!email || !code) return;
+            const res = await fetch(`${API_BASE}/api/pay/success`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email.trim(), type, code: code.trim() })
+            });
+            const data = await res.json();
+            if (data.success) { localStorage.setItem('ymtea_token', data.token); alert("会员已激活！"); location.reload(); }
+            else { alert(data.msg || "激活失败"); }
+        }
+
+        function refreshRadar() {
+            const trendList = document.getElementById('trendList');
+            const data = [...radarPool].sort(() => 0.5 - Math.random()).slice(0, 4);
+            trendList.innerHTML = data.map(item => `<div class="p-3 border border-white/5 rounded-xl bg-white/5 flex justify-between items-center"><span class="text-[11px] text-zinc-400">${item.t}</span><span class="text-[10px] ${item.c} font-bold">${item.s}</span></div>`).join('');
+        }
+
+        const radarPool = [{ t: "🚢 美线运费监测", s: "ON_TRACK", c: "text-green-500" },{ t: "🤖 AI 选品更新", s: "SYNCED", c: "text-orange-500" },{ t: "📦 东南亚海外仓", s: "LIVE", c: "text-blue-500" },{ t: "📈 亚马逊排名异动", s: "WATCHING", c: "text-purple-500" }];
+
+        function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); document.getElementById('adminPanel').classList.toggle('flex'); }
+        function setCategory(cat) { 
+            currentCategory = cat; 
             document.getElementById('cat_report').className = cat === 'report' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500';
             document.getElementById('cat_tool').className = cat === 'tool' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500';
         }
-
-        function clearTestUser() { localStorage.removeItem('ymtea_token'); alert("Session 清除成功"); location.reload(); }
-        function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); document.getElementById('adminPanel').classList.toggle('flex'); }
+        function clearTestUser() { localStorage.removeItem('ymtea_token'); alert("Session 清除"); location.reload(); }
         function showPayModal() { document.getElementById('payModal').classList.replace('hidden', 'flex'); }
         function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
         function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
@@ -240,10 +252,10 @@
             refreshRadar();
             loadContent();
             if(localStorage.getItem('ymtea_token')) {
-                const label = document.getElementById('statusLabel');
-                label.innerText = "PRO_SUBSCRIBER";
-                label.className = "text-[10px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20";
-                const pb = document.getElementById('proBtn'); if(pb) pb.style.display = 'none';
+                document.getElementById('statusLabel').innerText = "PRO_SUBSCRIBER";
+                document.getElementById('statusLabel').classList.replace('bg-zinc-800', 'bg-orange-500/10');
+                document.getElementById('statusLabel').classList.replace('text-gray-500', 'text-orange-500');
+                if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
             }
         };
     </script>
