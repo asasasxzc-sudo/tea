@@ -55,46 +55,49 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
             <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[450px]">
                 <h3 class="font-bold text-xl mb-3 text-white">🌐 核心情报目录</h3>
-                <div id="reportList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll">
-                    <div class="text-zinc-800 text-xs italic py-10 text-center">正在同步情报库...</div>
-                </div>
+                <div id="reportList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll"></div>
             </div>
             <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[450px]">
                 <h3 class="font-bold text-xl mb-3 text-white">🛠️ 生产力工具</h3>
-                <div id="toolList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll">
-                    <div class="text-zinc-800 text-xs italic py-10 text-center">正在检索工具箱...</div>
-                </div>
+                <div id="toolList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll"></div>
                 <button onclick="showPayModal()" id="proBtn" class="mt-6 w-full py-4 bg-zinc-900 border border-white/5 rounded-2xl text-xs font-bold hover:bg-orange-700 transition-all text-white">升级 PRO 解锁全部下载</button>
             </div>
         </div>
     </main>
 
-    <footer class="w-full border-t border-white/5 bg-black/50 py-10">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-zinc-500">
+    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md shadow-2xl">
+            <div class="flex justify-between items-center mb-6 text-white"><h2 class="font-black text-sm tracking-widest">SYSTEM TERMINAL</h2><button onclick="toggleAdmin()" class="text-zinc-500">✕</button></div>
             <div class="space-y-4">
-                <div class="text-lg font-black"><span class="gold-text">YMTEA</span> HUB</div>
-                <p class="text-xs">专注跨境贸易自动化与商业情报。基于 Cloudflare 构建的超轻量级私密终端。</p>
-            </div>
-            <div class="grid grid-cols-2 gap-4 md:col-span-2 text-[11px]">
-                <div class="space-y-3">
-                    <div class="text-xs font-bold text-white uppercase tracking-widest">旗下站点</div>
-                    <a href="https://ymtea.club" target="_blank" class="block hover:text-orange-500 transition">YMtea Shop</a>
-                    <a href="https://vip.ymtea.club" target="_blank" class="block hover:text-orange-500 transition">云茗荟 VIP</a>
-                    <a href="https://ymtea.club/bbs" target="_blank" class="block hover:text-orange-500 transition">云茗荟论坛</a>
+                <input type="password" id="adminPass" placeholder="ADMIN_ACCESS_KEY" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500 font-mono">
+                
+                <div class="flex gap-2">
+                    <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">发情报</button>
+                    <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">发工具</button>
                 </div>
-                <div class="space-y-3">
-                    <div class="text-xs font-bold text-white uppercase tracking-widest">支持</div>
-                    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" target="_blank" class="block hover:text-orange-500 transition">在线客服</a>
-                    <span class="block cursor-help opacity-50">管理员登录 (双击LOGO)</span>
+
+                <input type="text" id="quickTitle" placeholder="标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500">
+                <textarea id="quickContent" rows="3" placeholder="正文或下载链接..." class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500"></textarea>
+                
+                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 rounded-2xl font-black text-xs text-white hover:bg-orange-600 transition tracking-widest uppercase">Sync to Cloud</button>
+
+                <div class="pt-4 border-t border-white/5 space-y-2">
+                    <p class="text-[9px] text-zinc-600 uppercase font-bold text-center">生成并显示激活码</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="generateTestCode('monthly')" class="py-2 bg-zinc-800 border border-white/5 rounded-xl text-[9px] text-zinc-400 hover:text-white transition uppercase font-bold">生成月码</button>
+                        <button onclick="generateTestCode('yearly')" class="py-2 bg-zinc-800 border border-white/5 rounded-xl text-[9px] text-zinc-400 hover:text-white transition uppercase font-bold">生成年码</button>
+                    </div>
                 </div>
+
+                <button onclick="clearTestUser()" class="w-full py-2 bg-red-900/20 border border-red-500/20 rounded-xl text-[9px] text-red-500 font-bold uppercase mt-2">Reset Session</button>
             </div>
         </div>
-    </footer>
+    </div>
 
     <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black items-center justify-center p-0 md:p-6 backdrop-blur-3xl">
         <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[2.5rem] flex flex-col relative border border-white/10">
             <div class="p-6 border-b border-white/5 flex justify-between items-center text-white">
-                <h2 id="readerTitle" class="font-bold">加密情报</h2>
+                <h2 id="readerTitle" class="font-bold">情报详情</h2>
                 <button onclick="closeReader()" class="text-xl p-2 hover:bg-white/5 rounded-full">✕</button>
             </div>
             <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-300 leading-relaxed whitespace-pre-wrap select-text custom-scroll"></div>
@@ -118,58 +121,17 @@
         </div>
     </div>
 
-    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md shadow-2xl">
-            <div class="flex justify-between items-center mb-6 text-white"><h2 class="font-black text-sm tracking-widest">SYSTEM TERMINAL</h2><button onclick="toggleAdmin()" class="text-zinc-500">✕</button></div>
-            <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="ADMIN_ACCESS_KEY" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500 font-mono">
-                
-                <div class="flex gap-2">
-                    <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">发情报</button>
-                    <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">发工具</button>
-                </div>
-
-                <input type="text" id="quickTitle" placeholder="标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500">
-                <textarea id="quickContent" rows="3" placeholder="正文内容..." class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500"></textarea>
-                
-                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 rounded-2xl font-black text-xs text-white hover:bg-orange-600 transition tracking-widest uppercase">Sync to Cloud</button>
-
-                <div class="pt-4 border-t border-white/5 space-y-2">
-                    <p class="text-[9px] text-zinc-600 uppercase font-bold">Debug: Generate Active Codes</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="generateTestCode('monthly')" class="py-2 bg-zinc-800 border border-white/5 rounded-xl text-[9px] text-zinc-400 hover:text-white transition uppercase font-bold">Gen Monthly</button>
-                        <button onclick="generateTestCode('yearly')" class="py-2 bg-zinc-800 border border-white/5 rounded-xl text-[9px] text-zinc-400 hover:text-white transition uppercase font-bold">Gen Yearly</button>
-                    </div>
-                </div>
-
-                <button onclick="clearTestUser()" class="w-full py-2 bg-red-900/20 border border-red-500/20 rounded-xl text-[9px] text-red-500 font-bold uppercase mt-2">Reset Local Session</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const API_BASE = "https://tea.asasasxzc.workers.dev";
+        const ADMIN_PWD_DEFAULT = "ym916916"; 
         let currentCategory = 'report';
 
-        // 贸易雷达池
-        const radarPool = [
-            { t: "🚢 美线运费指数波动监测", s: "ON_TRACK", c: "text-green-500" },
-            { t: "🤖 AI 选品逻辑库 v4.2 更新", s: "SYNCED", c: "text-orange-500" },
-            { t: "📦 东南亚海外仓扩容情报", s: "LIVE", c: "text-blue-500" },
-            { t: "💡 TikTok Shop 政策预警", s: "URGENT", c: "text-red-500" },
-            { t: "📈 亚马逊关键词排名异动", s: "WATCHING", c: "text-purple-500" },
-            { t: "🌐 全球支付接口状态检测", s: "STABLE", c: "text-emerald-500" }
-        ];
+        const radarPool = [{ t: "🚢 美线运费监测", s: "ON_TRACK", c: "text-green-500" },{ t: "🤖 AI 选品更新", s: "SYNCED", c: "text-orange-500" },{ t: "📦 东南亚海外仓扩容", s: "LIVE", c: "text-blue-500" },{ t: "💡 TikTok Shop 政策预警", s: "URGENT", c: "text-red-500" }];
 
         function refreshRadar() {
             const trendList = document.getElementById('trendList');
             const selected = [...radarPool].sort(() => 0.5 - Math.random()).slice(0, 4);
-            trendList.innerHTML = selected.map(item => `
-                <div class="p-3 border border-white/5 rounded-xl bg-white/5 flex justify-between items-center fade-in">
-                    <span class="text-[11px] text-zinc-400 font-medium">${item.t}</span>
-                    <span class="text-[10px] ${item.c} font-mono font-bold">${item.s}</span>
-                </div>
-            `).join('');
+            trendList.innerHTML = selected.map(item => `<div class="p-3 border border-white/5 rounded-xl bg-white/5 flex justify-between items-center fade-in"><span class="text-[11px] text-zinc-400 font-medium">${item.t}</span><span class="text-[10px] ${item.c} font-mono font-bold">${item.s}</span></div>`).join('');
         }
 
         async function loadContent() {
@@ -179,19 +141,8 @@
                 const reports = data.filter(i => i.category !== 'tool');
                 const tools = data.filter(i => i.category === 'tool');
 
-                document.getElementById('reportList').innerHTML = reports.map(r => `
-                    <div onclick="openReport(${r.id}, '${r.title}')" class="flex justify-between items-center p-4 glass rounded-2xl cursor-pointer hover:border-orange-500/30 border border-white/5 group transition-all">
-                        <span class="text-xs text-zinc-300 group-hover:text-orange-400 transition-colors">${r.title}</span>
-                        <span class="text-[9px] text-zinc-700 font-mono">${new Date(r.created_at).toLocaleDateString()}</span>
-                    </div>
-                `).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">情报库为空</div>';
-
-                document.getElementById('toolList').innerHTML = tools.map(r => `
-                    <div onclick="openReport(${r.id}, '${r.title}')" class="flex items-center gap-4 p-4 glass rounded-2xl cursor-pointer hover:bg-orange-600/10 border border-white/5 group transition-all">
-                        <div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all">🚀</div>
-                        <div class="flex-grow"><div class="text-[11px] text-zinc-200 font-bold group-hover:text-orange-400">${r.title}</div><div class="text-[9px] text-zinc-600 italic">PRO 工具下载</div></div>
-                    </div>
-                `).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">工具库为空</div>';
+                document.getElementById('reportList').innerHTML = reports.map(r => `<div onclick="openReport(${r.id}, '${r.title}')" class="flex justify-between items-center p-4 glass rounded-2xl cursor-pointer hover:border-orange-500/30 border border-white/5 group transition-all"><span class="text-xs text-zinc-300 group-hover:text-orange-400 transition-colors">${r.title}</span><span class="text-[9px] text-zinc-700 font-mono">${new Date(r.created_at).toLocaleDateString()}</span></div>`).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">情报库为空</div>';
+                document.getElementById('toolList').innerHTML = tools.map(r => `<div onclick="openReport(${r.id}, '${r.title}')" class="flex items-center gap-4 p-4 glass rounded-2xl cursor-pointer hover:bg-orange-600/10 border border-white/5 group transition-all"><div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all">🚀</div><div class="flex-grow"><div class="text-[11px] text-zinc-200 font-bold group-hover:text-orange-400">${r.title}</div><div class="text-[9px] text-zinc-600 italic">PRO 工具下载</div></div></div>`).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">工具库为空</div>';
             } catch (e) { console.error("Sync Error"); }
         }
 
@@ -209,12 +160,10 @@
             } catch (e) { alert("网络异常，请重试"); }
         }
 
-        // 激活逻辑
         async function startPay(type) {
-            const email = prompt("请输入测试邮箱 (Email)：");
+            const email = prompt("请输入会员邮箱：");
             const code = prompt("请输入激活码 (Code)：");
             if (!email || !code) return;
-            
             try {
                 const res = await fetch(`${API_BASE}/api/pay/success`, {
                     method: 'POST',
@@ -229,35 +178,39 @@
                 } else {
                     alert(data.msg || "激活失败");
                 }
-            } catch (e) { alert("请求失败，请检查 Worker 网络。"); }
+            } catch (e) { alert("请求失败"); }
         }
 
-        // 一键生成激活码逻辑 (需要后端配合添加 /api/admin/generate-code 路由)
+        // --- 管理员核心功能：生成并直显激活码 ---
         async function generateTestCode(type) {
-            const adminKey = document.getElementById('adminPass').value;
-            if (!adminKey) return alert("请输入管理密钥");
+            const adminKey = document.getElementById('adminPass').value || ADMIN_PWD_DEFAULT;
+            const tempCode = `T-${Math.random().toString(36).substring(7).toUpperCase()}`;
+            
+            // 使用 RETURNING 语法确保数据库返回刚生成的 code
+            const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('${tempCode}', '${type}', 0) RETURNING code;`;
             
             try {
-                const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('T-${Math.random().toString(36).substring(7).toUpperCase()}', '${type}', 0) RETURNING code;`;
                 const res = await fetch(`${API_BASE}/api/admin/publish`, {
                     method: 'POST',
                     headers: { 'Admin-Key': adminKey, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ sql })
                 });
                 
-                if (res.ok) {
-                    alert(`激活码生成成功！请在 D1 控制台或数据库中查看最新的一条记录即可使用。`);
+                const result = await res.json();
+                if (res.ok && result.success && result.results.length > 0) {
+                    const finalCode = result.results[0].code;
+                    alert(`✅ 生成成功！\n\n卡种：${type === 'monthly' ? '月卡' : '年卡'}\n卡密：${finalCode}\n\n请复制并提供给用户。`);
                 } else {
-                    alert("密钥错误或请求失败");
+                    alert("生成失败：可能是密钥错误或代码重复");
                 }
             } catch (e) { alert("生成异常"); }
         }
 
         async function quickPublish() {
-            const pass = document.getElementById('adminPass').value;
+            const pass = document.getElementById('adminPass').value || ADMIN_PWD_DEFAULT;
             const title = document.getElementById('quickTitle').value;
             const content = document.getElementById('quickContent').value;
-            if (!pass || !title || !content) return alert("字段不能为空");
+            if (!title || !content) return alert("标题和内容不能为空");
 
             const sql = `INSERT INTO reports (title, content, category) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}');`;
             
