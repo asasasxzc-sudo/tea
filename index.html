@@ -3,55 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMTEA HUB</title>
+    <title>YMTEA HUB | 商业情报终端</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 强制背景色，防止内容溢出时变白 */
-        html, body { background-color: #000; color: #fff; margin: 0; padding: 0; }
-        /* 解决移动端滚动条导致的变形 */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .gold-text { background: linear-gradient(135deg, #fb923c, #c2410c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* 防止弹窗导致背景滚动 */
+        .modal-open { overflow: hidden; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <nav class="h-16 border-b border-white/10 px-6 flex justify-between items-center bg-black/80 backdrop-blur sticky top-0 z-40">
-        <div class="font-black text-orange-500">YMTEA HUB</div>
-        <div id="authStatus" class="text-[10px] bg-zinc-800 px-2 py-1 rounded">GUEST_MODE</div>
+    <nav class="sticky top-0 z-40 w-full border-b border-white/5 bg-black/80 backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="text-xl font-black tracking-tighter cursor-pointer select-none" ondblclick="toggleAdmin()">
+                <span class="gold-text">YMTEA</span> <span class="text-white">HUB</span>
+            </div>
+            <div id="authStatus" class="flex items-center gap-3">
+                <span id="statusLabel" class="text-[10px] font-mono px-2 py-1 rounded bg-zinc-800 text-gray-500 border border-white/5">GUEST_MODE</span>
+            </div>
+        </div>
     </nav>
 
-    <main class="flex-grow max-w-6xl w-full mx-auto p-6 space-y-8">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-12 space-y-12">
         
-        <section class="bg-zinc-900/50 rounded-2xl p-6 border border-white/5">
-            <h2 class="text-sm font-bold mb-4 text-orange-400">● 实时全球贸易雷达</h2>
-            <div id="trendList" class="space-y-3 min-h-[100px]">
-                <div class="text-gray-600 text-xs italic">正在连接安全数据源...</div>
+        <header class="text-center space-y-4">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-none">内容即资产，<br><span class="gold-text">情报即先机</span></h1>
+            <p class="text-gray-500 text-sm max-w-xl mx-auto leading-relaxed">提供全球贸易数据、AI 选品雷达及跨境套利指南。按月订阅，随时取消。</p>
+        </header>
+
+        <section class="glass rounded-[2rem] p-8">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="h-2 w-2 bg-orange-500 rounded-full animate-pulse"></div>
+                <h2 class="text-xs font-bold uppercase tracking-widest text-gray-400">实时全球贸易雷达</h2>
+            </div>
+            <div id="trendList" class="grid gap-4">
+                <div class="text-zinc-700 italic text-sm">正在接入加密数据链...</div>
             </div>
         </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
-            <div class="bg-zinc-900/30 border border-white/5 p-6 rounded-3xl flex flex-col justify-between">
+        <div class="grid md:grid-cols-2 gap-8 pb-12">
+            <div class="glass p-8 rounded-[2.5rem] flex flex-col justify-between hover:border-orange-500/30 transition-colors">
                 <div>
-                    <h3 class="font-bold mb-2">核心情报库</h3>
-                    <p class="text-xs text-gray-500 mb-6">内含 AI 选品与行业套利逻辑</p>
+                    <h3 class="text-xl font-bold mb-3 flex items-center gap-2">🌐 核心情报深度拆解</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed mb-6">内含各行业套利机会、海关预警及非公开选品逻辑。</p>
                 </div>
-                <button onclick="accessContent('report_pro')" class="w-full py-3 bg-zinc-800 rounded-xl text-sm hover:bg-orange-700 transition">查看权限内容</button>
+                <button onclick="accessContent('report_pro_01')" class="w-full py-4 bg-zinc-900 rounded-2xl font-bold text-sm hover:bg-orange-700 transition">解锁深度报告</button>
             </div>
 
-            <div class="bg-zinc-900/30 border border-white/5 p-6 rounded-3xl flex flex-col justify-between">
+            <div class="glass p-8 rounded-[2.5rem] flex flex-col justify-between hover:border-orange-500/30 transition-colors">
                 <div>
-                    <h3 class="font-bold mb-2">生产力工具</h3>
-                    <p class="text-xs text-gray-500 mb-6">营销脚本与自动化模版下载</p>
+                    <h3 class="text-xl font-bold mb-3 flex items-center gap-2">🛠️ 生产力工具 & 脚本</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed mb-6">直接下载使用的自动化爬虫、营销模版及私有代码库。</p>
                 </div>
-                <button onclick="accessContent('tool_pro')" class="w-full py-3 bg-zinc-800 rounded-xl text-sm hover:bg-orange-700 transition">下载 PRO 工具</button>
+                <button onclick="accessContent('tool_pro_01')" class="w-full py-4 bg-zinc-900 rounded-2xl font-bold text-sm hover:bg-orange-700 transition">下载 PRO 工具</button>
             </div>
         </div>
     </main>
 
-    <div id="payModal" class="fixed inset-0 bg-black/95 z-50 hidden flex-col items-center justify-center p-6 backdrop-blur-md">
-        <div class="bg-zinc-900 border border-orange-500/50 rounded-[2rem] p-8 max-w-sm w-full text-center">
-            <h2 class="text-2xl font-black mb-2">PRO 订阅解锁</h2>
-            <p class="text-gray-500 text-xs mb-8">按月付费，随时取消。享受完整情报数据。</p>
+    <div id="payModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-xl flex-col items-center justify-center p-6">
+        <div class="max-w-sm w-full bg-zinc-900 border border-orange-500/50 rounded-[3rem] p-10 text-center shadow-2xl shadow-orange-500/10">
+            <div class="text-4xl mb-4">🔒</div>
+            <h2 class="text-2xl font-bold mb-2">PRO 订阅解锁</h2>
+            <p class="text-gray-500 text-xs mb-8">当前内容仅限专业订阅者访问</p>
+            <div class="mb-8">
+                <span class="text-5xl font-black">$29</span><span class="text-gray-500 text-sm">/月</span>
+            </div>
+            <button onclick="simulateMonthlyPay()" class="w-full py-4 bg-orange-600 rounded-2xl font-black text-white shadow-lg shadow-orange-600/30 hover:bg-orange-500 transition">立即按月订阅</button>
+            <button onclick="closeModal('payModal')" class="mt-6 text-gray-600 text-xs uppercase tracking-widest">返回访客模式</button>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 flex-col items-center justify-center p-6">
+        <div class="w-full max-w-lg bg-zinc-900 border border-white/10 rounded-[2.5rem] p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold">系统管理终端</h2>
+                <button onclick="toggleAdmin()" class="text-gray-500 hover:text-white">关闭</button>
+            </div>
+            <div class="space-y-4">
+                <input type="password" id="adminPass" placeholder="管理密钥" class="w-full bg-black border border-white/10 p-4 rounded-xl text-sm focus:border-orange-500 outline-none">
+                <select id="updateTarget" class="w-full bg-black border border-white/10 p-4 rounded-xl text-sm">
+                    <option value="KV">更新 KV (付费内容/报告)</option>
+                    <option value="D1">更新 D1 (实时雷达/SQL)</option>
+                </select>
+                <input type="text" id="contentKey" placeholder="内容 ID (如: report_pro_01)" class="w-full bg-black border border-white/10 p-4 rounded-xl text-sm">
+                <textarea id="contentVal" rows="5" placeholder="内容文本 或 SQL 语句" class="w-full bg-black border border-white/10 p-4 rounded-xl text-sm text-gray-400"></textarea>
+                <button onclick="adminPublish()" class="w-full py-5 bg-orange-700 rounded-2xl font-bold hover:bg-orange-600 transition">同步至全球节点</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = "https://tea.asasasxzc.workers.dev"; // 确保此地址正确
+
+        // 1. 管理入口控制 (双击 Logo 触发)
+        function toggleAdmin() {
+            const el = document.getElementById('adminPanel');
+            el.classList.toggle('hidden');
+            el.classList.contains('hidden') ? document.body.classList.remove('modal-open') : document.body.classList.add('modal-open');
+        }
+
+        // 2. 模拟支付 (按月开通)
+        async function simulateMonthlyPay() {
+            const email = prompt("请输入您的订阅邮箱以接收凭证：");
+            if(!email) return;
             
-            <div class="text-3xl font-black mb-6">$29<span class="text-xs text-gray-500">/月</span></div>
+            const res = await fetch(`${API_BASE}/api/pay/success`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, auth_mask: 1, months: 1 })
+            });
+            const data = await res.json();
+            if(data.success) {
+                localStorage.setItem('ymtea_token', data.token);
+                alert("支付成功！您的 PRO 权限已激活（有效期31天）");
+                location.reload();
+            }
+        }
+
+        // 3. 访问内容鉴权
+        async function accessContent(key) {
+            const token = localStorage.getItem('ymtea_token');
+            const res = await fetch(`${API_BASE}/api/fetch/${key}`, {
+                headers: { 'Authorization': token }
+            });
             
-            <button onclick="simulateMonthlyPay()" class="w-full py
+            if(res.status === 403) {
+                document.getElementById('payModal').classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            } else {
+                const result = await res.json();
+                alert("内容已解锁：\n" + result.data);
+            }
+        }
+
+        // 4. 管理员发布
+        async function adminPublish() {
+            const pass = document.getElementById('adminPass').value;
+            const target = document.getElementById('updateTarget').value;
+            const key = document.getElementById('contentKey').value;
+            const val = document.getElementById('contentVal').value;
+
+            const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                method: 'POST',
+                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    target, key, 
+                    value: target === 'KV' ? val : null,
+                    sql: target === 'D1' ? val : null
+                })
+            });
+            if(res.ok) alert("发布成功！"); else alert("发布失败，请检查密钥。");
+        }
+
+        // 5. 加载公开雷达数据
+        async function loadTrends() {
+            try {
+                const res = await fetch(`${API_BASE}/api/public/trends`);
+                const data = await res.json();
+                document.getElementById('trendList').innerHTML = data.map(item => `
+                    <div class="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/5">
+                        <div>
+                            <div class="text-sm font-bold text-gray-200">${item.title}</div>
+                            <div class="text-[10px] text-gray-500 mt-1">${item.summary}</div>
+                        </div>
+                        <div class="text-[9px] font-mono text-zinc-600">${new Date(item.update_time).toLocaleDateString()}</div>
+                    </div>
+                `).join('');
+            } catch (e) { console.log("等待数据录入..."); }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        }
+
+        window.onload = () => {
+            loadTrends();
+            if(localStorage.getItem('ymtea_token')) {
+                const label = document.getElementById('statusLabel');
+                label.innerText = "PRO_SUBSCRIBER";
+                label.className = "text-[10px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20";
+            }
+        };
+    </script>
+</body>
+</html>
