@@ -10,11 +10,12 @@
         body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; }
         .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); }
         .gold-text { background: linear-gradient(135deg, #fb923c, #c2410c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        /* 修复弹窗显示时的背景锁定 */
         .modal-active { overflow: hidden; height: 100vh; }
-        /* 自定义过渡动画 */
         .fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* 隐藏滚动条但保留功能 */
+        #readerBody::-webkit-scrollbar { width: 4px; }
+        #readerBody::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -24,7 +25,7 @@
             <div class="text-xl font-black tracking-tighter cursor-pointer select-none" ondblclick="toggleAdmin()">
                 <span class="gold-text">YMTEA</span> <span class="text-white">HUB</span>
             </div>
-            <div id="statusLabel" class="text-[10px] font-mono px-2 py-1 rounded bg-zinc-800 text-gray-500 border border-white/5">GUEST_MODE</div>
+            <div id="statusLabel" class="text-[10px] font-mono px-2 py-1 rounded bg-zinc-800 text-gray-500 border border-white/5 uppercase">GUEST_MODE</div>
         </div>
     </nav>
 
@@ -44,7 +45,7 @@
                 实时全球贸易雷达
             </h2>
             <div id="trendList" class="space-y-3">
-                <div class="text-zinc-800 text-xs italic p-4">正在同步边缘网络数据...</div>
+                <div class="text-zinc-800 text-xs italic p-4 text-center">系统就绪，正在接入云端情报...</div>
             </div>
         </div>
 
@@ -52,7 +53,7 @@
             <div class="glass p-8 rounded-[2.5rem] flex flex-col justify-between min-h-[260px] hover:border-orange-500/20 transition-all">
                 <div>
                     <h3 class="font-bold text-xl mb-3 text-white">🌐 核心情报深度拆解</h3>
-                    <p class="text-xs text-zinc-500 leading-relaxed mb-6">内含各行业套利机会、海关预警及非公开选品逻辑，每日定时更新。</p>
+                    <p class="text-xs text-zinc-500 leading-relaxed mb-6">包含行业套利机会、海关预警及非公开选品逻辑，每日实时更新。</p>
                 </div>
                 <button onclick="accessContent('report_pro')" class="w-full py-4 bg-zinc-900 rounded-2xl text-sm font-bold hover:bg-orange-700 transition active:scale-95 text-white">解锁深度报告</button>
             </div>
@@ -60,7 +61,7 @@
             <div class="glass p-8 rounded-[2.5rem] flex flex-col justify-between min-h-[260px] hover:border-orange-500/20 transition-all">
                 <div>
                     <h3 class="font-bold text-xl mb-3 text-white">🛠️ 生产力工具 & 脚本</h3>
-                    <p class="text-xs text-zinc-500 leading-relaxed mb-6">直接下载使用的自动化爬虫、营销模版及私有代码库，助您效率翻倍。</p>
+                    <p class="text-xs text-zinc-500 leading-relaxed mb-6">自动化爬虫、营销模版及私有代码库下载。PRO 成员独享。</p>
                 </div>
                 <button onclick="accessContent('tool_pro')" class="w-full py-4 bg-zinc-900 rounded-2xl text-sm font-bold hover:bg-orange-700 transition active:scale-95 text-white">下载 PRO 工具</button>
             </div>
@@ -90,8 +91,25 @@
         </div>
     </div>
 
-    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[2.5rem] w-full max-w-md shadow-2xl">
+    <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black items-center justify-center p-0 md:p-6 backdrop-blur-3xl">
+        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[2.5rem] flex flex-col shadow-2xl border border-white/5 relative">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+                    <h2 class="font-bold text-white tracking-wide">核心情报密卷</h2>
+                </div>
+                <button onclick="closeReader()" class="text-zinc-500 hover:text-white p-2 text-xl">✕</button>
+            </div>
+            <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-300 leading-relaxed text-base md:text-lg whitespace-pre-wrap select-text">
+                </div>
+            <div class="p-6 border-t border-white/5 text-center">
+                <p class="text-[10px] text-zinc-600 uppercase tracking-[0.2em] font-mono">YMTEA HUB INTERNAL DATA STREAM</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[2.5rem] w-full max-w-md">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="font-black text-lg text-white">系统管理终端</h2>
                 <button onclick="toggleAdmin()" class="text-zinc-500 hover:text-white">✕</button>
@@ -103,8 +121,8 @@
                     <option value="D1">发布雷达数据 (D1 SQL)</option>
                 </select>
                 <input type="text" id="contentKey" placeholder="内容 ID (如: report_pro)" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-sm text-white outline-none focus:border-orange-500">
-                <textarea id="contentVal" rows="4" placeholder="内容文本 或 SQL 语句" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-sm text-white outline-none focus:border-orange-500"></textarea>
-                <button onclick="adminPublish()" class="w-full py-4 bg-orange-700 rounded-2xl font-bold hover:bg-orange-600 transition active:scale-95 text-white">执行发布</button>
+                <textarea id="contentVal" rows="4" placeholder="长文本 或 SQL 语句" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-sm text-white outline-none focus:border-orange-500"></textarea>
+                <button onclick="adminPublish()" class="w-full py-4 bg-orange-700 rounded-2xl font-bold hover:bg-orange-600 transition active:scale-95 text-white shadow-lg shadow-orange-900/20">执行发布</button>
             </div>
         </div>
     </div>
@@ -127,63 +145,43 @@
             }
         }
 
-        // 2. 管理员发布逻辑
+        // 2. 管理员发布
         async function adminPublish() {
             try {
                 const pass = document.getElementById('adminPass').value;
                 const target = document.getElementById('updateTarget').value;
                 const key = document.getElementById('contentKey').value;
                 const val = document.getElementById('contentVal').value;
-
-                if (!pass) return alert("🚨 请输入管理密钥");
-
+                if (!pass) return alert("请输入密钥");
                 const res = await fetch(`${API_BASE}/api/admin/publish`, {
                     method: 'POST',
-                    headers: { 
-                        'Admin-Key': pass, 
-                        'Content-Type': 'application/json' 
-                    },
-                    body: JSON.stringify({
-                        target, key, 
-                        value: target === 'KV' ? val : null,
-                        sql: target === 'D1' ? val : null
-                    })
+                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target, key, value: target === 'KV' ? val : null, sql: target === 'D1' ? val : null })
                 });
-
-                if (res.ok) {
-                    alert("✅ 发布成功！");
-                    location.reload();
-                } else {
-                    const errText = await res.text();
-                    alert("❌ 发布失败！状态码：" + res.status + "\n原因：" + errText);
-                }
-            } catch (error) {
-                alert("🚨 网络错误或后端未响应：\n" + error.message);
-            }
+                if (res.ok) { alert("✅ 发布成功！"); location.reload(); }
+                else { alert("❌ 发布失败：" + await res.text()); }
+            } catch (e) { alert("🚨 接口异常: " + e.message); }
         }
 
-        // 3. 内容权限访问
+        // 3. 访问权限内容 (长内容显示核心)
         async function accessContent(key) {
             const token = localStorage.getItem('ymtea_token');
             try {
                 const res = await fetch(`${API_BASE}/api/fetch/${key}`, {
                     headers: { 'Authorization': token }
                 });
-                
-                if (res.status === 403) {
-                    showPayModal();
-                } else {
+                if (res.status === 403) { showPayModal(); }
+                else {
                     const result = await res.json();
-                    alert("🔓 内容已解锁：\n" + result.data);
+                    openReader(result.data); // 调用长内容阅读器
                 }
             } catch (e) { showPayModal(); }
         }
 
-        // 4. 模拟支付逻辑
+        // 4. 支付模拟
         async function startPay(type) {
-            const email = prompt("请输入您的注册邮箱（用于激活权限）：");
+            const email = prompt("请输入您的注册邮箱：");
             if (!email) return;
-            
             try {
                 const res = await fetch(`${API_BASE}/api/pay/success`, {
                     method: 'POST',
@@ -193,31 +191,45 @@
                 const data = await res.json();
                 if (data.success) {
                     localStorage.setItem('ymtea_token', data.token);
-                    alert(`🎉 支付成功！已为您开通 ${type === 'yearly' ? '1年' : '1个月'} PRO 权限`);
+                    alert(`🎉 订阅成功！`);
                     location.reload();
+                } else {
+                    alert("支付失败: " + data.error);
                 }
-            } catch (e) {
-                alert("支付接口连接失败，请检查网络。");
-            }
+            } catch (e) { alert("接口连接失败"); }
         }
 
-        // 5. 加载公开雷达数据
+        // 5. 阅读器控制
+        function openReader(text) {
+            const reader = document.getElementById('contentReader');
+            const body = document.getElementById('readerBody');
+            body.innerText = text || "暂无情报内容...";
+            reader.classList.replace('hidden', 'flex');
+            document.body.classList.add('modal-active');
+        }
+        function closeReader() {
+            document.getElementById('contentReader').classList.replace('flex', 'hidden');
+            document.body.classList.remove('modal-active');
+        }
+
+        // 6. 加载雷达
         async function loadTrends() {
             try {
                 const res = await fetch(`${API_BASE}/api/public/trends`);
                 const data = await res.json();
                 if (data && data.length > 0) {
                     document.getElementById('trendList').innerHTML = data.map(item => `
-                        <div class="flex justify-between items-center p-4 glass rounded-2xl text-xs hover:bg-white/5 transition-colors">
-                            <span class="text-zinc-200 font-medium">${item.title}</span>
-                            <span class="text-zinc-600 text-[10px] font-mono">${new Date(item.update_time).toLocaleDateString()}</span>
+                        <div class="flex flex-col p-4 glass rounded-2xl border border-white/5 hover:border-orange-500/20 transition-all group">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-zinc-200 font-bold group-hover:text-orange-400 transition-colors">${item.title}</span>
+                                <span class="text-[9px] font-mono text-zinc-600 bg-black/40 px-2 py-0.5 rounded">${new Date(item.update_time).toLocaleDateString()}</span>
+                            </div>
+                            <div class="text-[11px] text-zinc-500 leading-relaxed">${item.summary || '情报采集中...'}</div>
                         </div>
                     `).join('');
-                } else {
-                    document.getElementById('trendList').innerHTML = '<div class="text-zinc-700 text-xs italic p-4 text-center">暂无公开情报更新</div>';
                 }
             } catch (e) {
-                document.getElementById('trendList').innerHTML = '<div class="text-zinc-700 text-xs italic p-4 text-center">无法连接至雷达中心</div>';
+                document.getElementById('trendList').innerText = "雷达离线";
             }
         }
 
@@ -225,17 +237,14 @@
             document.getElementById('payModal').classList.replace('hidden', 'flex');
             document.body.classList.add('modal-active');
         }
-
         function closeModal(id) {
             document.getElementById(id).classList.replace('flex', 'hidden');
             document.body.classList.remove('modal-active');
         }
 
-        // 初始化
         window.onload = () => {
             loadTrends();
-            const token = localStorage.getItem('ymtea_token');
-            if(token) {
+            if(localStorage.getItem('ymtea_token')) {
                 const label = document.getElementById('statusLabel');
                 label.innerText = "PRO_SUBSCRIBER";
                 label.className = "text-[10px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20";
