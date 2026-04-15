@@ -15,7 +15,6 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-        /* 侧边栏样式 */
         .side-contact { position: fixed; right: 20px; bottom: 100px; z-index: 50; }
     </style>
 </head>
@@ -39,97 +38,129 @@
     <main class="flex-grow w-full max-w-7xl mx-auto px-4 py-8 space-y-8 fade-in">
         <section class="text-center py-6">
             <h1 class="text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tight text-white">内容即资产，<span class="gold-text">情报即先机</span></h1>
-            <p class="text-zinc-500 text-xs md:text-sm tracking-widest uppercase font-bold">Global Trade Data • AI Radar • Arbitrage Guide</p>
+            <p class="text-zinc-500 text-xs md:text-sm tracking-widest uppercase font-bold text-center">Global Trade Data • AI Radar • Arbitrage Guide</p>
         </section>
 
         <div class="glass rounded-3xl p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xs font-bold text-orange-500 flex items-center gap-2 tracking-widest uppercase">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
-                    </span>
+                    <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span></span>
                     实时全球贸易雷达
                 </h2>
-                <button onclick="refreshRadar()" class="text-[10px] text-zinc-600 hover:text-zinc-400">手动刷新</button>
+                <button onclick="refreshRadar()" class="text-[10px] text-zinc-600 hover:text-zinc-400 uppercase font-bold tracking-widest">Refresh</button>
             </div>
-            <div id="trendList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                </div>
+            <div id="trendList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
             <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[450px]">
                 <h3 class="font-bold text-xl mb-3 text-white">🌐 核心情报目录</h3>
-                <div id="reportList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll"></div>
+                <div id="reportList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll">
+                    <div class="text-zinc-800 text-xs italic py-10 text-center">正在同步情报库...</div>
+                </div>
             </div>
 
             <div class="glass p-8 rounded-[2.5rem] flex flex-col min-h-[450px]">
                 <h3 class="font-bold text-xl mb-3 text-white">🛠️ 生产力工具</h3>
-                <div id="toolList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll"></div>
+                <div id="toolList" class="flex-grow space-y-3 overflow-y-auto pr-2 custom-scroll">
+                    <div class="text-zinc-800 text-xs italic py-10 text-center">正在检索工具箱...</div>
+                </div>
                 <button onclick="showPayModal()" id="proBtn" class="mt-6 w-full py-4 bg-zinc-900 border border-white/5 rounded-2xl text-xs font-bold hover:bg-orange-700 transition-all text-white">升级 PRO 解锁全部下载</button>
             </div>
         </div>
     </main>
 
-    <footer class="w-full border-t border-white/5 bg-black/50 py-10 mt-12">
+    <footer class="w-full border-t border-white/5 bg-black/50 py-10">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="space-y-4">
                 <div class="text-lg font-black"><span class="gold-text">YMTEA</span> HUB</div>
-                <p class="text-xs text-zinc-600 leading-loose">专注于跨境贸易自动化与商业情报分析。基于 Cloudflare 构建的超轻量级私有情报站。</p>
+                <p class="text-xs text-zinc-600">专注跨境贸易自动化与商业情报。基于 Cloudflare 构建的超轻量级私密终端。</p>
             </div>
             <div class="grid grid-cols-2 gap-4 md:col-span-2">
-                <div class="space-y-3">
+                <div class="space-y-3 text-[11px] text-zinc-500">
                     <div class="text-xs font-bold text-white uppercase tracking-widest">旗下站点</div>
-                    <ul class="text-[11px] space-y-2 text-zinc-500">
-                        <li><a href="https://ymtea.club" target="_blank" class="hover:text-orange-500 transition">YMtea Shop (精品店)</a></li>
-                        <li><a href="https://vip.ymtea.club" target="_blank" class="hover:text-orange-500 transition">云茗荟 (VIP 专区)</a></li>
-                        <li><a href="https://ymtea.club/bbs" target="_blank" class="hover:text-orange-500 transition">云茗荟论坛 (交流社区)</a></li>
-                    </ul>
+                    <a href="https://ymtea.club" target="_blank" class="block hover:text-orange-500">YMtea Shop</a>
+                    <a href="https://vip.ymtea.club" target="_blank" class="block hover:text-orange-500">云茗荟 VIP</a>
+                    <a href="https://ymtea.club/bbs" target="_blank" class="block hover:text-orange-500">云茗荟论坛</a>
                 </div>
-                <div class="space-y-3">
-                    <div class="text-xs font-bold text-white uppercase tracking-widest">联系 & 支持</div>
-                    <ul class="text-[11px] space-y-2 text-zinc-500">
-                        <li><a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" target="_blank" class="hover:text-orange-500 transition">在线人工客服</a></li>
-                        <li><span class="cursor-help" title="双击标题打开">管理员登录</span></li>
-                    </ul>
+                <div class="space-y-3 text-[11px] text-zinc-500">
+                    <div class="text-xs font-bold text-white uppercase tracking-widest">支持</div>
+                    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" target="_blank" class="block hover:text-orange-500">在线客服</a>
+                    <span class="block cursor-help" title="双击 Logo 登录后台">管理员入口</span>
                 </div>
             </div>
         </div>
-        <div class="text-center mt-10 text-[9px] text-zinc-800 font-mono tracking-widest uppercase">© 2026 YMTEA CLOUD TECHNOLOGY. ALL RIGHTS RESERVED.</div>
+        <div class="text-center mt-10 text-[9px] text-zinc-800 font-mono tracking-widest uppercase">© 2026 YMTEA TECHNOLOGY.</div>
     </footer>
 
-    <div id="payModal" class="fixed inset-0 z-50 hidden bg-black/95 items-center justify-center p-4">...</div>
-    <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black items-center justify-center p-0 md:p-6">...</div>
-    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">...</div>
+    <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black items-center justify-center p-0 md:p-6 backdrop-blur-3xl">
+        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[2.5rem] flex flex-col relative border border-white/10">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span><h2 id="readerTitle" class="font-bold">加密情报</h2></div>
+                <button onclick="closeReader()" class="text-xl p-2">✕</button>
+            </div>
+            <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-300 leading-relaxed whitespace-pre-wrap select-text custom-scroll"></div>
+        </div>
+    </div>
+
+    <div id="payModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-xl items-center justify-center p-4">
+        <div class="max-w-xl w-full fade-in">
+            <div class="text-center mb-8"><h2 class="text-2xl font-black text-white">订阅专业版</h2></div>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-zinc-900 border border-white/5 p-6 rounded-[2rem] text-center hover:border-orange-500/50 transition cursor-pointer" onclick="startPay('monthly')">
+                    <div class="text-3xl font-black mb-2 text-white">¥38</div>
+                    <div class="text-[10px] text-zinc-500 uppercase">月度激活</div>
+                </div>
+                <div class="bg-zinc-900 border-2 border-orange-500 p-6 rounded-[2rem] text-center cursor-pointer shadow-lg shadow-orange-500/10" onclick="startPay('yearly')">
+                    <div class="text-3xl font-black mb-2 text-white">¥199</div>
+                    <div class="text-[10px] text-orange-500 font-bold uppercase">年度激活</div>
+                </div>
+            </div>
+            <button onclick="closeModal('payModal')" class="w-full mt-8 text-zinc-600 text-[10px] uppercase tracking-widest">返回主页</button>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[2.5rem] w-full max-w-md">
+            <div class="flex justify-between items-center mb-6 text-white"><h2 class="font-black">ADMIN TERMINAL</h2><button onclick="toggleAdmin()">✕</button></div>
+            <div class="space-y-4">
+                <input type="password" id="adminPass" placeholder="管理密钥" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-sm text-white outline-none focus:border-orange-500">
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setCategory('report')" id="cat_report" class="py-2 rounded-xl text-[10px] font-bold bg-orange-600 text-white">情报库</button>
+                    <button onclick="setCategory('tool')" id="cat_tool" class="py-2 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">工具箱</button>
+                </div>
+                <input type="text" id="quickTitle" placeholder="内容标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-sm text-white outline-none">
+                <textarea id="quickContent" rows="4" placeholder="具体内容或下载链接..." class="w-full bg-black border border-white/10 p-4 rounded-2xl text-sm text-white outline-none"></textarea>
+                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 rounded-2xl font-bold text-white hover:bg-orange-600 transition">同步云端</button>
+                <button onclick="clearTestUser()" class="w-full py-2 bg-red-900/20 border border-red-500/20 rounded-xl text-[9px] text-red-500 font-bold uppercase mt-4">🔴 重置本地登录状态</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const API_BASE = "https://tea.asasasxzc.workers.dev";
         let currentCategory = 'report';
 
-        // 1. 贸易雷达刷新逻辑
         const radarPool = [
             { t: "🚢 美线运费指数波动监测", s: "ON_TRACK", c: "text-green-500" },
             { t: "🤖 AI 选品逻辑库 v4.2 更新", s: "SYNCED", c: "text-orange-500" },
             { t: "📦 东南亚海外仓扩容情报", s: "LIVE", c: "text-blue-500" },
             { t: "💡 TikTok Shop 政策预警", s: "URGENT", c: "text-red-500" },
             { t: "📈 亚马逊关键词排名异动", s: "WATCHING", c: "text-purple-500" },
-            { t: "🌐 全球支付接口状态检测", s: "STABLE", c: "text-emerald-500" },
-            { t: "🛡️ 私有化爬虫集群负载", s: "NORMAL", c: "text-zinc-500" }
+            { t: "🌐 全球支付接口状态检测", s: "STABLE", c: "text-emerald-500" }
         ];
 
         function refreshRadar() {
             const trendList = document.getElementById('trendList');
-            const shuffled = [...radarPool].sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, 4);
+            const selected = [...radarPool].sort(() => 0.5 - Math.random()).slice(0, 4);
             trendList.innerHTML = selected.map(item => `
                 <div class="p-3 border border-white/5 rounded-xl bg-white/5 flex justify-between items-center fade-in">
-                    <span class="text-[11px] text-zinc-400">${item.t}</span>
-                    <span class="text-[10px] ${item.c} font-mono">${item.s}</span>
+                    <span class="text-[11px] text-zinc-400 font-medium">${item.t}</span>
+                    <span class="text-[10px] ${item.c} font-mono font-bold">${item.s}</span>
                 </div>
             `).join('');
         }
 
-        // 2. 数据加载与用户状态
         async function loadContent() {
             try {
                 const res = await fetch(`${API_BASE}/api/reports/list`);
@@ -138,45 +169,85 @@
                 const tools = data.filter(i => i.category === 'tool');
 
                 document.getElementById('reportList').innerHTML = reports.map(r => `
-                    <div onclick="openReport(${r.id}, '${r.title}')" class="flex justify-between items-center p-4 glass rounded-2xl cursor-pointer hover:border-orange-500/30 border border-white/5 group">
+                    <div onclick="openReport(${r.id}, '${r.title}')" class="flex justify-between items-center p-4 glass rounded-2xl cursor-pointer hover:border-orange-500/30 border border-white/5 group transition-all">
                         <span class="text-xs text-zinc-300 group-hover:text-orange-400 transition-colors">${r.title}</span>
                         <span class="text-[9px] text-zinc-700 font-mono">${new Date(r.created_at).toLocaleDateString()}</span>
                     </div>
                 `).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">情报库为空</div>';
 
                 document.getElementById('toolList').innerHTML = tools.map(r => `
-                    <div onclick="openReport(${r.id}, '${r.title}')" class="flex items-center gap-4 p-4 glass rounded-2xl cursor-pointer hover:bg-orange-600/10 border border-white/5 group">
-                        <div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition">🚀</div>
-                        <div class="flex-grow"><div class="text-[11px] text-zinc-200 font-bold">${r.title}</div><div class="text-[9px] text-zinc-600">点击查看下载</div></div>
+                    <div onclick="openReport(${r.id}, '${r.title}')" class="flex items-center gap-4 p-4 glass rounded-2xl cursor-pointer hover:bg-orange-600/10 border border-white/5 group transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all">🚀</div>
+                        <div class="flex-grow"><div class="text-[11px] text-zinc-200 font-bold group-hover:text-orange-400">${r.title}</div><div class="text-[9px] text-zinc-600 italic">PRO 工具下载</div></div>
                     </div>
                 `).join('') || '<div class="text-zinc-800 text-xs text-center py-10 italic">工具库为空</div>';
-            } catch (e) { console.error("API Error"); }
+            } catch (e) { console.error("同步异常"); }
         }
 
-        // 3. 登录重置（测试用）
-        function clearTestUser() {
-            localStorage.removeItem('ymtea_token');
-            alert("本地权限已重置");
-            location.reload();
+        async function openReport(id, title) {
+            const token = localStorage.getItem('ymtea_token');
+            if (!token) return showPayModal();
+            try {
+                const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
+                if (res.status === 403) return showPayModal();
+                const result = await res.json();
+                document.getElementById('readerTitle').innerText = title;
+                document.getElementById('readerBody').innerText = result.data || "无内容";
+                document.getElementById('contentReader').classList.replace('hidden', 'flex');
+                document.body.classList.add('modal-active');
+            } catch (e) { alert("网络异常"); }
         }
 
-        // UI 控制与支付/发布逻辑（略，同前个版本一致）
-        // ... (此处省略重复的 startPay, quickPublish, toggleAdmin 函数) ...
+        async function startPay(type) {
+            const email = prompt("请输入您的会员邮箱：");
+            const code = prompt("请输入激活码：");
+            if (!email || !code) return;
+            const res = await fetch(`${API_BASE}/api/pay/success`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, type, code })
+            });
+            const data = await res.json();
+            if (data.success) { localStorage.setItem('ymtea_token', data.token); alert("激活成功！"); location.reload(); }
+            else { alert(data.msg); }
+        }
+
+        async function quickPublish() {
+            const pass = document.getElementById('adminPass').value;
+            const title = document.getElementById('quickTitle').value;
+            const content = document.getElementById('quickContent').value;
+            if (!pass || !title || !content) return alert("必填项为空");
+            const sql = `INSERT INTO reports (title, content, category) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}');`;
+            const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                method: 'POST',
+                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql })
+            });
+            if (res.ok) { alert("发布成功"); location.reload(); } else { alert("密钥错误"); }
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.getElementById('cat_report').className = cat === 'report' ? 'py-2 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'py-2 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500';
+            document.getElementById('cat_tool').className = cat === 'tool' ? 'py-2 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'py-2 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500';
+        }
+
+        function clearTestUser() { localStorage.removeItem('ymtea_token'); alert("已重置"); location.reload(); }
+        function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); document.getElementById('adminPanel').classList.toggle('flex'); }
+        function showPayModal() { document.getElementById('payModal').classList.replace('hidden', 'flex'); }
+        function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
+        function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
 
         window.onload = () => {
             refreshRadar();
             loadContent();
             if(localStorage.getItem('ymtea_token')) {
-                document.getElementById('statusLabel').innerText = "PRO_SUBSCRIBER";
-                document.getElementById('statusLabel').className = "text-[10px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20";
-                const pb = document.getElementById('proBtn'); if(pb) pb.style.display = 'none';
+                const label = document.getElementById('statusLabel');
+                label.innerText = "PRO_SUBSCRIBER";
+                label.className = "text-[10px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20";
+                document.getElementById('proBtn').style.display = 'none';
             }
         };
-
-        // 辅助 UI 控制
-        function toggleAdmin() { const p = document.getElementById('adminPanel'); p.classList.toggle('hidden'); p.classList.toggle('flex'); }
-        function showPayModal() { document.getElementById('payModal').classList.replace('hidden', 'flex'); }
-        function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); }
     </script>
 </body>
 </html>
