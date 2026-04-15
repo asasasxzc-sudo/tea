@@ -3,156 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>云茗荟 · 智库平台 | YMTEA HUB</title>
+    <title>YMTEA HUB | 全球商用情报终端</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #050505; color: #e4e4e7; font-family: system-ui, -apple-system, sans-serif; }
-        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .glass-card:hover { border-color: #c2410c; background: rgba(255, 255, 255, 0.05); transform: translateY(-4px); }
-        .premium-locked { position: relative; overflow: hidden; }
-        .premium-locked::after { content: "🔒 订阅解锁"; position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-blur: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #f97316; }
-        .gold-text { background: linear-gradient(135deg, #fb923c, #c2410c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body { background: #0a0a0a; color: #eee; font-family: 'Inter', sans-serif; }
+        .premium-glow { border: 1px solid rgba(249, 115, 22, 0.2); box-shadow: 0 0 20px rgba(249, 115, 22, 0.05); }
+        .data-dot { height: 8px; width: 8px; background: #f97316; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="bg-black">
 
-    <nav class="p-6 border-b border-white/10 flex justify-between items-center sticky top-0 bg-black/80 backdrop-blur-md z-50">
-        <div class="text-2xl font-black tracking-tighter gold-text">YMTEA <span class="text-white">HUB</span></div>
-        <div class="flex gap-6 items-center">
-            <button onclick="toggleAdmin()" class="text-[10px] text-gray-600 hover:text-white uppercase tracking-widest">Admin</button>
-            <div id="userStatus" class="text-xs text-orange-500 font-bold"></div>
-        </div>
+    <nav class="border-b border-white/5 p-5 flex justify-between items-center sticky top-0 bg-black/90 backdrop-blur">
+        <div class="font-black text-xl tracking-tighter text-orange-500">YMTEA HUB <span class="text-white text-xs opacity-50">PRO</span></div>
+        <div id="authStatus" class="text-xs font-mono text-gray-500">GUEST_MODE</div>
     </nav>
 
-    <header class="py-20 px-6 text-center">
-        <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight">内容即资产，<br><span class="gold-text">情报即先机</span></h1>
-        <p class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed">
-            集成非遗茶道、全球贸易数据、AI选品雷达及数字游民指南的综合性商业智能平台。
-        </p>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20">
-        
-        <section class="glass-card p-8 rounded-[2.5rem] flex flex-col">
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🌐 全球贸易雷达</h3>
-            <div id="trade_data" class="space-y-4 mb-8 text-sm text-gray-400">
-                <p>正在同步全球海关数据...</p>
+    <main class="max-w-6xl mx-auto p-6 space-y-12">
+        <section class="bg-zinc-900/50 p-8 rounded-3xl border border-white/5">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="data-dot"></span>
+                <h2 class="text-lg font-bold">实时全球贸易雷达 (公开)</h2>
             </div>
-            <button onclick="subscribe('trade', 2)" class="mt-auto w-full py-4 rounded-2xl bg-orange-700 font-bold text-white hover:bg-orange-600">解锁深度报告</button>
+            <div id="trendList" class="space-y-4">
+                <div class="animate-pulse text-gray-700">正在接入全球数据流...</div>
+            </div>
         </section>
 
-        <section class="glass-card p-8 rounded-[2.5rem] flex flex-col border-orange-700/30">
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 AI 效率专家</h3>
-            <div class="bg-black/40 p-4 rounded-xl mb-8">
-                <p class="text-[10px] text-orange-500 font-bold mb-2 uppercase italic">今日推荐 Prompt</p>
-                <div id="ai_prompt" class="text-xs italic text-gray-500">“点击解锁获取价值 $200 的行业级指令集...”</div>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="premium-glow p-8 rounded-3xl bg-zinc-900/30">
+                <h3 class="text-xl font-bold mb-4">核心情报深度拆解</h3>
+                <p class="text-sm text-gray-500 mb-6">内含各行业套利机会、海关封号预警及选品逻辑。</p>
+                <div class="space-y-3">
+                    <button onclick="accessContent('report_2026_tea')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
+                        <span>2026 东南亚贸易白皮书</span>
+                        <span class="text-xs text-orange-500">VIP</span>
+                    </button>
+                    <button onclick="accessContent('report_tiktok_ads')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
+                        <span>TikTok 高转化投放参数库</span>
+                        <span class="text-xs text-orange-500">VIP</span>
+                    </button>
+                </div>
             </div>
-            <button onclick="fetchContent('ai_prompt_seo')" class="mt-auto w-full py-4 rounded-2xl border border-orange-700 text-orange-500 font-bold hover:bg-orange-700 hover:text-white">查看私有库</button>
-        </section>
 
-        <section class="glass-card p-8 rounded-[2.5rem] flex flex-col">
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🍵 非遗·点茶/刻花</h3>
-            <div class="aspect-video bg-white/5 rounded-2xl mb-8 flex items-center justify-center text-gray-600">
-                <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-            <button onclick="fetchContent('culture_diancha_01')" class="mt-auto w-full py-4 rounded-2xl bg-white text-black font-bold hover:bg-orange-700 hover:text-white">进入研习社</button>
-        </section>
-
-    </main>
-
-    <div id="adminPanel" class="hidden fixed inset-0 bg-black/95 z-[100] p-10 overflow-y-auto">
-        <div class="max-w-3xl mx-auto">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-3xl font-bold">后台内容发布终端</h2>
-                <button onclick="toggleAdmin()" class="text-gray-500">关闭</button>
-            </div>
-            <div class="space-y-6">
-                <input type="password" id="adminPass" placeholder="管理密钥" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl">
-                <select id="updateTarget" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-white">
-                    <option value="KV">更新 KV 内容 (文章/代码/视频链接)</option>
-                    <option value="D1">更新 D1 数据 (贸易列表/选品动态)</option>
-                </select>
-                <input type="text" id="contentKey" placeholder="内容 Key (如: ai_prompt_seo)" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl">
-                <textarea id="contentVal" rows="8" placeholder="内容详情 或 SQL 语句" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl"></textarea>
-                <button onclick="adminPublish()" class="w-full py-5 bg-orange-700 rounded-xl font-bold text-lg">立即发布到全球节点</button>
+            <div class="premium-glow p-8 rounded-3xl bg-zinc-900/30">
+                <h3 class="text-xl font-bold mb-4">生产力工具 & 模板</h3>
+                <p class="text-sm text-gray-500 mb-6">直接下载即可使用的自动化脚本与营销物料。</p>
+                <div class="space-y-3">
+                    <button onclick="accessContent('tool_scraper_v1')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
+                        <span>万能外贸客户抓取脚本 (Python)</span>
+                        <span class="text-xs text-orange-500">VIP</span>
+                    </button>
+                    <button onclick="accessContent('template_email_cold')" class="w-full text-left p-4 rounded-xl bg-white/5 hover:bg-white/10 flex justify-between items-center">
+                        <span>高回复率开发信模版 (12系)</span>
+                        <span class="text-xs text-orange-500">VIP</span>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div id="contentModal" class="hidden fixed inset-0 bg-black/90 z-[90] p-6 flex items-center justify-center">
-        <div class="bg-zinc-900 w-full max-w-4xl p-10 rounded-[3rem] border border-white/10 max-h-[80vh] overflow-y-auto relative">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-500">关闭退出</button>
-            <div id="modalBody" class="prose prose-invert max-w-none"></div>
+    <div id="payModal" class="fixed inset-0 bg-black/95 hidden items-center justify-center z-[100] p-6">
+        <div class="max-w-md w-full text-center space-y-6">
+            <div class="text-5xl">🔒</div>
+            <h2 class="text-2xl font-bold">该内容仅限专业订阅者</h2>
+            <p class="text-gray-400">加入 YMTEA HUB，获取每日更新的行业情报与生产力工具。</p>
+            <div class="bg-zinc-900 p-6 rounded-2xl border border-orange-500/30">
+                <div class="text-sm text-gray-500">年度专业版</div>
+                <div class="text-3xl font-black my-2">$199 <span class="text-sm font-normal text-gray-600">/ 年</span></div>
+                <ul class="text-left text-xs text-gray-400 space-y-2 my-4">
+                    <li>✓ 每日实时贸易雷达推送</li>
+                    <li>✓ 核心情报库永久访问权限</li>
+                    <li>✓ 生产力工具集全量下载</li>
+                </ul>
+                <button onclick="alert('支付对接即将上线...')" class="w-full py-4 bg-orange-600 rounded-xl font-bold hover:bg-orange-500">立即解锁专业权限</button>
+            </div>
+            <button onclick="closePayModal()" class="text-gray-600 text-sm">稍后再说</button>
         </div>
     </div>
 
     <script>
-        const API_BASE = "https://tea.asasasxzc.workers.dev"; // 部署后修改此处
+        const API_BASE = "https://tea.asasasxzc.workers.dev";
 
-        // 1. 管理员开关
-        function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); }
-
-        // 2. 模拟订阅
-        async function subscribe(type, level) {
-            const email = prompt("请输入接收凭证的邮箱：");
-            if(!email) return;
-            const res = await fetch(`${API_BASE}/api/pay/success`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, auth_mask: level, months: 1 })
-            });
-            const data = await res.json();
-            if(data.success) {
-                localStorage.setItem('ymtea_token', data.token);
-                alert("订阅成功！权限已解锁。");
-                location.reload();
-            }
+        // 加载公开趋势数据
+        async function loadTrends() {
+            try {
+                const res = await fetch(`${API_BASE}/api/public/trends`);
+                const data = await res.json();
+                const container = document.getElementById('trendList');
+                container.innerHTML = data.map(item => `
+                    <div class="flex justify-between items-center border-b border-white/5 pb-3">
+                        <div>
+                            <div class="text-sm font-bold text-gray-200">${item.title}</div>
+                            <div class="text-xs text-gray-500">${item.summary}</div>
+                        </div>
+                        <div class="text-[10px] font-mono text-gray-600">${new Date(item.update_time).toLocaleDateString()}</div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error("数据加载失败"); }
         }
 
-        // 3. 鉴权提取内容
-        async function fetchContent(key) {
+        // 访问内容鉴权
+        async function accessContent(key) {
             const token = localStorage.getItem('ymtea_token');
-            if(!token) return alert("该内容仅限订阅会员查看。");
-
             const res = await fetch(`${API_BASE}/api/fetch/${key}`, {
                 headers: { 'Authorization': token }
             });
-            const result = await res.json();
-            if(res.ok) {
-                document.getElementById('contentModal').classList.remove('hidden');
-                document.getElementById('modalBody').innerHTML = result.data;
+            
+            if (res.status === 403) {
+                document.getElementById('payModal').style.display = 'flex';
             } else {
-                alert("您的权限级别不足，请升级套餐。");
+                const result = await res.json();
+                alert("内容已解锁：\n" + result.data);
             }
         }
 
-        function closeModal() { document.getElementById('contentModal').classList.add('hidden'); }
+        function closePayModal() { document.getElementById('payModal').style.display = 'none'; }
 
-        // 4. 管理员发布
-        async function adminPublish() {
-            const pass = document.getElementById('adminPass').value;
-            const target = document.getElementById('updateTarget').value;
-            const key = document.getElementById('contentKey').value;
-            const val = document.getElementById('contentVal').value;
-
-            const res = await fetch(`${API_BASE}/api/admin/publish`, {
-                method: 'POST',
-                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    target: target,
-                    key: key,
-                    value: target === 'KV' ? val : null,
-                    sql: target === 'D1' ? val : null
-                })
-            });
-            if(res.ok) alert("发布成功！"); else alert("发布失败，请检查密钥。");
-        }
-
-        // 页面初始化：显示登录状态
         window.onload = () => {
-            const token = localStorage.getItem('ymtea_token');
-            if(token) document.getElementById('userStatus').innerText = "已认证会员 (VIP)";
-        }
+            loadTrends();
+            if(localStorage.getItem('ymtea_token')) document.getElementById('authStatus').innerText = "PRO_SUBSCRIBER";
+        };
     </script>
 </body>
 </html>
