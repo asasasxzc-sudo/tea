@@ -16,7 +16,6 @@
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
         .side-contact { position: fixed; right: 20px; bottom: 40px; z-index: 50; }
-        /* 底部提亮 */
         footer { background: linear-gradient(to top, rgba(20,20,20,1), rgba(10,10,10,0.8)); border-top: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
@@ -68,11 +67,27 @@
     </main>
 
     <footer class="w-full py-12">
-        <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
             <div class="space-y-4">
                 <div class="text-2xl font-black text-white tracking-tighter"><span class="gold-text">YMTEA</span> HUB</div>
                 <p class="text-zinc-300 text-xs leading-relaxed max-w-sm">云茗荟旗下高端情报分发终端。依托 Cloudflare 全球边缘节点，为专业跨境贸易者提供秒级响应的私密数据支持。</p>
             </div>
+            
+            <div class="space-y-4">
+                <div class="text-white text-xs font-bold uppercase tracking-widest">服务定价 (PRO)</div>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                        <span class="text-zinc-400 text-[11px]">月度高级会员</span>
+                        <span class="text-orange-500 font-bold text-sm">¥78 / mo</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                        <span class="text-zinc-400 text-[11px]">年度精英通行证</span>
+                        <span class="text-orange-500 font-bold text-sm">¥730 / yr</span>
+                    </div>
+                    <p class="text-[10px] text-zinc-500 italic mt-2">※ 购买订阅或获取激活码，请点击右下角按钮联系客服人员。</p>
+                </div>
+            </div>
+
             <div class="flex justify-between md:justify-end gap-16">
                 <div class="space-y-3">
                     <div class="text-white text-xs font-bold uppercase tracking-widest">官方矩阵</div>
@@ -120,7 +135,8 @@
 
     <div id="payModal" class="fixed inset-0 z-50 hidden bg-black/95 items-center justify-center p-4">
         <div class="max-w-xl w-full text-center">
-            <h2 class="text-3xl font-black text-white uppercase tracking-tighter mb-8">Access Denied</h2>
+            <h2 class="text-3xl font-black text-white uppercase tracking-tighter mb-4">Access Denied</h2>
+            <p class="text-zinc-500 text-xs mb-8 uppercase tracking-widest">请选择订阅方案并在支付后联系客服获取激活码</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="glass p-8 rounded-[2.5rem] hover:bg-zinc-800 transition cursor-pointer" onclick="startPay('monthly')">
                     <div class="text-3xl font-black text-white">¥78</div><div class="text-[10px] mt-2 text-zinc-500 uppercase font-bold tracking-widest">Monthly Pass</div>
@@ -137,7 +153,6 @@
         const API_BASE = "https://s1.ymtea.club";
         let currentCategory = 'report';
 
-        // 扩充的海量雷达池
         const radarPool = [
             { t: "🚢 美西港口吞吐预警", s: "DELAYED", c: "text-red-500" },
             { t: "🤖 AI 广告投放回报率", s: "+14.2%", c: "text-green-500" },
@@ -161,7 +176,6 @@
 
         function refreshRadar() {
             const trendList = document.getElementById('trendList');
-            // 每次随机选 6 个显示
             const data = [...radarPool].sort(() => 0.5 - Math.random()).slice(0, 6);
             trendList.innerHTML = data.map(item => `
                 <div class="p-4 border border-white/5 rounded-2xl bg-white/5 flex justify-between items-center fade-in">
@@ -211,7 +225,6 @@
             } catch (e) { alert("ERROR_SYNC"); }
         }
 
-        // 管理员功能
         async function generateTestCode(type) {
             const pass = document.getElementById('adminPass').value;
             if (!pass) return alert("REQUIRED_PASSWORD");
@@ -249,8 +262,8 @@
         }
 
         async function startPay(type) {
-            const email = prompt("Email:");
-            const code = prompt("Activation Code:");
+            const email = prompt("请输入您的接收邮箱 (Email):");
+            const code = prompt("请输入激活码 (请通过联系客服获取):");
             if (!email || !code) return;
             try {
                 const res = await fetch(`${API_BASE}/api/pay/success`, {
@@ -263,7 +276,7 @@
                     localStorage.setItem('ymtea_token', data.token);
                     location.reload();
                 } else { alert(data.msg); }
-            } catch (e) { alert("PAY_ERR"); }
+            } catch (e) { alert("激活失败，请检查激活码或联系客服"); }
         }
 
         function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); document.getElementById('adminPanel').classList.toggle('flex'); }
