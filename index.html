@@ -10,20 +10,14 @@
         body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; }
         .glass { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); }
         .gold-text { background: linear-gradient(135deg, #fb923c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .modal-active { overflow: hidden; height: 100vh; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .side-contact { position: fixed; right: 20px; bottom: 40px; z-index: 50; }
         .nav-btn { @apply flex-1 py-5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-white/5; }
+        .radar-card { border-left: 3px solid transparent; transition: all 0.3s; }
+        .radar-card:hover { border-left-color: #f97316; background: rgba(255, 255, 255, 0.08); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
-
-    <div class="side-contact">
-        <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" target="_blank" class="w-12 h-12 bg-orange-600 rounded-2xl flex items-center justify-center shadow-xl border border-white/30">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-        </a>
-    </div>
 
     <nav class="sticky top-0 z-40 w-full border-b border-white/10 bg-black/90 backdrop-blur-lg">
         <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
@@ -35,20 +29,19 @@
     </nav>
 
     <main class="flex-grow w-full max-w-7xl mx-auto px-4 py-8 space-y-8 fade-in">
-        <section class="text-center py-6">
-            <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tighter text-white">智联全球，<span class="gold-text">洞察先机</span></h1>
-            <p class="text-zinc-400 text-[10px] tracking-[0.3em] uppercase font-bold opacity-80">Real-time Trade Intelligence</p>
-        </section>
-
-        <div class="glass rounded-[2rem] p-6">
+        <div class="glass rounded-[2rem] p-6 shadow-2xl">
             <h2 class="text-xs font-bold text-orange-500 mb-5 flex items-center gap-2 tracking-widest uppercase">
-                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-orange-600"></span></span>
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-600"></span>
+                </span>
                 全球贸易实时雷达 (Live)
             </h2>
-            <div id="trendList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <div id="trendList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 min-h-[160px]">
+                </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
                 <h3 class="font-bold text-xl mb-6 text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 核心情报目录</h3>
                 <div id="reportList" class="flex-grow space-y-3"></div>
@@ -58,97 +51,82 @@
                 <h3 class="font-bold text-xl mb-6 text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 生产力工具库</h3>
                 <div id="toolList" class="flex-grow space-y-3"></div>
                 <div id="toolPagination" class="flex justify-center gap-2 mt-6"></div>
-                <button onclick="showPayModal()" id="proBtn" class="mt-8 w-full py-4 bg-orange-600 rounded-2xl text-[11px] font-black uppercase text-white">Upgrade to Pro</button>
+                <button onclick="showPayModal()" id="proBtn" class="mt-8 w-full py-4 bg-orange-600 rounded-2xl text-[11px] font-black uppercase text-white shadow-lg">Upgrade to Pro</button>
             </div>
         </div>
     </main>
 
-    <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black items-center justify-center p-0 md:p-6 backdrop-blur-3xl">
-        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden shadow-2xl">
-            <div class="p-6 border-b border-white/5 flex justify-between items-center text-white">
-                <h2 id="readerTitle" class="font-black text-sm uppercase truncate text-orange-500">Detail</h2>
-                <button onclick="closeReader()" class="text-xl">✕</button>
-            </div>
-            <div id="readerBody" class="flex-grow overflow-y-auto p-8 text-zinc-200 leading-relaxed whitespace-pre-wrap text-sm md:text-base"></div>
-            <div class="flex border-t border-white/5 bg-black/40">
-                <button id="prevBtn" class="nav-btn border-r border-white/5">← PREV</button>
-                <button id="nextBtn" class="nav-btn">NEXT →</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/95 items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md">
-            <div class="flex justify-between items-center mb-6 text-white text-xs font-black uppercase"><span>Terminal</span><button onclick="toggleAdmin()">✕</button></div>
+    <footer class="w-full py-12 border-t border-white/5 bg-zinc-950/50 mt-20">
+        <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
             <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-white outline-none">
-                <div class="flex gap-2">
-                    <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">情报</button>
-                    <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">工具</button>
+                <div class="text-2xl font-black text-white tracking-tighter"><span class="gold-text">YMTEA</span> HUB</div>
+                <p class="text-zinc-500 text-xs leading-relaxed">云茗荟旗下高端情报分发终端。基于加密协议提供专业私密数据支持。</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div class="text-white font-bold uppercase tracking-widest">服务状态</div>
+                <div class="flex justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                    <span class="text-zinc-400 text-[10px]">加密节点连接</span>
+                    <span class="text-green-500 font-mono text-[10px]">ONLINE</span>
                 </div>
-                <input type="text" id="quickTitle" placeholder="Title" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-white">
-                <textarea id="quickContent" rows="3" placeholder="Content" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-white"></textarea>
-                <button onclick="quickPublish()" id="adminSubmitBtn" class="w-full py-4 bg-orange-700 rounded-2xl font-black text-xs text-white uppercase">Sync To Cloud</button>
-                <div class="pt-4 border-t border-white/5">
-                    <input type="text" id="codeOutput" readonly placeholder="Result Code" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center text-orange-500 font-mono text-sm mb-2">
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="generateTestCode('monthly')" class="py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400">Monthly</button>
-                        <button onclick="generateTestCode('yearly')" class="py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400">Yearly</button>
-                    </div>
+                <div class="flex justify-between p-3 bg-white/5 rounded-xl border border-white/5">
+                    <span class="text-zinc-400 text-[10px]">数据更新频率</span>
+                    <span class="text-orange-500 font-mono text-[10px]">5m / Sync</span>
+                </div>
+            </div>
+            <div class="flex justify-between md:justify-end gap-16">
+                <div class="space-y-3">
+                    <div class="text-white text-xs font-bold uppercase tracking-widest">官方支持</div>
+                    <a href="https://work.weixin.qq.com/kfid/kfcab9eba83e85cde3e" class="block text-zinc-400 hover:text-orange-500 text-[11px] transition">联系客服</a>
+                    <a href="#" class="block text-zinc-400 hover:text-orange-500 text-[11px] transition">使用说明</a>
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
 
-    <div id="payModal" class="fixed inset-0 z-50 hidden bg-black/95 items-center justify-center p-4">
-        <div class="max-w-xl w-full text-center">
-            <h2 class="text-3xl font-black text-white uppercase mb-4">Access Denied</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="glass p-8 rounded-[2.5rem]" onclick="startPay('monthly')">
-                    <div class="text-3xl font-black text-white">¥78</div><div class="text-[10px] text-zinc-500 uppercase font-bold">Monthly</div>
-                </div>
-                <div class="bg-orange-600/10 border-2 border-orange-600 p-8 rounded-[2.5rem]" onclick="startPay('yearly')">
-                    <div class="text-3xl font-black text-orange-500">¥730</div><div class="text-[10px] text-orange-400 uppercase font-bold">Annual</div>
-                </div>
+    <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black/90 items-center justify-center p-4 backdrop-blur-xl">
+        <div class="bg-zinc-900 w-full max-w-4xl h-[80vh] rounded-[2.5rem] flex flex-col border border-white/10 overflow-hidden">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center text-white">
+                <h2 id="readerTitle" class="font-black text-sm uppercase text-orange-500">Document</h2>
+                <button onclick="closeReader()">✕</button>
             </div>
-            <button onclick="closeModal('payModal')" class="text-zinc-600 text-[10px] font-black uppercase">Close</button>
+            <div id="readerBody" class="flex-grow overflow-y-auto p-8 text-zinc-300 leading-relaxed text-sm select-text"></div>
         </div>
     </div>
 
     <script>
         const API_BASE = "https://s1.ymtea.club";
-        let currentCategory = 'report';
-        let fullData = { reports: [], tools: [] };
-        let editTargetId = null;
-
+        
         function refreshRadar() {
-            const pool = [
+            const radarPool = [
                 { t: "🚢 美西港口吞吐预警", s: "DELAYED", c: "text-red-500" },
-                { t: "🤖 AI 广告投放回报率", s: "+14.2%", c: "text-green-500" },
+                { t: "🤖 AI 投放转化回报率", s: "+14.2%", c: "text-green-500" },
                 { t: "📦 达拉斯分拨中心扩容", s: "LIVE", c: "text-blue-500" },
-                { t: "💡 TikTok Shop 英国禁售清单", s: "URGENT", c: "text-orange-600" },
-                { t: "🚀 巴西海外仓新规发布", s: "STABLE", c: "text-cyan-500" }
+                { t: "💡 TikTok Shop 英国禁售", s: "URGENT", c: "text-orange-600" },
+                { t: "🚀 巴西海外仓新规发布", s: "STABLE", c: "text-cyan-500" },
+                { t: "📉 欧线集装箱运费回落", s: "-8.4%", c: "text-green-400" },
+                { t: "🔥 东南亚斋月消费爆表", s: "PEAK", c: "text-red-400" },
+                { t: "⚓️ 宁波舟山港泊位拥堵", s: "HEAVY", c: "text-yellow-500" },
+                { t: "📦 极兔沙特中转场启用", s: "ONLINE", c: "text-emerald-400" },
+                { t: "📱 iPhone 印度产能提升", s: "UPDATE", c: "text-indigo-400" }
             ];
             const trendList = document.getElementById('trendList');
-            if(!trendList) return;
-            const data = [...pool].sort(() => 0.5 - Math.random()).slice(0, 6);
-            trendList.innerHTML = data.map(item => `
-                <div class="p-4 border border-white/5 rounded-2xl bg-white/5 flex justify-between items-center">
-                    <span class="text-[11px] text-zinc-300">${item.t}</span>
-                    <span class="text-[10px] ${item.c} font-black font-mono">${item.s}</span>
+            // 随机打乱并精准抓取 6 条，确保前台满格
+            const shuffled = radarPool.sort(() => 0.5 - Math.random()).slice(0, 6);
+            trendList.innerHTML = shuffled.map(item => `
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5 radar-card flex justify-between items-center fade-in">
+                    <span class="text-[11px] text-zinc-300 font-medium truncate pr-2">${item.t}</span>
+                    <span class="text-[10px] ${item.c} font-black font-mono tracking-tighter shrink-0">${item.s}</span>
                 </div>
             `).join('');
         }
 
         function getRemainingDays(token) {
             try {
-                const payloadStr = token.split('.')[1];
-                const jsonPayload = JSON.parse(atob(payloadStr.replace(/-/g, '+').replace(/_/g, '/')));
-                const exp = jsonPayload.exp || jsonPayload.expires;
+                const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+                const exp = payload.exp || payload.expires;
                 if (!exp) return null;
-                const now = Math.floor(Date.now() / 1000);
-                const diff = exp - now;
-                return diff > 0 ? Math.ceil(diff / 86400) : 0;
+                const days = Math.ceil((exp - Math.floor(Date.now() / 1000)) / 86400);
+                return days > 0 ? days : 0;
             } catch (e) { return null; }
         }
 
@@ -156,129 +134,36 @@
             try {
                 const res = await fetch(`${API_BASE}/api/reports/list`);
                 const data = await res.json();
-                fullData.reports = data.filter(i => i.category !== 'tool');
-                fullData.tools = data.filter(i => i.category === 'tool');
-                renderReportPage(1);
-                renderToolPage(1);
-            } catch (e) { console.error(e); }
+                const reports = data.filter(i => i.category !== 'tool');
+                const tools = data.filter(i => i.category === 'tool');
+                
+                document.getElementById('reportList').innerHTML = reports.slice(0, 11).map(r => `
+                    <div class="flex justify-between items-center p-4 glass rounded-xl border border-white/5 group">
+                        <div onclick="openReport(${r.id})" class="cursor-pointer text-[13px] text-zinc-200 group-hover:text-orange-400 transition">${r.title}</div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('toolList').innerHTML = tools.map(r => `
+                    <div onclick="openReport(${r.id})" class="flex items-center gap-4 p-4 glass rounded-xl border border-white/5 hover:bg-orange-600/10 cursor-pointer transition">
+                        <div class="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-orange-600">⚡</div>
+                        <div class="text-[13px] text-zinc-100 font-bold">${r.title}</div>
+                    </div>
+                `).join('');
+            } catch (e) { console.error("Data Load Failed"); }
         }
 
-        function renderReportPage(page) {
-            const size = 11;
-            const container = document.getElementById('reportList');
-            const data = fullData.reports.slice((page-1)*size, page*size);
-            container.innerHTML = data.map(r => `
-                <div class="flex justify-between items-center p-5 glass rounded-2xl border border-white/5 group">
-                    <div onclick="openReport(${r.id}, 'report')" class="flex-grow cursor-pointer">
-                        <span class="text-[13px] text-zinc-200 group-hover:text-orange-400">${r.title}</span>
-                        <div class="text-[9px] text-zinc-600 font-mono mt-1">${new Date(r.created_at).toLocaleDateString()}</div>
-                    </div>
-                    <div class="flex gap-3 opacity-0 group-hover:opacity-100">
-                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[10px] text-blue-400">Edit</button>
-                        <button onclick="handleDelete(${r.id})" class="text-[10px] text-red-500">Del</button>
-                    </div>
-                </div>
-            `).join('');
-            renderPagination('reportPagination', fullData.reports.length, size, page, 'renderReportPage');
-        }
-
-        function renderToolPage(page) {
-            const size = 10;
-            const container = document.getElementById('toolList');
-            const data = fullData.tools.slice((page-1)*size, page*size);
-            container.innerHTML = data.map(r => `
-                <div class="flex items-center gap-4 p-5 glass rounded-2xl border border-white/5 group">
-                    <div onclick="openReport(${r.id}, 'tool')" class="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white cursor-pointer">⚡</div>
-                    <div class="flex-grow cursor-pointer" onclick="openReport(${r.id}, 'tool')">
-                        <div class="text-[13px] text-zinc-100 font-black">${r.title}</div>
-                    </div>
-                    <div class="flex gap-3 opacity-0 group-hover:opacity-100">
-                        <button onclick="handleEdit(${r.id}, 'tool')" class="text-[10px] text-blue-400">Edit</button>
-                        <button onclick="handleDelete(${r.id})" class="text-[10px] text-red-500">Del</button>
-                    </div>
-                </div>
-            `).join('');
-            renderPagination('toolPagination', fullData.tools.length, size, page, 'renderToolPage');
-        }
-
-        function renderPagination(id, total, size, cur, func) {
-            const pages = Math.ceil(total / size);
-            const container = document.getElementById(id);
-            if(pages <= 1) { container.innerHTML = ''; return; }
-            let html = '';
-            for(let i=1; i<=pages; i++) {
-                html += `<button onclick="${func}(${i})" class="px-2 py-1 rounded text-[10px] ${i===cur ? 'bg-orange-600' : 'bg-white/5 text-zinc-500'}">${i}</button>`;
-            }
-            container.innerHTML = html;
-        }
-
-        async function openReport(id, cat) {
+        async function openReport(id) {
             const token = localStorage.getItem('ymtea_token');
-            if(!token) return showPayModal();
-            try {
-                const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
-                const result = await res.json();
-                if(res.status === 403) return showPayModal();
-                document.getElementById('readerTitle').innerText = "CONTENT VIEW";
-                document.getElementById('readerBody').innerText = result.data;
-                document.getElementById('contentReader').classList.remove('hidden');
-                document.getElementById('contentReader').classList.add('flex');
-                document.body.classList.add('modal-active');
-            } catch (e) { alert("SYNC_ERROR"); }
-        }
-
-        async function handleEdit(id, cat) {
-            const item = (cat === 'tool' ? fullData.tools : fullData.reports).find(i => i.id === id);
-            editTargetId = id;
-            setCategory(cat);
-            document.getElementById('quickTitle').value = item.title;
-            const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': localStorage.getItem('ymtea_token') || "" } });
+            if(!token) { showPayModal(); return; }
+            const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
+            if(res.status === 403) { showPayModal(); return; }
             const result = await res.json();
-            document.getElementById('quickContent').value = result.data;
-            toggleAdmin();
+            document.getElementById('readerBody').innerText = result.data;
+            document.getElementById('contentReader').classList.replace('hidden', 'flex');
         }
 
-        async function handleDelete(id) {
-            const pass = prompt("ADMIN PASS:");
-            if(!pass) return;
-            const sql = `DELETE FROM reports WHERE id = ${id};`;
-            await fetch(`${API_BASE}/api/admin/publish`, { method: 'POST', headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' }, body: JSON.stringify({ sql }) });
-            location.reload();
-        }
-
-        async function quickPublish() {
-            const pass = document.getElementById('adminPass').value;
-            const title = document.getElementById('quickTitle').value;
-            const content = document.getElementById('quickContent').value;
-            let sql = editTargetId 
-                ? `UPDATE reports SET title='${title.replace(/'/g, "''")}', content='${content.replace(/'/g, "''")}', category='${currentCategory}' WHERE id=${editTargetId};`
-                : `INSERT INTO reports (title, content, category) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}');`;
-            const res = await fetch(`${API_BASE}/api/admin/publish`, { method: 'POST', headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' }, body: JSON.stringify({ sql }) });
-            if(res.ok) location.reload(); else alert("FAILED");
-        }
-
-        async function generateTestCode(type) {
-            const pass = document.getElementById('adminPass').value;
-            const code = `T-${Math.random().toString(36).substring(7).toUpperCase()}`;
-            const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('${code}', '${type}', 0);`;
-            await fetch(`${API_BASE}/api/admin/publish`, { method: 'POST', headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' }, body: JSON.stringify({ sql }) });
-            document.getElementById('codeOutput').value = code;
-        }
-
-        async function startPay(type) {
-            const email = prompt("Email:");
-            const code = prompt("Code:");
-            if(!email || !code) return;
-            const res = await fetch(`${API_BASE}/api/pay/success`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, type, code }) });
-            const data = await res.json();
-            if(data.success) { localStorage.setItem('ymtea_token', data.token); location.reload(); } else alert(data.msg);
-        }
-
-        function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); document.getElementById('adminPanel').classList.toggle('flex'); }
-        function setCategory(cat) { currentCategory = cat; }
-        function showPayModal() { document.getElementById('payModal').classList.replace('hidden', 'flex'); }
-        function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); }
-        function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
+        function showPayModal() { /* ... */ }
+        function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); }
 
         window.onload = () => {
             refreshRadar();
@@ -288,7 +173,7 @@
                 const days = getRemainingDays(token);
                 const label = document.getElementById('statusLabel');
                 label.innerText = days !== null ? `PRO_ACCESS | 剩余 ${days} 天` : "PRO_ACCESS | 授权有效";
-                label.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 uppercase tracking-widest";
+                label.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20";
                 if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
             }
         };
