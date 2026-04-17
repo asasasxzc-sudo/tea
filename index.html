@@ -191,7 +191,7 @@
                 const res = await fetch(`${API_BASE}/api/reports/list`);
                 const data = await res.json();
                 
-                // 【核心逻辑】按创建时间倒序排列，最新的在前
+                // 【逻辑优化】按创建时间倒序排列，确保最新文章在最前
                 const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
                 
                 fullData.reports = sortedData.filter(i => i.category !== 'tool');
@@ -203,7 +203,7 @@
         }
 
         function renderReportPage(page) {
-            const size = 20;
+            const size = 11; // 【逻辑调整】每页11篇
             const container = document.getElementById('reportList');
             const data = fullData.reports.slice((page-1)*size, page*size);
             container.innerHTML = data.map(r => `
@@ -263,26 +263,27 @@
                 if (res.status === 403) return showPayModal();
                 const result = await res.json();
                 
+                // 【阅读器优化】重置滚动条和结束标记
                 document.getElementById('readerTitle').innerText = dataset[idx].title;
                 document.getElementById('readerBody').innerText = result.data;
+                document.getElementById('readerBody').scrollTop = 0;
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
                 document.body.classList.add('modal-active');
-                document.getElementById('readerBody').scrollTop = 0;
                 
-                // 处理翻页显示 (倒序逻辑下：idx 0 是最新，idx dataset.length-1 是最旧)
+                // 处理翻页 (基于倒序排列的索引)
                 const pBtn = document.getElementById('prevBtn');
                 const nBtn = document.getElementById('nextBtn');
                 const endMark = document.getElementById('endMark');
 
-                // 上一篇 (更晚发表的)
+                // 上一篇 (更晚发表的，即索引更小的)
                 pBtn.disabled = idx === 0;
                 pBtn.onclick = () => openReport(dataset[idx-1].id, cat);
                 
-                // 下一篇 (更早发表的)
+                // 下一篇 (更早发表的，即索引更大的)
                 nBtn.disabled = idx === dataset.length - 1;
                 nBtn.onclick = () => openReport(dataset[idx+1].id, cat);
 
-                // END 标记逻辑：如果当前文章是数据集中的最后一个（最旧的一个）
+                // 如果是最后一条数据（最旧的），显示 - THE END -
                 if (idx === dataset.length - 1) {
                     endMark.classList.remove('hidden');
                 } else {
@@ -392,12 +393,16 @@
         function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
         function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
 
-        window.onload = () => { refreshRadar(); loadContent(); if(localStorage.getItem('ymtea_token')) {
-            const status = document.getElementById('statusLabel');
-            status.innerText = "PRO_ACCESS";
-            status.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 uppercase tracking-widest";
-            if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
-        }};
+        window.onload = () => { 
+            refreshRadar(); 
+            loadContent(); 
+            if(localStorage.getItem('ymtea_token')) {
+                const status = document.getElementById('statusLabel');
+                status.innerText = "PRO_ACCESS";
+                status.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 uppercase tracking-widest";
+                if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
+            }
+        };
     </script>
 </body>
 </html>
