@@ -17,7 +17,6 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
         .side-contact { position: fixed; right: 20px; bottom: 40px; z-index: 50; }
         footer { background: linear-gradient(to top, rgba(20,20,20,1), rgba(10,10,10,0.8)); border-top: 1px solid rgba(255,255,255,0.1); }
-        /* 导航按钮样式 */
         .nav-btn { @apply flex-1 py-4 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-white/5 disabled:opacity-20; }
     </style>
 </head>
@@ -70,8 +69,45 @@
         </div>
     </main>
 
+    <footer class="w-full py-12">
+        <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="space-y-4">
+                <div class="text-2xl font-black text-white tracking-tighter"><span class="gold-text">YMTEA</span> HUB</div>
+                <p class="text-zinc-300 text-xs leading-relaxed max-w-sm">云茗荟旗下高端情报分发终端。依托 Cloudflare 全球边缘节点，为专业跨境贸易者提供秒级响应的私密数据支持。</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="text-white text-xs font-bold uppercase tracking-widest">服务定价 (PRO)</div>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                        <span class="text-zinc-400 text-[11px]">月度高级会员</span>
+                        <span class="text-orange-500 font-bold text-sm">¥78 / mo</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                        <span class="text-zinc-400 text-[11px]">年度精英通行证</span>
+                        <span class="text-orange-500 font-bold text-sm">¥730 / yr</span>
+                    </div>
+                    <p class="text-[10px] text-zinc-500 italic mt-2">※ 购买订阅或获取激活码，请点击右下角按钮联系客服人员。</p>
+                </div>
+            </div>
+
+            <div class="flex justify-between md:justify-end gap-16">
+                <div class="space-y-3">
+                    <div class="text-white text-xs font-bold uppercase tracking-widest">官方矩阵</div>
+                    <a href="https://ymtea.club" class="block text-zinc-400 hover:text-orange-500 text-[11px] transition">云茗荟商城</a>
+                    <a href="https://vip.ymtea.club" class="block text-zinc-400 hover:text-orange-500 text-[11px] transition">VIP 社区</a>
+                </div>
+                <div class="space-y-3">
+                    <div class="text-white text-xs font-bold uppercase tracking-widest">系统状态</div>
+                    <div class="text-green-500 text-[10px] font-mono">NODE: ONLINE</div>
+                    <div class="text-zinc-500 text-[10px] font-mono">API: v2.4.1-STABLE</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md">
+        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md shadow-2xl">
             <div class="flex justify-between items-center mb-6 text-white font-black text-xs tracking-widest uppercase"><span id="adminTitle">System Terminal</span><button onclick="toggleAdmin()">✕</button></div>
             <div class="space-y-4">
                 <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white focus:border-orange-500 outline-none">
@@ -94,9 +130,9 @@
     </div>
 
     <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black items-center justify-center p-0 md:p-6 backdrop-blur-3xl">
-        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden shadow-2xl">
+        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden">
             <div class="p-6 border-b border-white/5 flex justify-between items-center text-white">
-                <h2 id="readerTitle" class="font-black text-sm uppercase truncate pr-4">Intelligence Detail</h2>
+                <h2 id="readerTitle" class="font-black text-sm uppercase truncate pr-4 text-orange-500">Detail</h2>
                 <button onclick="closeReader()" class="text-xl">✕</button>
             </div>
             <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 leading-relaxed whitespace-pre-wrap select-text text-sm md:text-base custom-scroll"></div>
@@ -160,7 +196,6 @@
             } catch (e) { console.error(e); }
         }
 
-        // 分页渲染逻辑
         function renderReportPage(page) {
             const size = 20;
             const container = document.getElementById('reportList');
@@ -176,7 +211,7 @@
                         <button onclick="handleDelete(${r.id})" class="text-[10px] text-red-500 font-bold uppercase">Del</button>
                     </div>
                 </div>
-            `).join('') || '<p class="text-zinc-700 text-xs py-10 text-center">DATABASE EMPTY</p>';
+            `).join('') || '<p class="text-zinc-700 text-xs py-10 text-center uppercase tracking-widest">Database Empty</p>';
             renderPagination('reportPagination', fullData.reports.length, size, page, 'renderReportPage');
         }
 
@@ -189,14 +224,14 @@
                     <div onclick="openReport(${r.id}, 'tool')" class="w-12 h-12 rounded-2xl bg-zinc-900 flex items-center justify-center text-orange-600 text-lg group-hover:bg-orange-600 group-hover:text-white transition-all shadow-inner shrink-0 cursor-pointer">⚡</div>
                     <div class="flex-grow cursor-pointer" onclick="openReport(${r.id}, 'tool')">
                         <div class="text-[13px] text-zinc-100 font-black group-hover:text-orange-400">${r.title}</div>
-                        <div class="text-[10px] text-zinc-500 italic mt-0.5">Premium Utility</div>
+                        <div class="text-[10px] text-zinc-500 italic mt-0.5 uppercase tracking-tighter">Premium Utility</div>
                     </div>
                     <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onclick="handleEdit(${r.id}, 'tool')" class="text-[10px] text-blue-400 font-bold uppercase">Edit</button>
                         <button onclick="handleDelete(${r.id})" class="text-[10px] text-red-500 font-bold uppercase">Del</button>
                     </div>
                 </div>
-            `).join('') || '<p class="text-zinc-700 text-xs py-10 text-center">TOOLS EMPTY</p>';
+            `).join('') || '<p class="text-zinc-700 text-xs py-10 text-center uppercase tracking-widest">Tools Empty</p>';
             renderPagination('toolPagination', fullData.tools.length, size, page, 'renderToolPage');
         }
 
@@ -206,73 +241,54 @@
             if(pages <= 1) { container.innerHTML = ''; return; }
             let html = '';
             for(let i=1; i<=pages; i++) {
-                html += `<button onclick="${funcName}(${i})" class="px-3 py-1 rounded-lg text-[10px] font-mono ${i===current ? 'bg-orange-600 text-white' : 'bg-white/5 text-zinc-500'}">${i}</button>`;
+                html += `<button onclick="${funcName}(${i})" class="px-3 py-1 rounded-lg text-[10px] font-mono transition-all ${i===current ? 'bg-orange-600 text-white' : 'bg-white/5 text-zinc-500 hover:text-white'}">${i}</button>`;
             }
             container.innerHTML = html;
         }
 
-        // 打开阅读并处理上一篇/下一篇
         async function openReport(id, cat) {
             const token = localStorage.getItem('ymtea_token');
             if (!token) return showPayModal();
-            
             const dataset = cat === 'tool' ? fullData.tools : fullData.reports;
             const idx = dataset.findIndex(i => i.id === id);
             if(idx === -1) return;
-
             try {
                 const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
                 if (res.status === 403) return showPayModal();
                 const result = await res.json();
-                
                 document.getElementById('readerTitle').innerText = dataset[idx].title;
                 document.getElementById('readerBody').innerText = result.data;
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
                 document.body.classList.add('modal-active');
                 document.getElementById('readerBody').scrollTop = 0;
-
-                // 绑定按钮逻辑
                 const pBtn = document.getElementById('prevBtn');
                 const nBtn = document.getElementById('nextBtn');
-
-                if(idx > 0) {
-                    pBtn.disabled = false;
-                    pBtn.onclick = () => openReport(dataset[idx-1].id, cat);
-                } else { pBtn.disabled = true; }
-
-                if(idx < dataset.length - 1) {
-                    nBtn.disabled = false;
-                    nBtn.onclick = () => openReport(dataset[idx+1].id, cat);
-                } else { nBtn.disabled = true; }
-
+                pBtn.disabled = idx === 0;
+                pBtn.onclick = () => openReport(dataset[idx-1].id, cat);
+                nBtn.disabled = idx === dataset.length - 1;
+                nBtn.onclick = () => openReport(dataset[idx+1].id, cat);
             } catch (e) { alert("ERROR_SYNC"); }
         }
 
-        // 修改文章
         async function handleEdit(id, cat) {
             const dataset = cat === 'tool' ? fullData.tools : fullData.reports;
             const item = dataset.find(i => i.id === id);
             if(!item) return;
-
             editTargetId = id;
             setCategory(cat);
             document.getElementById('quickTitle').value = item.title;
-            // 需请求内容
             const token = localStorage.getItem('ymtea_token');
             const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token || "" } });
             const result = await res.json();
             document.getElementById('quickContent').value = result.data;
-            
-            document.getElementById('adminTitle').innerText = "Update Content ID: " + id;
+            document.getElementById('adminTitle').innerText = "Update ID: " + id;
             document.getElementById('adminSubmitBtn').innerText = "UPDATE CLOUD";
             toggleAdmin();
         }
 
-        // 删除文章
         async function handleDelete(id) {
-            const pass = prompt("ADMIN SECRET REQUIRED FOR DELETE:");
-            if(!pass) return;
-            if(!confirm("ARE YOU SURE?")) return;
+            const pass = prompt("ADMIN SECRET REQUIRED:");
+            if(!pass || !confirm("DELETE PERMANENTLY?")) return;
             const sql = `DELETE FROM reports WHERE id = ${id};`;
             try {
                 const res = await fetch(`${API_BASE}/api/admin/publish`, {
@@ -280,35 +296,28 @@
                     headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ sql })
                 });
-                if (res.ok) { location.reload(); } else { alert("AUTH FAILED"); }
+                if (res.ok) location.reload(); else alert("AUTH FAILED");
             } catch (e) { alert("FATAL"); }
         }
 
-        // 发布与更新
         async function quickPublish() {
             const pass = document.getElementById('adminPass').value;
             const title = document.getElementById('quickTitle').value;
             const content = document.getElementById('quickContent').value;
             if (!pass || !title || !content) return alert("MISSING_DATA");
-            
-            let sql = "";
-            if(editTargetId) {
-                sql = `UPDATE reports SET title='${title.replace(/'/g, "''")}', content='${content.replace(/'/g, "''")}', category='${currentCategory}' WHERE id=${editTargetId};`;
-            } else {
-                sql = `INSERT INTO reports (title, content, category) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}');`;
-            }
-
+            let sql = editTargetId 
+                ? `UPDATE reports SET title='${title.replace(/'/g, "''")}', content='${content.replace(/'/g, "''")}', category='${currentCategory}' WHERE id=${editTargetId};`
+                : `INSERT INTO reports (title, content, category) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}');`;
             try {
                 const res = await fetch(`${API_BASE}/api/admin/publish`, {
                     method: 'POST',
                     headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ sql })
                 });
-                if (res.ok) { location.reload(); } else { alert("AUTH ERR"); }
+                if (res.ok) location.reload(); else alert("AUTH ERR");
             } catch (e) { alert("FATAL"); }
         }
 
-        // 其他原有逻辑 (生成码、支付等保持不变)
         async function generateTestCode(type) {
             const pass = document.getElementById('adminPass').value;
             const tempCode = `T-${Math.random().toString(36).substring(7).toUpperCase()}`;
@@ -320,16 +329,13 @@
                     body: JSON.stringify({ sql })
                 });
                 const result = await res.json();
-                if (res.ok && result.success) {
-                    const out = document.getElementById('codeOutput');
-                    out.value = result.results[0].code;
-                } else { alert("AUTH_FAILED"); }
+                if (res.ok && result.success) document.getElementById('codeOutput').value = result.results[0].code;
             } catch (e) { alert("API_ERROR"); }
         }
 
         async function startPay(type) {
-            const email = prompt("请输入您的接收邮箱 (Email):");
-            const code = prompt("请输入激活码 (请通过联系客服获取):");
+            const email = prompt("接收邮箱 (Email):");
+            const code = prompt("激活码 (Activation Code):");
             if (!email || !code) return;
             try {
                 const res = await fetch(`${API_BASE}/api/pay/success`, {
@@ -338,48 +344,38 @@
                     body: JSON.stringify({ email: email.trim(), type, code: code.trim() })
                 });
                 const data = await res.json();
-                if (data.success) {
-                    localStorage.setItem('ymtea_token', data.token);
-                    location.reload();
-                } else { alert(data.msg); }
-            } catch (e) { alert("激活失败"); }
+                if (data.success) { localStorage.setItem('ymtea_token', data.token); location.reload(); } else alert(data.msg);
+            } catch (e) { alert("FAILED"); }
         }
 
         function toggleAdmin() { 
-            if(document.getElementById('adminPanel').classList.contains('hidden')) {
-                // 如果是新开，非编辑模式，重置文本
-                if(!editTargetId) {
-                    document.getElementById('adminTitle').innerText = "System Terminal";
-                    document.getElementById('adminSubmitBtn').innerText = "Sync To Cloud";
-                    document.getElementById('quickTitle').value = "";
-                    document.getElementById('quickContent').value = "";
-                }
-            } else {
+            if(document.getElementById('adminPanel').classList.contains('hidden') && !editTargetId) {
+                document.getElementById('adminTitle').innerText = "System Terminal";
+                document.getElementById('adminSubmitBtn').innerText = "Sync To Cloud";
+                document.getElementById('quickTitle').value = "";
+                document.getElementById('quickContent').value = "";
+            } else if (!document.getElementById('adminPanel').classList.contains('hidden')) {
                 editTargetId = null;
             }
-            document.getElementById('adminPanel').classList.toggle('hidden'); 
-            document.getElementById('adminPanel').classList.toggle('flex'); 
+            document.getElementById('adminPanel').classList.toggle('hidden'); document.getElementById('adminPanel').classList.toggle('flex'); 
         }
+
         function setCategory(cat) { 
             currentCategory = cat; 
-            document.getElementById('cat_report').className = cat === 'report' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white transition-all' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500 transition-all';
-            document.getElementById('cat_tool').className = cat === 'tool' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white transition-all' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500 transition-all';
+            document.getElementById('cat_report').className = cat === 'report' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500';
+            document.getElementById('cat_tool').className = cat === 'tool' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500';
         }
+
         function showPayModal() { document.getElementById('payModal').classList.replace('hidden', 'flex'); }
         function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
         function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
 
-        window.onload = () => {
-            refreshRadar();
-            loadContent();
-            if(localStorage.getItem('ymtea_token')) {
-                const status = document.getElementById('statusLabel');
-                status.innerText = "PRO_ACCESS";
-                status.classList.replace('text-zinc-400', 'text-orange-500');
-                status.classList.replace('bg-zinc-800', 'bg-orange-500/10');
-                if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
-            }
-        };
+        window.onload = () => { refreshRadar(); loadContent(); if(localStorage.getItem('ymtea_token')) {
+            const status = document.getElementById('statusLabel');
+            status.innerText = "PRO_ACCESS";
+            status.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 uppercase tracking-widest";
+            if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
+        }};
     </script>
 </body>
 </html>
