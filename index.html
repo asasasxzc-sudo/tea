@@ -134,9 +134,7 @@
                 <button onclick="closeReader()" class="text-xl">✕</button>
             </div>
             <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 leading-relaxed whitespace-pre-wrap select-text text-sm md:text-base custom-scroll"></div>
-            
             <div id="endMark" class="hidden text-center py-4 text-zinc-700 font-black text-[10px] tracking-[0.5em] uppercase border-t border-white/5">- THE END -</div>
-            
             <div class="flex border-t border-white/5 bg-black/40 justify-between items-center">
                 <button id="prevBtn" class="nav-btn border-r border-white/5">← PREV</button>
                 <div class="w-px h-10 bg-white/5"></div> <button id="nextBtn" class="nav-btn">NEXT →</button>
@@ -175,6 +173,19 @@
             { t: "🚀 巴西海外仓新规发布", s: "STABLE", c: "text-cyan-500" }
         ];
 
+        // 解析 Token 获取到期天数
+        function getRemainingDays(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const payload = JSON.parse(window.atob(base64));
+                if (!payload.exp) return null;
+                const remainingSec = payload.exp - Math.floor(Date.now() / 1000);
+                const days = Math.ceil(remainingSec / 86400);
+                return days > 0 ? days : 0;
+            } catch (e) { return null; }
+        }
+
         function refreshRadar() {
             const trendList = document.getElementById('trendList');
             const data = [...radarPool].sort(() => 0.5 - Math.random()).slice(0, 6);
@@ -190,20 +201,16 @@
             try {
                 const res = await fetch(`${API_BASE}/api/reports/list`);
                 const data = await res.json();
-                
-                // 【逻辑优化】按创建时间倒序排列，确保最新文章在最前
                 const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                
                 fullData.reports = sortedData.filter(i => i.category !== 'tool');
                 fullData.tools = sortedData.filter(i => i.category === 'tool');
-                
                 renderReportPage(1);
                 renderToolPage(1);
             } catch (e) { console.error(e); }
         }
 
         function renderReportPage(page) {
-            const size = 11; // 【逻辑调整】每页11篇
+            const size = 11; // 调整为11篇文章翻页
             const container = document.getElementById('reportList');
             const data = fullData.reports.slice((page-1)*size, page*size);
             container.innerHTML = data.map(r => `
@@ -262,34 +269,19 @@
                 const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
                 if (res.status === 403) return showPayModal();
                 const result = await res.json();
-                
-                // 【阅读器优化】重置滚动条和结束标记
                 document.getElementById('readerTitle').innerText = dataset[idx].title;
                 document.getElementById('readerBody').innerText = result.data;
-                document.getElementById('readerBody').scrollTop = 0;
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
                 document.body.classList.add('modal-active');
-                
-                // 处理翻页 (基于倒序排列的索引)
+                document.getElementById('readerBody').scrollTop = 0;
                 const pBtn = document.getElementById('prevBtn');
                 const nBtn = document.getElementById('nextBtn');
                 const endMark = document.getElementById('endMark');
-
-                // 上一篇 (更晚发表的，即索引更小的)
                 pBtn.disabled = idx === 0;
                 pBtn.onclick = () => openReport(dataset[idx-1].id, cat);
-                
-                // 下一篇 (更早发表的，即索引更大的)
                 nBtn.disabled = idx === dataset.length - 1;
                 nBtn.onclick = () => openReport(dataset[idx+1].id, cat);
-
-                // 如果是最后一条数据（最旧的），显示 - THE END -
-                if (idx === dataset.length - 1) {
-                    endMark.classList.remove('hidden');
-                } else {
-                    endMark.classList.add('hidden');
-                }
-
+                if (idx === dataset.length - 1) endMark.classList.remove('hidden'); else endMark.classList.add('hidden');
             } catch (e) { alert("ERROR_SYNC"); }
         }
 
@@ -396,9 +388,12 @@
         window.onload = () => { 
             refreshRadar(); 
             loadContent(); 
-            if(localStorage.getItem('ymtea_token')) {
+            const token = localStorage.getItem('ymtea_token');
+            if(token) {
                 const status = document.getElementById('statusLabel');
-                status.innerText = "PRO_ACCESS";
+                const days = getRemainingDays(token);
+                // 显示 PRO 状态及到期天数
+                status.innerText = days !== null ? `PRO_ACCESS | 剩余 ${days} 天` : "PRO_ACCESS";
                 status.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 uppercase tracking-widest";
                 if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
             }
