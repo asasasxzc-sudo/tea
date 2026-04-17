@@ -73,7 +73,7 @@
         <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
             <div class="space-y-4">
                 <div class="text-2xl font-black text-white tracking-tighter"><span class="gold-text">YMTEA</span> HUB</div>
-                <p class="text-zinc-300 text-xs leading-relaxed max-sm">云茗荟旗下高端情报分发终端。依托 Cloudflare 全球边缘节点，提供专业私密数据支持。</p>
+                <p class="text-zinc-300 text-xs leading-relaxed">云茗荟旗下高端情报分发终端。依托 Cloudflare 全球边缘节点，提供专业私密数据支持。</p>
             </div>
             <div class="space-y-4">
                 <div class="text-white text-xs font-bold uppercase tracking-widest">服务定价 (PRO)</div>
@@ -169,7 +169,7 @@
             { t: "🚀 巴西海外仓新规发布", s: "STABLE", c: "text-cyan-500" }
         ];
 
-        // 核心：从 Token 解析剩余天数
+        // 暴力搜索 Token 内部所有时间字段
         function getRemainingDays(token) {
             try {
                 if (!token || token.split('.').length < 2) return null;
@@ -177,16 +177,26 @@
                 const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
                 const payload = JSON.parse(window.atob(base64));
                 
-                const expireTime = payload.exp || payload.expires;
-                if (!expireTime) return null;
-                
                 const currentTime = Math.floor(Date.now() / 1000);
-                // 自动识别毫秒/秒
-                const expSec = expireTime > 9999999999 ? Math.floor(expireTime/1000) : expireTime;
-                const remainingSec = expSec - currentTime;
-                
-                const days = Math.ceil(remainingSec / 86400);
-                return days > 0 ? days : 0;
+                let targetExp = payload.exp || payload.expires || payload.expire;
+
+                if (!targetExp) {
+                    for (let key in payload) {
+                        let val = payload[key];
+                        if (typeof val === 'number') {
+                            let checkVal = val > 9999999999 ? Math.floor(val / 1000) : val;
+                            if (checkVal > currentTime + 3600) { // 找一个比当前时间晚至少1小时的数字
+                                targetExp = checkVal;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!targetExp) return null;
+                const expSec = targetExp > 9999999999 ? Math.floor(targetExp / 1000) : targetExp;
+                const days = Math.ceil((expSec - currentTime) / 86400);
+                return (days >= 0) ? days : 0;
             } catch (e) { return null; }
         }
 
@@ -214,7 +224,7 @@
         }
 
         function renderReportPage(page) {
-            const size = 11; // 保持 11 篇翻页
+            const size = 11;
             const container = document.getElementById('reportList');
             const data = fullData.reports.slice((page-1)*size, page*size);
             container.innerHTML = data.map(r => `
@@ -392,8 +402,11 @@
             if(token) {
                 const status = document.getElementById('statusLabel');
                 const days = getRemainingDays(token);
-                // 更新状态栏显示
-                status.innerText = (days !== null) ? `PRO_ACCESS | 剩余 ${days} 天` : "PRO_ACCESS | 已授权";
+                if (days !== null && !isNaN(days)) {
+                    status.innerText = `PRO_ACCESS | 剩余 ${days} 天`;
+                } else {
+                    status.innerText = "PRO_ACCESS | 授权有效";
+                }
                 status.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 uppercase tracking-widest";
                 if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
             }
