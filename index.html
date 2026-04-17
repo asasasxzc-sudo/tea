@@ -73,7 +73,7 @@
         <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-12">
             <div class="space-y-4">
                 <div class="text-2xl font-black text-white tracking-tighter"><span class="gold-text">YMTEA</span> HUB</div>
-                <p class="text-zinc-300 text-xs leading-relaxed max-sm">云茗荟旗下高端情报分发终端。依托 Cloudflare 全球边缘节点，为专业跨境贸易者提供秒级响应的私密数据支持。</p>
+                <p class="text-zinc-300 text-xs leading-relaxed max-sm">云茗荟旗下高端情报分发终端。依托 Cloudflare 全球边缘节点，提供专业私密数据支持。</p>
             </div>
             <div class="space-y-4">
                 <div class="text-white text-xs font-bold uppercase tracking-widest">服务定价 (PRO)</div>
@@ -86,19 +86,16 @@
                         <span class="text-zinc-400 text-[11px]">年度精英通行证</span>
                         <span class="text-orange-500 font-bold text-sm">¥730 / yr</span>
                     </div>
-                    <p class="text-[10px] text-zinc-500 italic mt-2">※ 购买订阅或获取激活码，请点击右下角按钮联系客服人员。</p>
                 </div>
             </div>
             <div class="flex justify-between md:justify-end gap-16">
                 <div class="space-y-3">
                     <div class="text-white text-xs font-bold uppercase tracking-widest">官方矩阵</div>
                     <a href="https://ymtea.club" class="block text-zinc-400 hover:text-orange-500 text-[11px] transition">云茗荟商城</a>
-                    <a href="https://vip.ymtea.club" class="block text-zinc-400 hover:text-orange-500 text-[11px] transition">VIP 社区</a>
                 </div>
                 <div class="space-y-3">
                     <div class="text-white text-xs font-bold uppercase tracking-widest">系统状态</div>
                     <div class="text-green-500 text-[10px] font-mono">NODE: ONLINE</div>
-                    <div class="text-zinc-500 text-[10px] font-mono">API: v2.4.1-STABLE</div>
                 </div>
             </div>
         </div>
@@ -169,18 +166,25 @@
             { t: "🤖 AI 广告投放回报率", s: "+14.2%", c: "text-green-500" },
             { t: "📦 达拉斯分拨中心扩容", s: "LIVE", c: "text-blue-500" },
             { t: "💡 TikTok Shop 英国禁售清单", s: "URGENT", c: "text-orange-600" },
-            { t: "📉 欧元区零售额变动", s: "-2.1%", c: "text-red-400" },
             { t: "🚀 巴西海外仓新规发布", s: "STABLE", c: "text-cyan-500" }
         ];
 
-        // 解析 Token 获取到期天数
+        // 核心：从 Token 解析剩余天数
         function getRemainingDays(token) {
             try {
+                if (!token || token.split('.').length < 2) return null;
                 const base64Url = token.split('.')[1];
                 const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
                 const payload = JSON.parse(window.atob(base64));
-                if (!payload.exp) return null;
-                const remainingSec = payload.exp - Math.floor(Date.now() / 1000);
+                
+                const expireTime = payload.exp || payload.expires;
+                if (!expireTime) return null;
+                
+                const currentTime = Math.floor(Date.now() / 1000);
+                // 自动识别毫秒/秒
+                const expSec = expireTime > 9999999999 ? Math.floor(expireTime/1000) : expireTime;
+                const remainingSec = expSec - currentTime;
+                
                 const days = Math.ceil(remainingSec / 86400);
                 return days > 0 ? days : 0;
             } catch (e) { return null; }
@@ -210,7 +214,7 @@
         }
 
         function renderReportPage(page) {
-            const size = 11; // 调整为11篇文章翻页
+            const size = 11; // 保持 11 篇翻页
             const container = document.getElementById('reportList');
             const data = fullData.reports.slice((page-1)*size, page*size);
             container.innerHTML = data.map(r => `
@@ -264,7 +268,6 @@
             if (!token) return showPayModal();
             const dataset = cat === 'tool' ? fullData.tools : fullData.reports;
             const idx = dataset.findIndex(i => i.id === id);
-            if(idx === -1) return;
             try {
                 const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
                 if (res.status === 403) return showPayModal();
@@ -274,14 +277,11 @@
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
                 document.body.classList.add('modal-active');
                 document.getElementById('readerBody').scrollTop = 0;
-                const pBtn = document.getElementById('prevBtn');
-                const nBtn = document.getElementById('nextBtn');
-                const endMark = document.getElementById('endMark');
-                pBtn.disabled = idx === 0;
-                pBtn.onclick = () => openReport(dataset[idx-1].id, cat);
-                nBtn.disabled = idx === dataset.length - 1;
-                nBtn.onclick = () => openReport(dataset[idx+1].id, cat);
-                if (idx === dataset.length - 1) endMark.classList.remove('hidden'); else endMark.classList.add('hidden');
+                document.getElementById('prevBtn').disabled = idx === 0;
+                document.getElementById('prevBtn').onclick = () => openReport(dataset[idx-1].id, cat);
+                document.getElementById('nextBtn').disabled = idx === dataset.length - 1;
+                document.getElementById('nextBtn').onclick = () => openReport(dataset[idx+1].id, cat);
+                if (idx === dataset.length - 1) document.getElementById('endMark').classList.remove('hidden'); else document.getElementById('endMark').classList.add('hidden');
             } catch (e) { alert("ERROR_SYNC"); }
         }
 
@@ -392,8 +392,8 @@
             if(token) {
                 const status = document.getElementById('statusLabel');
                 const days = getRemainingDays(token);
-                // 显示 PRO 状态及到期天数
-                status.innerText = days !== null ? `PRO_ACCESS | 剩余 ${days} 天` : "PRO_ACCESS";
+                // 更新状态栏显示
+                status.innerText = (days !== null) ? `PRO_ACCESS | 剩余 ${days} 天` : "PRO_ACCESS | 已授权";
                 status.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20 uppercase tracking-widest";
                 if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
             }
