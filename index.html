@@ -7,21 +7,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 100px; }
+        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 180px; }
         .glass { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-blur: 10px; }
         .gold-text { background: linear-gradient(135deg, #fb923c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 75px; background: rgba(10,10,10,0.98); border-top: 1px solid rgba(255,255,255,0.1); z-index: 100; display: flex; align-items: center; justify-content: space-around; }
         
-        /* 内容与代码块渲染 */
+        /* 底部导航与会员计划整合 */
+        .footer-fixed { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10,10,10,0.98); border-top: 1px solid rgba(255,255,255,0.1); z-index: 100; }
+        .membership-bar { background: rgba(249,115,22,0.1); border-bottom: 1px solid rgba(249,115,22,0.2); padding: 12px; text-align: center; }
+        .bottom-nav { height: 75px; display: flex; align-items: center; justify-content: space-around; }
+        
+        /* 内容渲染 */
         #readerBody { white-space: pre-wrap; word-wrap: break-word; line-height: 1.8; }
         #readerBody a { color: #f97316; text-decoration: underline; }
-        #readerBody code { background: #1a1a1a; border: 1px solid #333; padding: 1.2rem; border-radius: 12px; display: block; font-family: 'Consolas', monospace; margin: 1.5rem 0; overflow-x: auto; color: #fb923c; font-size: 0.85rem; }
+        #readerBody code { background: #1a1a1a; border: 1px solid #333; padding: 1rem; border-radius: 12px; display: block; font-family: monospace; margin: 1rem 0; color: #fb923c; overflow-x: auto; }
         
         /* 侧边客服 */
-        .side-service { position: fixed; right: 20px; bottom: 120px; z-index: 90; }
+        .side-service { position: fixed; right: 20px; bottom: 200px; z-index: 90; }
         .service-btn { width: 50px; height: 50px; background: #f97316; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(249,115,22,0.4); cursor: pointer; transition: transform 0.3s; }
         .service-btn:hover { transform: scale(1.1); }
-
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
@@ -65,36 +68,39 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <section id="section-intel" class="glass p-6 md:p-8 rounded-[2.5rem] min-h-[650px] flex flex-col">
+            <section id="section-intel" class="glass p-6 md:p-8 rounded-[2.5rem] min-h-[600px] flex flex-col">
                 <h3 class="font-black text-lg mb-6 flex items-center gap-2 text-white"><span class="w-1.5 h-5 bg-orange-600 rounded-full"></span> 核心情报</h3>
                 <div id="reportList" class="space-y-3 flex-grow"></div>
                 <div id="reportPagination" class="flex flex-wrap justify-center gap-1 mt-8"></div>
             </section>
 
-            <section id="section-tool" class="glass p-6 md:p-8 rounded-[2.5rem] min-h-[650px] flex flex-col">
+            <section id="section-tool" class="glass p-6 md:p-8 rounded-[2.5rem] min-h-[600px] flex flex-col">
                 <h3 class="font-black text-lg mb-6 flex items-center gap-2 text-white"><span class="w-1.5 h-5 bg-orange-600 rounded-full"></span> 生产力工具</h3>
                 <div id="toolList" class="space-y-3 flex-grow"></div>
                 <div id="toolPagination" class="flex flex-wrap justify-center gap-1 mt-8"></div>
-                
-                <div class="mt-8 p-4 bg-orange-600/10 border border-orange-500/20 rounded-2xl">
-                    <p class="text-[11px] text-center text-orange-500 font-black uppercase">PRO 会员计划：月费 ￥199 / 年费 ￥1688</p>
-                    <p class="text-[9px] text-center text-zinc-500 mt-1 uppercase">提示：购买或续费请务必联系在线客服</p>
-                </div>
             </section>
         </div>
     </main>
 
-    <div class="bottom-nav">
-        <button onclick="scrollToId('section-intel')" class="text-[10px] font-black text-orange-500 uppercase tracking-widest">情报 Intel</button>
-        <button onclick="scrollToId('section-tool')" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">工具 Tools</button>
-        <button onclick="toggleAdmin()" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">后台 MGR</button>
+    <div class="footer-fixed">
+        <div class="membership-bar">
+            <p class="text-[11px] text-orange-500 font-black uppercase tracking-widest">
+                PRO 计划：月费 ￥199 / 年费 ￥1688 — <span class="text-white">购买请联系客服</span>
+            </p>
+        </div>
+        <div class="bottom-nav">
+            <button onclick="scrollToId('section-intel')" class="text-[10px] font-black text-orange-500 uppercase tracking-widest">情报 Intel</button>
+            <button onclick="scrollToId('section-tool')" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">工具 Tools</button>
+            <button onclick="alert('请联系客服开通或在下方输入激活码')" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">激活 Active</button>
+            <button onclick="toggleAdmin()" class="text-[10px] font-black text-zinc-700 uppercase tracking-widest">管理 MGR</button>
+        </div>
     </div>
 
     <div id="adminPanel" class="fixed inset-0 z-[110] hidden bg-black/95 items-center justify-center p-4">
         <div class="bg-zinc-900 border border-white/10 p-8 rounded-[2.5rem] w-full max-w-xl shadow-2xl overflow-y-auto max-h-[90vh] custom-scroll">
             <div class="flex justify-between items-center mb-6">
-                <span class="text-white font-black text-xs uppercase tracking-widest">Content Management</span>
-                <button onclick="toggleAdmin()" class="text-zinc-500">✕</button>
+                <span class="text-white font-black text-xs uppercase tracking-widest">Manager Console</span>
+                <button onclick="toggleAdmin()" class="text-white">✕</button>
             </div>
             <div class="space-y-4">
                 <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none">
@@ -102,15 +108,15 @@
                     <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">情报模式</button>
                     <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">工具模式</button>
                 </div>
-                <input type="text" id="quickTitle" placeholder="文章标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
-                <textarea id="quickContent" rows="8" placeholder="正文（代码请用 ``` 包裹，支持网址自动跳转）" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white font-mono"></textarea>
+                <input type="text" id="quickTitle" placeholder="输入标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
+                <textarea id="quickContent" rows="8" placeholder="正文内容（代码请用 ``` 包裹）" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white font-mono"></textarea>
                 <div class="flex justify-between items-center">
-                    <label class="flex items-center gap-2 text-[10px] text-zinc-500"><input type="checkbox" id="isTopCheck" class="accent-orange-600"> 设置置顶</label>
-                    <div id="editModeIndicator" class="hidden text-[10px] text-orange-500 font-black uppercase">Editing Mode...</div>
+                    <label class="flex items-center gap-2 text-[10px] text-zinc-500"><input type="checkbox" id="isTopCheck" class="accent-orange-600"> 置顶文章</label>
+                    <div id="editModeIndicator" class="hidden text-[10px] text-orange-500 font-black uppercase">正在编辑中...</div>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="quickPublish()" class="flex-[2] py-4 bg-orange-700 rounded-2xl font-black text-xs text-white uppercase">同步数据库内容</button>
-                    <button onclick="resetAdminForm()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-black text-xs text-white uppercase">重置</button>
+                    <button onclick="quickPublish()" class="flex-[2] py-4 bg-orange-700 rounded-2xl font-black text-xs text-white uppercase">同步数据库</button>
+                    <button onclick="resetAdminForm()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-black text-xs text-white uppercase">重置表单</button>
                 </div>
             </div>
         </div>
@@ -119,7 +125,7 @@
     <div id="contentReader" class="fixed inset-0 z-[120] hidden bg-black items-center justify-center">
         <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden">
             <div class="p-6 border-b border-white/5 flex justify-between items-center bg-zinc-900/50">
-                <span id="readerTitleType" class="font-black text-xs uppercase text-orange-500">Intelligence Detail</span>
+                <span id="readerHead" class="font-black text-xs uppercase text-orange-500">Intelligence Detail</span>
                 <button onclick="closeReader()" class="text-white text-2xl">✕</button>
             </div>
             <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 text-sm md:text-base custom-scroll select-text"></div>
@@ -132,38 +138,38 @@
         let fullData = { reports: [], tools: [] };
         let editTargetId = null;
 
-        // 核心数据加载（回归修复）
+        // 加载内容：增强了默认分类分发，确保旧文章不消失
         async function loadContent() {
             try {
                 const res = await fetch(`${API_BASE}/api/reports/list`);
                 const data = await res.json();
                 
-                // 修复逻辑：如果不带分类或为 report，都划入情报。只有明确标记为 tool 的划入工具。
+                // 确保旧的文章（即使没有 category 字段）也会显示在情报中
                 fullData.reports = data.filter(i => i.category === 'report' || !i.category);
                 fullData.tools = data.filter(i => i.category === 'tool');
                 
                 renderReports(1);
                 renderTools(1);
-            } catch (e) { console.error("Data Sync Error"); }
+            } catch (e) { console.error("Load Error"); }
         }
 
-        // 通用分页逻辑（含 首页、末页、上下页）
+        // 分页逻辑（始、End、上一页、下一页）
         function renderPagination(targetId, total, size, current, func) {
             const pages = Math.ceil(total / size);
             const container = document.getElementById(targetId);
             if (!container || pages <= 1) { if(container) container.innerHTML=''; return; }
             
-            let html = `<button onclick="${func}(1)" class="px-3 h-8 rounded-lg bg-white/5 text-zinc-500 text-[10px] font-bold">首页</button>`;
+            let html = `<button onclick="${func}(1)" class="px-2 h-8 rounded-lg bg-white/5 text-zinc-500 text-[10px] font-bold">始</button>`;
             if(current > 1) html += `<button onclick="${func}(${current-1})" class="w-8 h-8 rounded-lg bg-white/5 text-zinc-500 text-[10px]"><</button>`;
             
             for (let i = 1; i <= pages; i++) {
                 if(Math.abs(i - current) < 2 || i === 1 || i === pages) {
-                    html += `<button onclick="${func}(i)" class="w-8 h-8 rounded-lg text-[10px] font-black ${i === current ? 'bg-orange-600 text-white' : 'bg-white/5 text-zinc-600'}">${i}</button>`;
+                    html += `<button onclick="${func}(${i})" class="w-8 h-8 rounded-lg text-[10px] font-black ${i === current ? 'bg-orange-600 text-white' : 'bg-white/5 text-zinc-600'}">${i}</button>`;
                 }
             }
 
             if(current < pages) html += `<button onclick="${func}(${current+1})" class="w-8 h-8 rounded-lg bg-white/5 text-zinc-500 text-[10px]">></button>`;
-            html += `<button onclick="${func}(${pages})" class="px-3 h-8 rounded-lg bg-white/5 text-zinc-500 text-[10px] font-bold">End</button>`;
+            html += `<button onclick="${func}(${pages})" class="px-2 h-8 rounded-lg bg-white/5 text-zinc-500 text-[10px] font-bold">End</button>`;
             container.innerHTML = html;
         }
 
@@ -173,17 +179,17 @@
             const paged = sorted.slice((page-1)*size, page*size);
             
             document.getElementById('reportList').innerHTML = paged.map(r => `
-                <div class="flex justify-between items-center p-5 glass rounded-2xl border ${r.is_top ? 'border-orange-500/30 bg-orange-600/5' : 'border-white/5'} hover:border-orange-500/30 group">
+                <div class="flex justify-between items-center p-5 glass rounded-2xl border ${r.is_top ? 'border-orange-500/40 bg-orange-600/5' : 'border-white/5'} hover:border-orange-500/30 group">
                     <div onclick="openItem(${r.id}, 'intel')" class="flex-grow cursor-pointer pr-4">
                         <div class="text-sm ${r.is_top ? 'text-orange-400 font-bold' : 'text-zinc-200'}">${r.title} ${r.is_top ? '🚩' : ''}</div>
                         <div class="text-[9px] text-zinc-600 mt-1 font-mono">${new Date(r.created_at).toLocaleDateString()}</div>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-700 hover:text-white uppercase font-black">Edit</button>
-                        <button onclick="handleDelete(${r.id})" class="text-[9px] text-zinc-800 hover:text-red-500 uppercase font-black">Del</button>
+                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-800 hover:text-white font-black">Edit</button>
+                        <button onclick="handleDelete(${r.id})" class="text-[9px] text-zinc-900 hover:text-red-500 font-black">Del</button>
                     </div>
                 </div>
-            `).join('') || '<div class="text-zinc-800 text-center py-20 text-xs uppercase tracking-widest">No Records Found</div>';
+            `).join('') || '<div class="py-10 text-center text-[10px] text-zinc-800 uppercase">Records Empty</div>';
             renderPagination('reportPagination', sorted.length, size, page, 'renderReports');
         }
 
@@ -193,38 +199,33 @@
             const paged = sorted.slice((page-1)*size, page*size);
             
             document.getElementById('toolList').innerHTML = paged.map(r => `
-                <div class="flex items-center gap-4 p-5 glass rounded-2xl border ${r.is_top ? 'border-orange-500/30' : 'border-white/5'} hover:bg-white/10 group">
+                <div class="flex items-center gap-4 p-5 glass rounded-2xl border ${r.is_top ? 'border-orange-500/40 bg-orange-600/5' : 'border-white/5'} hover:bg-white/10 group">
                     <div onclick="openItem(${r.id}, 'tool')" class="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-orange-600 cursor-pointer">⚡</div>
                     <div onclick="openItem(${r.id}, 'tool')" class="flex-grow cursor-pointer font-bold text-sm ${r.is_top ? 'text-orange-400' : 'text-zinc-200'}">${r.title} ${r.is_top ? '🚩' : ''}</div>
                     <div class="flex gap-3">
-                        <button onclick="handleEdit(${r.id}, 'tool')" class="text-[9px] text-zinc-700 hover:text-white font-black">Edit</button>
-                        <button onclick="handleDelete(${r.id})" class="text-[9px] text-zinc-800 hover:text-red-500 font-black">Del</button>
+                        <button onclick="handleEdit(${r.id}, 'tool')" class="text-[9px] text-zinc-800 hover:text-white font-black">Edit</button>
+                        <button onclick="handleDelete(${r.id})" class="text-[9px] text-zinc-900 hover:text-red-500 font-black">Del</button>
                     </div>
                 </div>
-            `).join('') || '<div class="text-zinc-800 text-center py-20 text-xs uppercase tracking-widest">No Tools Found</div>';
+            `).join('') || '<div class="py-10 text-center text-[10px] text-zinc-800 uppercase">Tools Empty</div>';
             renderPagination('toolPagination', sorted.length, size, page, 'renderTools');
         }
 
-        // 内容渲染增强
         async function openItem(id, type) {
             const token = localStorage.getItem('ymtea_token');
-            if (!token) return alert("请先在底部【激活】处验证授权码");
+            if (!token) return alert("请联系客服开通 PRO 会员并获取激活码。");
             
-            try {
-                const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
-                const result = await res.json();
-                
-                let content = result.data;
-                // 1. 网址新窗口打开
-                content = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-                // 2. 代码块美化
-                content = content.replace(/```([\s\S]*?)```/g, '<code>$1</code>');
-                
-                document.getElementById('readerTitleType').innerText = type === 'tool' ? 'Tool Documentation' : 'Intelligence Detail';
-                document.getElementById('readerBody').innerHTML = content;
-                document.getElementById('contentReader').classList.replace('hidden', 'flex');
-                document.body.style.overflow = 'hidden';
-            } catch (e) { alert("获取详情失败"); }
+            const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
+            const result = await res.json();
+            
+            let content = result.data;
+            content = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+            content = content.replace(/```([\s\S]*?)```/g, '<code>$1</code>');
+            
+            document.getElementById('readerHead').innerText = type === 'tool' ? 'Tool Documentation' : 'Intelligence Detail';
+            document.getElementById('readerBody').innerHTML = content;
+            document.getElementById('contentReader').classList.replace('hidden', 'flex');
+            document.body.style.overflow = 'hidden';
         }
 
         async function quickPublish() {
@@ -232,7 +233,7 @@
             const title = document.getElementById('quickTitle').value.trim();
             const content = document.getElementById('quickContent').value.trim();
             const isTop = document.getElementById('isTopCheck').checked ? 1 : 0;
-            if(!pass || !title) return alert("口令与标题必填");
+            if(!pass || !title) return alert("Secret & Title 必填");
 
             const safeTitle = title.replace(/'/g, "''");
             const safeContent = content.replace(/'/g, "''");
@@ -241,29 +242,25 @@
                 ? `UPDATE reports SET title='${safeTitle}', content='${safeContent}', category='${currentCategory}', is_top=${isTop} WHERE id=${editTargetId};`
                 : `INSERT INTO reports (title, content, category, is_top) VALUES ('${safeTitle}', '${safeContent}', '${currentCategory}', ${isTop});`;
             
-            try {
-                const res = await fetch(`${API_BASE}/api/admin/publish`, {
-                    method: 'POST',
-                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sql })
-                });
-                if (res.ok) { alert("同步成功！"); resetAdminForm(); loadContent(); toggleAdmin(); }
-                else alert("同步失败：口令不正确或 D1 拒绝");
-            } catch(e) { alert("网络错误"); }
+            const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                method: 'POST',
+                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql })
+            });
+            if (res.ok) { alert("成功！"); resetAdminForm(); loadContent(); toggleAdmin(); }
+            else alert("同步失败");
         }
 
         async function handleDelete(id) {
-            const pass = prompt("⚠️ 确认删除该文章吗？请输入管理员口令：");
+            const pass = prompt("确认删除？请输入管理员 Secret：");
             if(!pass) return;
             const sql = `DELETE FROM reports WHERE id=${id};`;
-            try {
-                const res = await fetch(`${API_BASE}/api/admin/publish`, {
-                    method: 'POST',
-                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sql })
-                });
-                if(res.ok) { alert("已删除"); loadContent(); }
-            } catch(e) { alert("删除失败"); }
+            const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                method: 'POST',
+                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql })
+            });
+            if(res.ok) { alert("已删除"); loadContent(); }
         }
 
         function handleEdit(id, cat) {
@@ -274,8 +271,7 @@
             document.getElementById('isTopCheck').checked = item.is_top == 1;
             document.getElementById('editModeIndicator').classList.remove('hidden');
             
-            // 自动拉取原内容
-            const token = localStorage.getItem('ymtea_token') || document.getElementById('adminPass').value;
+            const token = localStorage.getItem('ymtea_token') || prompt("编辑模式需要口令:");
             fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } })
                 .then(r => r.json())
                 .then(data => { document.getElementById('quickContent').value = data.data; });
