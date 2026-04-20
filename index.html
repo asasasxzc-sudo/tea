@@ -3,64 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMTEA HUB | 云茗荟 PRO</title>
+    <title>云茗荟 PRO | 深度内容引擎</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
-        body { font-family: 'Noto Serif SC', serif; background: #050505; color: #d1d5db; scroll-behavior: smooth; }
-        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); }
-        .pro-gradient { background: linear-gradient(135deg, #c2410c 0%, #7c2d12 100%); }
-        .report-content h2 { font-size: 1.5rem; color: #fff; margin: 2rem 0 1rem; border-left: 4px solid #c2410c; padding-left: 1rem; }
-        .report-content p { line-height: 2.2; margin-bottom: 1.5rem; text-align: justify; color: #a1a1aa; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap');
+        body { font-family: 'Noto Serif SC', serif; background: #F4F6F3; color: #2C3E2D; }
+        
+        /* 置顶卡片：青瓷色渐变 */
+        .top-card { 
+            background: linear-gradient(135deg, #4A5D4A 0%, #6B8E6B 100%); 
+            box-shadow: 0 10px 20px -5px rgba(74, 93, 74, 0.3);
+        }
+        
+        /* 内容白板 */
+        .glass-white { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 1);
+        }
+
+        .report-content h2 { font-size: 1.5rem; color: #1A1A1A; margin: 2rem 0 1rem; border-left: 6px solid #4A5D4A; padding-left: 1rem; }
+        .report-content p { line-height: 2.1; margin-bottom: 1.5rem; text-align: justify; font-size: 1.05rem; }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <nav class="p-6 border-b border-white/5 flex justify-between items-center sticky top-0 bg-black/90 z-50">
-        <div class="text-xl font-black tracking-tighter text-white">YMTEA <span class="text-orange-700">HUB</span></div>
-        <div id="userStatus" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest"></div>
+    <nav class="p-6 border-b border-gray-200 flex justify-between items-center sticky top-0 bg-white/80 z-50 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+            <div class="bg-[#4A5D4A] w-8 h-8 rounded-lg flex items-center justify-center text-white text-lg font-black">云</div>
+            <h1 class="text-xl font-black tracking-tight text-slate-800">云茗荟 <span class="text-[#4A5D4A]">PRO</span></h1>
+        </div>
+        <div id="userStatus" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"></div>
     </nav>
 
     <main class="container mx-auto px-4 py-12 max-w-6xl">
-        <div class="grid lg:grid-cols-12 gap-12">
+        <div class="grid lg:grid-cols-12 gap-10">
             
             <div class="lg:col-span-7">
                 <div id="topSection" class="mb-12 hidden">
-                    <h2 class="text-[11px] font-black text-orange-700 mb-6 flex items-center gap-2 uppercase tracking-[0.4em]">
-                        <span class="w-2 h-4 bg-orange-700"></span> 核心置顶情报
+                    <h2 class="text-xs font-black text-slate-400 mb-5 flex items-center gap-2 uppercase tracking-[0.3em]">
+                        <span class="w-4 h-[1px] bg-slate-300"></span> 核心置顶情报
                     </h2>
-                    <div id="topGrid" class="grid grid-cols-2 gap-4"></div>
+                    <div id="topGrid" class="grid grid-cols-2 gap-4">
+                        </div>
                 </div>
 
-                <h2 class="text-xl font-bold text-white mb-8 flex items-center gap-3">
-                    <span class="w-1.5 h-8 pro-gradient rounded-full"></span> 核心情报目录
+                <h2 class="text-xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="w-1.5 h-7 bg-[#4A5D4A] rounded-full"></span> 核心情报目录
                 </h2>
-                <div id="reportList" class="space-y-4"></div>
+                <div id="reportList" class="space-y-4">
+                    </div>
             </div>
 
             <div class="lg:col-span-5 space-y-8">
-                <div class="glass p-8 rounded-[2.5rem]">
-                    <h3 class="text-lg font-bold text-white mb-6">PRO 会员解锁</h3>
+                <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6">激活会员权限</h3>
                     <div class="space-y-4">
-                        <input id="activeEmail" type="email" placeholder="邮箱" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-orange-700">
-                        <input id="activeCode" type="text" placeholder="激活码" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-orange-700">
-                        <button onclick="redeem('monthly')" class="w-full py-4 pro-gradient text-white rounded-2xl font-bold shadow-lg shadow-orange-900/20 active:scale-95 transition-all">立即激活权限</button>
+                        <input id="activeEmail" type="email" placeholder="您的电子邮箱" class="w-full bg-slate-50 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-[#4A5D4A]">
+                        <input id="activeCode" type="text" placeholder="输入激活码" class="w-full bg-slate-50 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-[#4A5D4A]">
+                        <button onclick="redeem('monthly')" class="w-full py-4 bg-[#4A5D4A] text-white rounded-2xl font-bold shadow-xl hover:bg-[#3E4A3E] active:scale-95 transition-all">立即激活 PRO 权限</button>
                     </div>
                 </div>
 
-                <div class="glass p-8 rounded-[2.5rem] border-orange-900/10">
-                    <details>
-                        <summary class="text-xs font-bold text-gray-500 cursor-pointer uppercase">发布系统 (ADMIN)</summary>
+                <div class="bg-slate-200/50 p-6 rounded-[2rem]">
+                    <details class="group">
+                        <summary class="text-xs font-bold text-slate-400 cursor-pointer list-none flex justify-between items-center">
+                            ADMIN PUBLISH <span class="group-open:rotate-180 transition-transform">↓</span>
+                        </summary>
                         <div class="mt-6 space-y-4">
-                            <input id="adminKey" type="password" placeholder="口令" class="w-full bg-black border border-white/10 p-3 rounded-xl text-sm">
-                            <input id="pubTitle" type="text" placeholder="标题" class="w-full bg-black border border-white/10 p-3 rounded-xl text-sm">
-                            <input id="pubCategory" type="text" placeholder="分类" class="w-full bg-black border border-white/10 p-3 rounded-xl text-sm">
-                            <textarea id="pubContent" rows="5" placeholder="正文" class="w-full bg-black border border-white/10 p-3 rounded-xl text-sm"></textarea>
+                            <input id="adminKey" type="password" placeholder="口令" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
+                            <input id="pubTitle" type="text" placeholder="文章标题" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
+                            <input id="pubCategory" type="text" placeholder="文章分类" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
+                            <textarea id="pubContent" rows="5" placeholder="正文内容" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none"></textarea>
                             <div class="flex items-center gap-2 px-1">
-                                <input type="checkbox" id="pubIsTop" class="accent-orange-700">
-                                <label for="pubIsTop" class="text-[10px] text-gray-500 uppercase">设为置顶</label>
+                                <input type="checkbox" id="pubIsTop" class="accent-[#4A5D4A]">
+                                <label for="pubIsTop" class="text-[10px] text-slate-500 font-bold uppercase">设为置顶</label>
                             </div>
-                            <button onclick="publishReport()" class="w-full py-3 bg-white text-black font-bold rounded-xl text-xs">发布</button>
+                            <button onclick="publishReport()" class="w-full py-3 bg-white text-[#4A5D4A] border border-[#4A5D4A] font-bold rounded-xl text-xs hover:bg-[#4A5D4A] hover:text-white transition-all">确认发布到云端</button>
                         </div>
                     </details>
                 </div>
@@ -68,10 +87,16 @@
         </div>
     </main>
 
-    <div id="modal" class="fixed inset-0 bg-black/98 z-[100] hidden overflow-y-auto">
-        <div class="max-w-3xl mx-auto px-6 py-20">
-            <button onclick="closeModal()" class="mb-12 text-orange-700 font-bold flex items-center gap-2">← CLOSE</button>
-            <div id="modalContent" class="report-content"></div>
+    <div id="modal" class="fixed inset-0 bg-slate-900/40 z-[100] hidden backdrop-blur-sm">
+        <div class="h-full w-full flex items-end lg:items-center justify-center p-0 lg:p-4">
+            <div class="bg-white w-full max-w-4xl h-[90vh] lg:h-[85vh] rounded-t-[2.5rem] lg:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col">
+                <div class="p-6 border-b flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">YMTEA PRO REPORT</span>
+                    <button onclick="closeModal()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 text-xl">&times;</button>
+                </div>
+                <div id="modalContent" class="flex-1 overflow-y-auto p-8 lg:p-14 report-content">
+                    </div>
+            </div>
         </div>
     </div>
 
@@ -82,62 +107,79 @@
 
         function checkUser() {
             const token = localStorage.getItem('ymtea_token');
-            document.getElementById('userStatus').innerHTML = token ? '<span class="text-orange-600">PRO MEMBER</span>' : 'GUEST';
+            document.getElementById('userStatus').innerHTML = token ? '<span class="text-[#4A5D4A]">● PRO 会员已激活</span>' : '● 游客访问';
         }
 
         async function loadList() {
-            const res = await fetch(`${API_BASE}/api/reports/list`);
-            const data = await res.json();
-            const topItems = data.filter(i => i.is_top === 1);
-            const normalItems = data.filter(i => i.is_top !== 1);
+            try {
+                const res = await fetch(`${API_BASE}/api/reports/list`);
+                const data = await res.json();
+                
+                const topItems = data.filter(i => i.is_top === 1);
+                const normalItems = data.filter(i => i.is_top !== 1);
 
-            if(topItems.length > 0) {
-                document.getElementById('topSection').classList.remove('hidden');
-                document.getElementById('topGrid').innerHTML = topItems.map(i => `
-                    <div onclick="viewReport('${i.id}')" class="pro-gradient p-5 rounded-2xl cursor-pointer hover:scale-[1.02] transition-all">
-                        <span class="text-[8px] bg-black/20 px-2 py-0.5 rounded text-white font-bold uppercase">${i.category}</span>
-                        <h3 class="text-white font-bold text-xs mt-3 leading-tight">${i.title}</h3>
+                if(topItems.length > 0) {
+                    document.getElementById('topSection').classList.remove('hidden');
+                    document.getElementById('topGrid').innerHTML = topItems.map(i => `
+                        <div onclick="viewReport('${i.id}')" class="top-card p-6 rounded-[1.5rem] cursor-pointer hover:translate-y-[-4px] transition-all group">
+                            <span class="text-[9px] bg-white/20 px-2 py-0.5 rounded text-white font-bold uppercase">${i.category}</span>
+                            <h3 class="text-white font-bold text-base mt-4 leading-snug group-hover:underline">${i.title}</h3>
+                        </div>
+                    `).join('');
+                }
+
+                document.getElementById('reportList').innerHTML = normalItems.map(i => `
+                    <div class="bg-white p-6 rounded-3xl flex justify-between items-center group hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-slate-200" onclick="viewReport('${i.id}')">
+                        <div>
+                            <span class="text-[10px] text-[#4A5D4A] font-bold uppercase tracking-widest">${i.category}</span>
+                            <h3 class="text-slate-800 font-bold mt-1 group-hover:text-[#4A5D4A]">${i.title}</h3>
+                            <p class="text-[9px] text-slate-300 mt-2 font-bold uppercase tracking-tighter">${i.created_at.split('T')[0]}</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-[#4A5D4A] group-hover:text-white transition-all">→</div>
                     </div>
                 `).join('');
-            }
-
-            document.getElementById('reportList').innerHTML = normalItems.map(i => `
-                <div class="glass p-6 rounded-3xl flex justify-between items-center group hover:bg-white/5 transition-all cursor-pointer" onclick="viewReport('${i.id}')">
-                    <div>
-                        <span class="text-[9px] text-orange-700 font-bold uppercase">${i.category}</span>
-                        <h3 class="text-white font-bold mt-1 group-hover:text-orange-500">${i.title}</h3>
-                    </div>
-                    <span class="text-gray-700">→</span>
-                </div>
-            `).join('');
+            } catch (e) { console.error("Load Error"); }
         }
 
         async function viewReport(id) {
             const token = localStorage.getItem('ymtea_token');
-            if(!token) return alert("请先激活会员");
-            const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token }});
+            if(!token) return alert("该内容为 PRO 深度报告，请先使用激活码解锁。");
+            
+            const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { 
+                headers: { 'Authorization': token }
+            });
             const data = await res.json();
+            
             if(res.ok) {
                 document.getElementById('modalContent').innerHTML = data.data;
                 document.getElementById('modal').classList.remove('hidden');
-            } else alert(data.msg);
+            } else {
+                alert(data.msg);
+            }
         }
 
         async function redeem(type) {
             const email = document.getElementById('activeEmail').value;
             const code = document.getElementById('activeCode').value;
+            if(!email || !code) return alert("请填写完整信息");
+
             const res = await fetch(`${API_BASE}/api/pay/success`, {
                 method: 'POST',
                 body: JSON.stringify({ email, code, type })
             });
             const data = await res.json();
-            if(data.success) { localStorage.setItem('ymtea_token', data.token); location.reload(); } else alert(data.msg);
+            if(data.success) { 
+                localStorage.setItem('ymtea_token', data.token); 
+                alert("激活成功，欢迎进入云茗荟 PRO 智库！");
+                location.reload(); 
+            } else alert(data.msg);
         }
 
         async function publishReport() {
+            const key = document.getElementById('adminKey').value;
             const res = await fetch(`${API_BASE}/api/admin/publish`, {
                 method: 'POST',
-                headers: { 'Admin-Key': document.getElementById('adminKey').value, 'Content-Type': 'application/json' },
+                headers: { 'Admin-Key': key, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     title: document.getElementById('pubTitle').value,
                     category: document.getElementById('pubCategory').value,
@@ -145,7 +187,7 @@
                     is_top: document.getElementById('pubIsTop').checked
                 })
             });
-            if(res.ok) location.reload(); else alert("发布失败");
+            if(res.ok) { alert("发布成功"); location.reload(); } else alert("发布失败");
         }
 
         function closeModal() { document.getElementById('modal').classList.add('hidden'); }
