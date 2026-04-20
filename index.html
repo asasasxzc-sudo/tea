@@ -7,20 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 180px; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 200px; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
         
         .gold-text { background: linear-gradient(135deg, #fb923c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .glass { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
         
-        /* 底部导航 */
+        /* 底部导航固定 */
         .bottom-fixed { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; }
         .price-bar { background: rgba(10,10,10,0.95); border-top: 1px solid rgba(255,255,255,0.05); padding: 8px 0; display: flex; justify-content: center; gap: 20px; backdrop-filter: blur(15px); }
         .bottom-nav { height: 85px; background: #000; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); }
         
-        /* 悬浮客服按钮 */
-        .service-float { position: fixed; right: 20px; bottom: 180px; z-index: 100; }
+        /* 右侧悬浮客服 */
+        .service-float { position: fixed; right: 16px; bottom: 180px; z-index: 100; }
+        .float-btn { width: 56px; height: 56px; background: #f97316; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); border: 2px solid rgba(255,255,255,0.2); transition: transform 0.2s; cursor: pointer; }
+        .float-btn:active { transform: scale(0.9); }
 
-        /* 内容显示 */
+        /* 内容阅读器优化 */
         #readerBody { white-space: pre-wrap; line-height: 1.8; word-break: break-all; }
         #readerBody a { color: #f97316; text-decoration: underline; font-weight: bold; }
         pre { background: #000; padding: 15px; border-radius: 12px; border: 1px solid #333; color: #fb923c; overflow-x: auto; font-family: monospace; margin: 15px 0; font-size: 12px; }
@@ -34,7 +36,7 @@
 </head>
 <body>
 
-    <!-- 顶部状态栏 -->
+    <!-- 顶部抬头 -->
     <header class="sticky top-0 z-[150] w-full border-b border-white/10 bg-black/90 backdrop-blur-md h-16 flex items-center justify-between px-6">
         <div class="flex flex-col" onclick="window.scrollTo({top:0, behavior:'smooth'})">
             <div class="text-xl font-black tracking-tighter cursor-pointer" ondblclick="toggleAdmin()">
@@ -45,147 +47,137 @@
         <div id="statusLabel" class="text-[9px] font-mono px-2 py-1 rounded bg-zinc-900 text-zinc-500 border border-white/10">SYS_READY</div>
     </header>
 
-    <main id="top" class="max-w-7xl mx-auto px-4 py-6 space-y-8">
-        <!-- 实时情报 -->
-        <div class="glass rounded-[2rem] p-6">
-            <div id="trendList" class="grid grid-cols-3 grid-rows-2 gap-3"></div>
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-8">
+        <!-- 实时趋势快报 -->
+        <div class="glass rounded-[2rem] p-4 md:p-6">
+            <div id="trendList" class="grid grid-cols-3 gap-3 md:grid-cols-6">
+                <!-- 由 JS 填充 -->
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <section id="section-intel" class="glass p-6 rounded-[2.5rem] min-h-[400px]">
-                <h2 class="font-black text-white mb-6 italic uppercase tracking-widest text-sm border-l-4 border-orange-500 pl-3">Intelligence / 情报</h2>
-                <div id="reportList" class="space-y-3">终端同步中...</div>
+            <!-- 情报板块 -->
+            <section id="section-intel" class="glass p-6 rounded-[2.5rem] min-h-[300px]">
+                <h2 class="font-black text-white mb-6 italic uppercase tracking-widest text-xs border-l-4 border-orange-500 pl-3">Intelligence / 核心情报</h2>
+                <div id="reportList" class="space-y-3 font-medium">连接终端中...</div>
                 <div id="reportPagination" class="flex justify-center gap-2 mt-6"></div>
             </section>
-            <section id="section-tools" class="glass p-6 rounded-[2.5rem] min-h-[400px]">
-                <h2 class="font-black text-white mb-6 italic uppercase tracking-widest text-sm border-l-4 border-zinc-600 pl-3">Toolbox / 工具</h2>
-                <div id="toolList" class="space-y-3">终端同步中...</div>
+            <!-- 工具板块 -->
+            <section id="section-tools" class="glass p-6 rounded-[2.5rem] min-h-[300px]">
+                <h2 class="font-black text-white mb-6 italic uppercase tracking-widest text-xs border-l-4 border-zinc-600 pl-3">Toolbox / 生产工具</h2>
+                <div id="toolList" class="space-y-3 font-medium">同步组件中...</div>
                 <div id="toolPagination" class="flex justify-center gap-2 mt-6"></div>
             </section>
         </div>
     </main>
 
-    <!-- 右侧客服找回 -->
+    <!-- 右侧客服找回悬浮 -->
     <div class="service-float">
-        <button onclick="showHelp()" class="w-12 h-12 bg-orange-600 rounded-full flex flex-col items-center justify-center shadow-lg border border-white/20">
-            <span class="text-[8px] font-black text-white">找回</span>
-            <span class="text-[8px] font-black text-white">激活</span>
+        <button onclick="showHelpModal()" class="float-btn">
+            <span class="text-[10px] font-black text-white leading-none">找回</span>
+            <span class="text-[10px] font-black text-white leading-none mt-1">权限</span>
         </button>
     </div>
 
     <!-- 底部固定栏 -->
     <div class="bottom-fixed">
         <div class="price-bar">
-            <div class="flex items-center gap-2 text-[10px]"><span class="text-zinc-500 font-bold">MONTHLY</span><span class="text-orange-500 font-black">¥78</span></div>
+            <div class="flex items-center gap-2 text-[10px]"><span class="text-zinc-500 font-bold uppercase">Monthly</span><span class="text-orange-500 font-black italic">¥78</span></div>
             <div class="w-[1px] h-3 bg-white/10"></div>
-            <div class="flex items-center gap-2 text-[10px]"><span class="text-zinc-500 font-bold">YEARLY</span><span class="text-orange-500 font-black">¥730</span></div>
+            <div class="flex items-center gap-2 text-[10px]"><span class="text-zinc-500 font-bold uppercase">Yearly</span><span class="text-orange-500 font-black italic">¥730</span></div>
         </div>
         <footer class="bottom-nav">
             <button onclick="scrollToId('section-intel')" class="flex-1 text-[11px] font-black text-zinc-500 hover:text-white transition-colors">情报</button>
+            
             <div class="flex flex-col items-center gap-1 min-w-[150px]">
-                <!-- 新窗口打开链接 -->
-                <a href="https://vip.ymtea.club" target="_blank" class="gold-text text-[12px] font-black tracking-[0.4em] mb-1 hover:opacity-80 transition-opacity">云茗荟</a>
+                <!-- 页脚链接：新窗口打开修复 -->
+                <a href="https://vip.ymtea.club" target="_blank" class="gold-text text-[12px] font-black tracking-[0.4em] mb-1 hover:opacity-80 transition-opacity cursor-pointer">云茗荟</a>
                 <button onclick="showPayModal()" class="w-full py-3.5 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-tighter shadow-xl">
                     立即激活权限
                 </button>
             </div>
+
             <button onclick="scrollToId('section-tools')" class="flex-1 text-[11px] font-black text-zinc-500 hover:text-white transition-colors">工具</button>
         </footer>
     </div>
 
-    <!-- 阅读器 -->
-    <div id="contentReader" class="fixed inset-0 z-[300] hidden bg-black/95 flex items-center justify-center p-4">
-        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 shadow-2xl">
-            <div class="p-6 border-b border-white/5 flex justify-between items-center">
-                <span class="text-orange-500 font-bold text-[9px] uppercase tracking-widest italic">Terminal Reader</span>
-                <button onclick="closeReader()" class="text-zinc-500 hover:text-white text-2xl">✕</button>
+    <!-- 找回激活码弹窗 -->
+    <div id="helpModal" class="fixed inset-0 z-[400] hidden bg-black/95 flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="max-w-xs w-full text-center">
+            <h2 class="text-2xl font-black text-white mb-2 uppercase italic gold-text">找回激活码</h2>
+            <div class="bg-zinc-900 border border-white/10 p-6 rounded-[2.5rem] space-y-4 mb-6 text-left">
+                <p class="text-[11px] text-zinc-400 leading-relaxed">如果您忘记了激活码，或支付后未收到，请联系云茗荟客服并提供支付截图：</p>
+                <div class="py-3 border-y border-white/5 space-y-2">
+                    <p class="text-xs font-bold text-white flex justify-between"><span>微信客服：</span><span class="text-orange-500 uppercase">ymtea_hub</span></p>
+                    <p class="text-xs font-bold text-white flex justify-between"><span>官方邮箱：</span><span class="text-orange-500 uppercase">vip@ymtea.club</span></p>
+                </div>
+                <p class="text-[9px] text-zinc-600 uppercase font-bold text-center">在线时间：10:00 - 22:00</p>
             </div>
-            <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 text-sm custom-scroll"></div>
-            <div class="p-6 border-t border-white/5 flex gap-4">
-                <button id="prevBtn" class="flex-1 py-4 bg-white/5 rounded-2xl text-[10px] font-bold text-zinc-500 uppercase">PREV</button>
-                <button id="nextBtn" class="flex-1 py-4 bg-white/5 rounded-2xl text-[10px] font-bold text-zinc-500 uppercase">NEXT</button>
+            <button onclick="closeModal('helpModal')" class="w-full py-4 bg-zinc-800 rounded-2xl text-zinc-400 font-black uppercase text-[10px] tracking-widest">返回</button>
+        </div>
+    </div>
+
+    <!-- 阅读器弹窗 -->
+    <div id="contentReader" class="fixed inset-0 z-[300] hidden bg-black/95 flex items-center justify-center p-4">
+        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3.5rem] flex flex-col border border-white/10 shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
+                <span class="text-orange-500 font-bold text-[9px] uppercase tracking-[0.3em] italic">Encrypted Data Stream</span>
+                <button onclick="closeReader()" class="w-10 h-10 flex items-center justify-center text-zinc-500 hover:text-white text-2xl transition-colors">✕</button>
+            </div>
+            <div id="readerBody" class="flex-grow overflow-y-auto p-6 md:p-12 text-zinc-200 text-sm leading-loose custom-scroll"></div>
+            <div class="p-4 border-t border-white/5 flex gap-4 bg-zinc-900/50">
+                <button id="prevBtn" class="flex-1 py-4 bg-white/5 rounded-2xl text-[10px] font-bold text-zinc-500 uppercase">Prev</button>
+                <button id="nextBtn" class="flex-1 py-4 bg-white/5 rounded-2xl text-[10px] font-bold text-zinc-500 uppercase">Next</button>
             </div>
         </div>
     </div>
 
-    <!-- 管理员控制台 -->
+    <!-- 管理控制台 -->
     <div id="adminPanel" class="fixed inset-0 z-[250] hidden bg-black/98 flex items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scroll shadow-2xl">
-            <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
-                <span class="gold-text font-black text-[10px] uppercase tracking-widest">Master Control Panel</span>
-                <button onclick="toggleAdmin()" class="text-zinc-600 underline text-[10px]">EXIT</button>
+        <div class="bg-zinc-900 border border-white/10 p-6 md:p-8 rounded-[3rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scroll shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <span class="gold-text font-black text-xs uppercase tracking-widest">Master Console</span>
+                <button onclick="toggleAdmin()" class="text-zinc-600 underline text-[10px] font-bold uppercase">Close</button>
             </div>
             
             <div class="space-y-6">
                 <div>
-                    <label class="text-[9px] text-zinc-500 font-bold ml-1">ADMIN SECRET KEY</label>
-                    <input type="password" id="adminPass" placeholder="输入管理员密码以开启编辑权限" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-white text-xs outline-none focus:border-orange-600 transition-all">
+                    <label class="text-[9px] text-zinc-500 font-black ml-1 uppercase">Admin Access Key</label>
+                    <input type="password" id="adminPass" placeholder="管理密钥" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-white text-xs outline-none focus:border-orange-500 transition-all">
                 </div>
-                
-                <div class="p-6 bg-zinc-800/30 border border-white/5 rounded-3xl space-y-4">
+
+                <div class="p-4 bg-zinc-800/20 border border-white/5 rounded-3xl space-y-4">
                     <div class="flex gap-2">
                         <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">情报</button>
                         <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">工具</button>
                     </div>
                     <input type="text" id="quickTitle" placeholder="标题" class="w-full bg-black border border-white/10 p-4 rounded-xl text-white text-xs outline-none">
-                    <textarea id="quickContent" rows="8" placeholder="正文内容..." class="w-full bg-black border border-white/10 p-4 rounded-xl text-white text-xs font-mono outline-none"></textarea>
-                    <div class="flex justify-between items-center px-1">
+                    <textarea id="quickContent" rows="8" placeholder="正文内容" class="w-full bg-black border border-white/10 p-4 rounded-xl text-white text-xs font-mono outline-none"></textarea>
+                    
+                    <div class="flex justify-between items-center">
                         <label class="flex items-center gap-2 text-[10px] text-zinc-500 uppercase cursor-pointer">
-                            <input type="checkbox" id="isTopCheck" class="w-4 h-4 accent-orange-600"> 强制置顶
+                            <input type="checkbox" id="isTopCheck" class="w-4 h-4 accent-orange-600"> 置顶文档
                         </label>
-                        <span id="editStatus" class="text-[9px] text-orange-500 font-bold uppercase italic"></span>
+                        <span id="editStatus" class="text-[9px] text-orange-500 font-bold"></span>
                     </div>
+
                     <div class="flex gap-3">
-                        <button onclick="quickPublish()" id="publishBtn" class="flex-[2] py-4 bg-orange-700 rounded-2xl font-black text-xs text-white uppercase">保存到云端</button>
-                        <button onclick="cancelEdit()" id="cancelBtn" class="hidden flex-1 py-4 bg-zinc-800 rounded-2xl font-black text-xs text-zinc-500 uppercase">放弃</button>
+                        <button onclick="quickPublish()" id="publishBtn" class="flex-[2] py-4 bg-orange-700 rounded-2xl font-black text-xs text-white uppercase">发布/同步</button>
+                        <button onclick="cancelEdit()" id="cancelBtn" class="hidden flex-1 py-4 bg-zinc-800 rounded-2xl font-black text-xs text-zinc-500 uppercase">取消</button>
                     </div>
-                </div>
-
-                <div class="p-6 bg-orange-600/5 border border-orange-600/10 rounded-3xl">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-[10px] font-bold text-orange-600 uppercase">激活码分发</span>
-                        <select id="codeType" class="bg-black text-[9px] text-orange-500 border border-orange-600/20 rounded px-2 py-1">
-                            <option value="MONTH">月卡激活码</option>
-                            <option value="YEAR">年卡激活码</option>
-                        </select>
-                    </div>
-                    <div class="flex gap-2">
-                        <input type="text" id="targetEmail" placeholder="备注姓名" class="flex-1 bg-black border border-white/10 p-4 rounded-xl text-white text-xs outline-none">
-                        <button onclick="manualAddCode()" class="px-6 bg-orange-600 rounded-xl text-[11px] font-black text-white uppercase">生成</button>
-                    </div>
-                    <div id="codeDisplay" class="mt-4 bg-black/50 p-4 rounded-xl text-[10px] font-mono text-zinc-500 min-h-[40px]">...</div>
-                    <button onclick="fetchCodes()" class="w-full mt-3 text-[8px] text-zinc-700 underline uppercase">查看最近记录</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 帮助/找回弹窗 -->
-    <div id="helpModal" class="fixed inset-0 z-[400] hidden bg-black/95 flex items-center justify-center p-6 backdrop-blur-md">
+    <!-- 激活权限弹窗 -->
+    <div id="payModal" class="fixed inset-0 z-[400] hidden bg-black/95 flex items-center justify-center p-6 backdrop-blur-md">
         <div class="max-w-xs w-full text-center">
-            <h2 class="text-2xl font-black text-white mb-2 uppercase italic gold-text">找回激活码</h2>
-            <div class="bg-zinc-900 border border-white/10 p-6 rounded-3xl space-y-4 mb-6">
-                <p class="text-[11px] text-zinc-400 leading-relaxed">
-                    如果您已支付但未收到激活码，或者激活码丢失，请通过以下方式联系客服：
-                </p>
-                <div class="py-3 border-y border-white/5 space-y-2">
-                    <p class="text-xs font-bold text-white">微信客服：<span class="text-orange-500">ymtea_hub</span></p>
-                    <p class="text-xs font-bold text-white">官方邮箱：<span class="text-orange-500">support@ymtea.club</span></p>
-                </div>
-                <p class="text-[9px] text-zinc-600 uppercase">工作时间：10:00 - 22:00</p>
-            </div>
-            <button onclick="closeModal('helpModal')" class="w-full py-4 bg-zinc-800 rounded-2xl text-zinc-400 font-black uppercase text-xs">我知道了</button>
-        </div>
-    </div>
-
-    <!-- 支付激活弹窗 -->
-    <div id="payModal" class="fixed inset-0 z-[400] hidden bg-black/95 flex items-center justify-center p-6">
-        <div class="max-w-xs w-full text-center">
-            <h2 class="text-3xl font-black text-white mb-2 uppercase italic gold-text">Activation</h2>
-            <p class="text-[9px] text-zinc-600 mb-8 tracking-[0.2em] uppercase font-black italic">YMTEA Professional Auth</p>
-            <input type="text" id="activeCode" placeholder="输入 12 位激活码" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-2xl text-white text-center mb-4 font-mono outline-none uppercase text-lg focus:border-orange-600">
-            <button onclick="doActivate()" class="w-full py-5 bg-orange-600 rounded-2xl text-white font-black uppercase shadow-2xl">立即激活</button>
-            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-800 text-[10px] underline uppercase font-bold tracking-widest">返回终端</button>
+            <h2 class="text-3xl font-black text-white mb-2 uppercase italic gold-text tracking-tighter">Terminal Auth</h2>
+            <p class="text-[10px] text-zinc-600 mb-8 tracking-[0.3em] uppercase font-black italic">YMTEA Professional Service</p>
+            <input type="text" id="activeCode" placeholder="激活码" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-3xl text-white text-center mb-4 font-mono outline-none uppercase text-lg focus:border-orange-600">
+            <button onclick="doActivate()" class="w-full py-5 bg-orange-600 rounded-3xl text-white font-black uppercase shadow-2xl">立即激活</button>
+            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-700 text-[10px] underline uppercase font-bold tracking-widest hover:text-white transition-colors">返回终端</button>
         </div>
     </div>
 
@@ -197,21 +189,20 @@
         let currentOpenList = [];
         let currentIndex = -1;
 
-        // 初始化加载
-        window.onload = () => { 
-            refreshRadar(); 
-            loadContent(); 
-            if(localStorage.getItem('ymtea_token')) { 
-                const label = document.getElementById('statusLabel'); 
-                label.innerText = "AUTH_ACTIVE"; 
-                label.classList.replace('text-zinc-500', 'text-orange-500'); 
-            } 
+        window.onload = function() {
+            refreshRadar();
+            loadContent();
+            if(localStorage.getItem('ymtea_token')) {
+                const label = document.getElementById('statusLabel');
+                label.innerText = "PRO_ENABLED";
+                label.classList.replace('text-zinc-500', 'text-orange-500');
+            }
         };
 
         async function loadContent() {
             try {
                 const res = await fetch(`${API_BASE}/api/reports/list`);
-                if(!res.ok) throw new Error("API Error");
+                if(!res.ok) throw new Error("Connection Fail");
                 const data = await res.json();
                 const sorted = data.sort((a,b) => (b.is_top||0) - (a.is_top||0) || b.id - a.id);
                 fullData.reports = sorted.filter(i => i.category !== 'tool');
@@ -219,7 +210,7 @@
                 renderReports(1); 
                 renderTools(1);
             } catch (e) {
-                document.getElementById('reportList').innerText = "终端连接失败，请检查网络协议";
+                document.getElementById('reportList').innerText = "终端数据同步异常，请检查网络。";
             }
         }
 
@@ -230,70 +221,189 @@
             const container = document.getElementById(containerId);
             
             if (data.length === 0) {
-                container.innerHTML = `<div class="p-4 text-zinc-800 text-[10px] uppercase">No Record Found</div>`;
+                container.innerHTML = `<div class="p-4 text-zinc-800 uppercase italic text-[10px]">No Data Available</div>`;
                 return;
             }
 
             container.innerHTML = paged.map(r => `
-                <div class="item-card flex justify-between items-center p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.06] mb-2 cursor-pointer" onclick="openItem(${r.id}, '${isTool?'tool':'report'}')">
+                <div class="item-card flex justify-between items-center p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/15 hover:bg-white/[0.05] mb-2 cursor-pointer" onclick="openItem(${r.id}, '${isTool?'tool':'report'}')">
                     <div class="flex-grow text-sm ${r.is_top?'text-orange-400 font-bold':'text-zinc-300'} truncate mr-4">
-                        ${r.is_top ? '<span class="text-[8px] bg-orange-600/20 text-orange-500 px-1 py-0.5 rounded mr-2">TOP</span>' : ''}${r.title}
+                        ${r.is_top ? '<span class="text-[8px] bg-orange-600/20 text-orange-500 px-1.5 py-0.5 rounded mr-2">TOP</span>' : ''}${r.title}
                     </div>
-                    <div class="flex gap-4" onclick="event.stopPropagation()">
-                        <button onclick="prepareEdit(event, ${r.id}, '${isTool?'tool':'report'}')" class="text-[9px] text-zinc-600 hover:text-orange-500 uppercase font-black">Edit</button>
-                        <button onclick="handleDelete(${r.id})" class="text-[9px] text-zinc-800 hover:text-red-500 uppercase font-black">Del</button>
+                    <div class="flex gap-3" onclick="event.stopPropagation()">
+                        <button onclick="prepareEdit(event, ${r.id}, '${isTool?'tool':'report'}')" class="text-[10px] text-zinc-600 hover:text-orange-500 uppercase font-black">Edit</button>
+                        <button onclick="handleDelete(${r.id})" class="text-[10px] text-zinc-800 hover:text-red-500 uppercase font-black">Del</button>
                     </div>
                 </div>
             `).join('');
             renderPagination(isTool ? 'toolPagination' : 'reportPagination', data.length, size, page, func);
         }
 
-        // 修改回显
         async function prepareEdit(event, id, cat) {
-            event.preventDefault();
             event.stopPropagation();
-            
-            const adminPass = document.getElementById('adminPass').value;
-            if(!adminPass) {
+            const pass = document.getElementById('adminPass').value;
+            if(!pass) {
                 toggleAdmin();
                 document.getElementById('adminPass').focus();
-                alert("请在 Master Panel 中输入密钥后再操作");
                 return;
             }
-
             const item = (cat === 'tool' ? fullData.tools : fullData.reports).find(i => i.id === id);
             currentEditId = id;
             setCategory(cat);
-
             document.getElementById('quickTitle').value = item.title;
             document.getElementById('isTopCheck').checked = (item.is_top == 1);
-            document.getElementById('editStatus').innerText = "LOADING...";
-            document.getElementById('publishBtn').innerText = "UPDATE DATA";
+            document.getElementById('editStatus').innerText = "Loading Content...";
+            document.getElementById('publishBtn').innerText = "Update Cloud";
             document.getElementById('cancelBtn').classList.remove('hidden');
 
             try {
-                const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Admin-Key': adminPass } });
+                const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Admin-Key': pass } });
                 const result = await res.json();
-                if (result.data !== undefined) {
+                if (result.data) {
                     document.getElementById('quickContent').value = result.data;
-                    document.getElementById('editStatus').innerText = `ID:${id} ON EDIT`;
+                    document.getElementById('editStatus').innerText = `Editing ID: ${id}`;
                 }
-            } catch(e) { alert("读取内容失败"); }
+            } catch(e) {}
         }
 
-        // 查看正文
         async function openItem(id, cat) {
             const token = localStorage.getItem('ymtea_token');
             const adminPass = document.getElementById('adminPass').value;
-            if(!token && !adminPass) { showPayModal(); return; }
+            
+            // 权限检查修复
+            if(!token && !adminPass) { 
+                showPayModal(); 
+                return; 
+            }
 
             currentOpenList = (cat === 'tool' ? fullData.tools : fullData.reports);
             currentIndex = currentOpenList.findIndex(i => i.id === id);
             
             try {
                 const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { 
-                    headers: { 'Authorization': token || "", 'Admin-Key': adminPass || "" } 
+                    headers: { 
+                        'Authorization': token || "", 
+                        'Admin-Key': adminPass || "" 
+                    } 
                 });
                 const result = await res.json();
                 if (result.data) {
-                    let body = result.data.replace(/
+                    let body = result.data
+                        .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                        .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+                    document.getElementById('readerBody').innerHTML = body;
+                    document.getElementById('contentReader').classList.remove('hidden');
+                    updateReaderNav();
+                } else {
+                    alert("权限不足，请先激活。");
+                }
+            } catch (e) {
+                alert("内容加载失败，请检查连接。");
+            }
+        }
+
+        async function quickPublish() {
+            const pass = document.getElementById('adminPass').value;
+            const title = document.getElementById('quickTitle').value;
+            const content = document.getElementById('quickContent').value;
+            const isTop = document.getElementById('isTopCheck').checked ? 1 : 0;
+            if(!pass || !title) return alert("请确保填写了管理密钥和标题");
+
+            const sql = currentEditId ? 
+                "UPDATE reports SET title = ?, content = ?, category = ?, is_top = ? WHERE id = ?" :
+                "INSERT INTO reports (title, content, category, is_top) VALUES (?, ?, ?, ?)";
+            const params = currentEditId ? [title, content, currentCategory, isTop, currentEditId] : [title, content, currentCategory, isTop];
+
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                    method: 'POST',
+                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sql, params })
+                });
+                if(res.ok) { 
+                    alert("操作成功");
+                    location.reload(); 
+                } else {
+                    alert("管理员权限校验失败");
+                }
+            } catch(e) {
+                alert("网络连接失败");
+            }
+        }
+
+        async function handleDelete(id) {
+            const pass = prompt("输入管理密钥确认删除:");
+            if(!pass) return;
+            await fetch(`${API_BASE}/api/admin/publish`, { 
+                method: 'POST', 
+                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ sql: "DELETE FROM reports WHERE id = ?", params: [id] }) 
+            });
+            location.reload();
+        }
+
+        async function doActivate() {
+            const code = document.getElementById('activeCode').value.trim().toUpperCase();
+            if(!code) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/pay/success`, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ code }) 
+                });
+                const data = await res.json();
+                if(data.success) { 
+                    localStorage.setItem('ymtea_token', data.token); 
+                    location.reload(); 
+                } else {
+                    alert("无效或已使用的激活码");
+                }
+            } catch(e) {
+                alert("激活系统不可用");
+            }
+        }
+
+        function refreshRadar() { 
+            const tags = ["趋势", "TK战法", "海关", "AI选品", "流量", "汇率"]; 
+            document.getElementById('trendList').innerHTML = tags.map(i => `
+                <div class="p-2 bg-white/5 rounded-xl border border-white/5 flex flex-col items-center justify-center">
+                    <span class="text-[9px] text-zinc-500 font-bold mb-1 uppercase">${i}</span>
+                    <span class="text-[8px] text-orange-500 font-black italic">LIVE</span>
+                </div>`).join(''); 
+        }
+        function renderReports(p) { renderItems('reportList', fullData.reports, p, 'renderReports'); }
+        function renderTools(p) { renderItems('toolList', fullData.tools, p, 'renderTools'); }
+        function renderPagination(tid, total, size, current, func) { 
+            const pages = Math.ceil(total/size); 
+            const container = document.getElementById(tid); 
+            if(pages <= 1) { container.innerHTML=''; return; } 
+            let html = ''; 
+            for(let i=1; i<=pages; i++) html += `
+                <button onclick="${func}(${i})" class="w-6 h-6 rounded text-[9px] font-bold ${i===current?'bg-orange-600 text-white':'bg-white/5 text-zinc-600'}">
+                    ${i}
+                </button>`; 
+            container.innerHTML = html; 
+        }
+        function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); }
+        function showPayModal() { document.getElementById('payModal').classList.remove('hidden'); }
+        function showHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function closeReader() { document.getElementById('contentReader').classList.add('hidden'); }
+        function scrollToId(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+        function setCategory(cat) { 
+            currentCategory = cat; 
+            document.getElementById('cat_report').className = cat === 'report' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500'; 
+            document.getElementById('cat_tool').className = cat === 'tool' ? 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white' : 'flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500'; 
+        }
+        function cancelEdit() { currentEditId = null; location.reload(); }
+        function updateReaderNav() { 
+            const prev = document.getElementById('prevBtn'); 
+            const next = document.getElementById('nextBtn'); 
+            prev.style.opacity = currentIndex > 0 ? "1" : "0.2"; 
+            next.style.opacity = currentIndex < currentOpenList.length - 1 ? "1" : "0.2"; 
+            prev.onclick = currentIndex > 0 ? () => openItem(currentOpenList[currentIndex-1].id, currentOpenList[currentIndex-1].category) : null; 
+            next.onclick = currentIndex < currentOpenList.length - 1 ? () => openItem(currentOpenList[currentIndex+1].id, currentOpenList[currentIndex+1].category) : null; 
+        }
+    </script>
+</body>
+</html>
