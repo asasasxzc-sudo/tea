@@ -8,20 +8,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&display=swap');
         body { font-family: 'Noto Serif SC', serif; background: #F4F6F3; color: #2C3E2D; }
-        
-        /* 置顶卡片：青瓷色渐变 */
         .top-card { 
             background: linear-gradient(135deg, #4A5D4A 0%, #6B8E6B 100%); 
             box-shadow: 0 10px 20px -5px rgba(74, 93, 74, 0.3);
         }
-        
-        /* 内容白板 */
         .glass-white { 
             background: rgba(255, 255, 255, 0.8); 
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 1);
         }
-
         .report-content h2 { font-size: 1.5rem; color: #1A1A1A; margin: 2rem 0 1rem; border-left: 6px solid #4A5D4A; padding-left: 1rem; }
         .report-content p { line-height: 2.1; margin-bottom: 1.5rem; text-align: justify; font-size: 1.05rem; }
     </style>
@@ -33,26 +28,25 @@
             <div class="bg-[#4A5D4A] w-8 h-8 rounded-lg flex items-center justify-center text-white text-lg font-black">云</div>
             <h1 class="text-xl font-black tracking-tight text-slate-800">云茗荟 <span class="text-[#4A5D4A]">PRO</span></h1>
         </div>
-        <div id="userStatus" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"></div>
+        <div id="userStatus" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">加载中...</div>
     </nav>
 
     <main class="container mx-auto px-4 py-12 max-w-6xl">
         <div class="grid lg:grid-cols-12 gap-10">
-            
             <div class="lg:col-span-7">
                 <div id="topSection" class="mb-12 hidden">
                     <h2 class="text-xs font-black text-slate-400 mb-5 flex items-center gap-2 uppercase tracking-[0.3em]">
                         <span class="w-4 h-[1px] bg-slate-300"></span> 核心置顶情报
                     </h2>
-                    <div id="topGrid" class="grid grid-cols-2 gap-4">
-                        </div>
+                    <div id="topGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
 
                 <h2 class="text-xl font-bold text-slate-800 mb-8 flex items-center gap-3">
                     <span class="w-1.5 h-7 bg-[#4A5D4A] rounded-full"></span> 核心情报目录
                 </h2>
                 <div id="reportList" class="space-y-4">
-                    </div>
+                    <div class="animate-pulse py-20 text-center text-slate-400 font-bold">正在同步云端情报...</div>
+                </div>
             </div>
 
             <div class="lg:col-span-5 space-y-8">
@@ -61,7 +55,7 @@
                     <div class="space-y-4">
                         <input id="activeEmail" type="email" placeholder="您的电子邮箱" class="w-full bg-slate-50 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-[#4A5D4A]">
                         <input id="activeCode" type="text" placeholder="输入激活码" class="w-full bg-slate-50 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-[#4A5D4A]">
-                        <button onclick="redeem('monthly')" class="w-full py-4 bg-[#4A5D4A] text-white rounded-2xl font-bold shadow-xl hover:bg-[#3E4A3E] active:scale-95 transition-all">立即激活 PRO 权限</button>
+                        <button onclick="redeem()" class="w-full py-4 bg-[#4A5D4A] text-white rounded-2xl font-bold shadow-xl hover:bg-[#3E4A3E] transition-all">立即激活 PRO 权限</button>
                     </div>
                 </div>
 
@@ -71,15 +65,15 @@
                             ADMIN PUBLISH <span class="group-open:rotate-180 transition-transform">↓</span>
                         </summary>
                         <div class="mt-6 space-y-4">
-                            <input id="adminKey" type="password" placeholder="口令" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
+                            <input id="adminKey" type="password" placeholder="发布口令" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
                             <input id="pubTitle" type="text" placeholder="文章标题" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
-                            <input id="pubCategory" type="text" placeholder="文章分类" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
-                            <textarea id="pubContent" rows="5" placeholder="正文内容" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none"></textarea>
+                            <input id="pubCategory" type="text" placeholder="分类" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none">
+                            <textarea id="pubContent" rows="5" placeholder="正文 HTML" class="w-full bg-white border-0 p-3 rounded-xl text-sm outline-none"></textarea>
                             <div class="flex items-center gap-2 px-1">
                                 <input type="checkbox" id="pubIsTop" class="accent-[#4A5D4A]">
-                                <label for="pubIsTop" class="text-[10px] text-slate-500 font-bold uppercase">设为置顶</label>
+                                <label for="pubIsTop" class="text-[10px] text-slate-500 font-bold">设为置顶</label>
                             </div>
-                            <button onclick="publishReport()" class="w-full py-3 bg-white text-[#4A5D4A] border border-[#4A5D4A] font-bold rounded-xl text-xs hover:bg-[#4A5D4A] hover:text-white transition-all">确认发布到云端</button>
+                            <button onclick="publishReport()" class="w-full py-3 bg-white text-[#4A5D4A] border border-[#4A5D4A] font-bold rounded-xl text-xs hover:bg-[#4A5D4A] hover:text-white transition-all">确认发布</button>
                         </div>
                     </details>
                 </div>
@@ -91,78 +85,138 @@
         <div class="h-full w-full flex items-end lg:items-center justify-center p-0 lg:p-4">
             <div class="bg-white w-full max-w-4xl h-[90vh] lg:h-[85vh] rounded-t-[2.5rem] lg:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col">
                 <div class="p-6 border-b flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">YMTEA PRO REPORT</span>
+                    <span id="modalCategory" class="text-xs font-bold text-slate-400 uppercase tracking-widest">REPORT</span>
                     <button onclick="closeModal()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 text-xl">&times;</button>
                 </div>
-                <div id="modalContent" class="flex-1 overflow-y-auto p-8 lg:p-14 report-content">
-                    </div>
+                <div id="modalContent" class="flex-1 overflow-y-auto p-8 lg:p-14 report-content"></div>
             </div>
         </div>
     </div>
 
     <script>
-    // 自动识别 API 地址，不再写死 https://s1.ymtea.club
-    const API_BASE = window.location.origin;
+        const API_BASE = window.location.origin;
 
-    window.onload = () => { loadList(); checkUser(); };
+        window.onload = () => { loadList(); checkUser(); };
 
-    function checkUser() {
-        const token = localStorage.getItem('ymtea_token');
-        document.getElementById('userStatus').innerHTML = token ? 
-            '<span class="text-[#4A5D4A]">● PRO 会员已激活</span>' : 
-            '● 游客访问 (内容锁定)';
-    }
+        function checkUser() {
+            const token = localStorage.getItem('ymtea_token');
+            document.getElementById('userStatus').innerHTML = token ? 
+                '<span class="text-[#4A5D4A]">● PRO 会员已激活</span>' : 
+                '● 游客访问 (内容锁定)';
+        }
 
-    async function loadList() {
-        try {
-            console.log("正在尝试从地址加载数据:", `${API_BASE}/api/reports/list`);
-            const res = await fetch(`${API_BASE}/api/reports/list`);
-            const data = await res.json();
-            
-            console.log("成功获取到数据量:", data.length);
+        async function loadList() {
+            try {
+                const res = await fetch(`${API_BASE}/api/reports/list`);
+                const rawText = await res.text();
+                
+                // 关键修复：截取正确的 JSON 数组部分，过滤掉末尾乱码
+                let data;
+                const jsonMatch = rawText.match(/\[.*\]/);
+                if (jsonMatch) {
+                    data = JSON.parse(jsonMatch[0]);
+                } else {
+                    throw new Error("数据格式异常");
+                }
 
-            // 自动适配逻辑：即使数据库字段是 NULL 或大小写不对，也强制转换
-            const processedData = data.map(item => ({
-                ...item,
-                is_top: (item.is_top === 1 || item.IS_TOP === 1) ? 1 : 0
-            }));
+                // 统一字段格式
+                const cleanData = data.map(item => ({
+                    ...item,
+                    is_top: (item.is_top == 1 || item.is_top === true) ? 1 : 0
+                }));
 
-            const topItems = processedData.filter(i => i.is_top === 1);
-            const normalItems = processedData.filter(i => i.is_top !== 1);
+                const topItems = cleanData.filter(i => i.is_top === 1);
+                const normalItems = cleanData.filter(i => i.is_top !== 1);
 
-            // 如果没有任何置顶，就强制显示前两条为置顶，防止版面全白
-            const finalTop = topItems.length > 0 ? topItems : processedData.slice(0, 2);
-            const finalNormal = topItems.length > 0 ? normalItems : processedData.slice(2);
+                // 渲染置顶区
+                if(topItems.length > 0) {
+                    document.getElementById('topSection').classList.remove('hidden');
+                    document.getElementById('topGrid').innerHTML = topItems.map(i => `
+                        <div onclick="viewReport('${i.id}')" class="top-card p-6 rounded-[1.5rem] cursor-pointer hover:translate-y-[-1px] transition-all group">
+                            <span class="text-[9px] bg-white/20 px-2 py-0.5 rounded text-white font-bold uppercase">${i.category}</span>
+                            <h3 class="text-white font-bold text-base mt-4 leading-snug group-hover:underline">${i.title}</h3>
+                        </div>
+                    `).join('');
+                }
 
-            if(processedData.length > 0) {
-                document.getElementById('topSection').classList.remove('hidden');
-                document.getElementById('topGrid').innerHTML = finalTop.map(i => `
-                    <div onclick="viewReport('${i.id}')" class="top-card p-6 rounded-[1.5rem] cursor-pointer hover:translate-y-[-4px] transition-all group">
-                        <span class="text-[9px] bg-white/20 px-2 py-0.5 rounded text-white font-bold uppercase">${i.category || '核心情报'}</span>
-                        <h3 class="text-white font-bold text-base mt-4 leading-snug group-hover:underline">${i.title}</h3>
-                    </div>
-                `).join('');
-
-                document.getElementById('reportList').innerHTML = finalNormal.map(i => `
+                // 渲染目录区
+                document.getElementById('reportList').innerHTML = normalItems.map(i => `
                     <div class="bg-white p-6 rounded-3xl flex justify-between items-center group hover:shadow-md transition-all cursor-pointer border border-transparent hover:border-slate-200" onclick="viewReport('${i.id}')">
                         <div>
-                            <span class="text-[10px] text-[#4A5D4A] font-bold uppercase tracking-widest">${i.category || '常规目录'}</span>
+                            <span class="text-[10px] text-[#4A5D4A] font-bold uppercase tracking-widest">${i.category}</span>
                             <h3 class="text-slate-800 font-bold mt-1 group-hover:text-[#4A5D4A]">${i.title}</h3>
-                            <p class="text-[9px] text-slate-300 mt-2 font-bold uppercase tracking-tighter">${(i.created_at || '').split('T')[0]}</p>
+                            <p class="text-[9px] text-slate-300 mt-2 font-bold uppercase tracking-tighter">${i.created_at.split(' ')[0]}</p>
                         </div>
                         <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-[#4A5D4A] group-hover:text-white transition-all">→</div>
                     </div>
                 `).join('');
-            } else {
-                document.getElementById('reportList').innerHTML = '<div class="text-center py-20 text-slate-400">数据库为空或未获取到数据</div>';
-            }
-        } catch (e) { 
-            console.error("加载失败:", e);
-            document.getElementById('reportList').innerHTML = '<div class="text-center py-20 text-red-400">连接 API 失败，请检查 Worker 是否部署成功</div>';
-        }
-    }
 
-    // ... 其余 viewReport, redeem, publishReport 函数保持不变 ...
-</script>
+            } catch (e) {
+                console.error(e);
+                document.getElementById('reportList').innerHTML = `<div class="text-center py-20 text-red-400">加载失败: 数据同步异常</div>`;
+            }
+        }
+
+        async function viewReport(id) {
+            const token = localStorage.getItem('ymtea_token');
+            if(!token) { alert("此内容为 PRO 会员专享，请先激活"); return; }
+
+            try {
+                const res = await fetch(`${API_BASE}/api/reports/view/${id}`, {
+                    headers: { 'Authorization': token }
+                });
+                const result = await res.json();
+                if(res.ok) {
+                    document.getElementById('modalContent').innerHTML = result.data;
+                    document.getElementById('modal').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    alert(result.msg || "权限验证失败");
+                }
+            } catch (e) { alert("网络错误，请稍后再试"); }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        async function redeem() {
+            const email = document.getElementById('activeEmail').value;
+            const code = document.getElementById('activeCode').value;
+            if(!email || !code) return alert("请填写完整");
+            
+            const res = await fetch(`${API_BASE}/api/pay/success`, {
+                method: 'POST',
+                body: JSON.stringify({ email, code, type: 'monthly' })
+            });
+            const data = await res.json();
+            if(data.success) {
+                localStorage.setItem('ymtea_token', data.token);
+                alert("激活成功！");
+                location.reload();
+            } else {
+                alert(data.msg);
+            }
+        }
+
+        async function publishReport() {
+            const payload = {
+                title: document.getElementById('pubTitle').value,
+                category: document.getElementById('pubCategory').value,
+                content: document.getElementById('pubContent').value,
+                is_top: document.getElementById('pubIsTop').checked
+            };
+            const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                method: 'POST',
+                headers: { 
+                    'Admin-Key': document.getElementById('adminKey').value,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            if(res.ok) { alert("发布成功！"); location.reload(); } else { alert("发布失败，请检查口令"); }
+        }
+    </script>
 </body>
 </html>
