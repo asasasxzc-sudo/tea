@@ -4,22 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>YMTEA HUB | 商业情报终端</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 80px; }
-        .glass { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); }
+        @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap)');
+        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 100px; }
+        .glass { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
         .gold-text { background: linear-gradient(135deg, #fb923c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 内容美化 */
+        #readerBody { line-height: 1.8; }
+        #readerBody code { background: #1a1a1a; border: 1px solid #333; padding: 1.2rem; border-radius: 12px; display: block; font-family: 'Consolas', monospace; margin: 1.5rem 0; color: #fb923c; overflow-x: auto; font-size: 0.85rem; }
+        
+        /* 客服悬浮 */
+        .side-contact { position: fixed; right: 20px; bottom: 120px; z-index: 45; }
+        .contact-ball { width: 50px; height: 50px; background: #f97316; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(249,115,22,0.4); cursor: pointer; }
+
+        /* 底部导航 */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 75px; background: rgba(10,10,10,0.98); border-top: 1px solid rgba(255,255,255,0.1); z-index: 50; display: flex; align-items: center; justify-content: space-around; }
+        
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
-        #readerBody img { max-width: 100%; height: auto; border-radius: 1rem; margin: 1.5rem 0; display: block; }
-        /* 底部导航固定 */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(10,10,10,0.98); backdrop-blur: 20px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 50; display: flex; align-items: center; justify-content: space-around; }
     </style>
 </head>
 <body>
+
+    <div class="side-contact" onclick="alert('官方客服微信：YMTEA_HUB\n电报：@ymtea')">
+        <div class="contact-ball"><span class="text-white text-[10px] font-black">客服</span></div>
+    </div>
 
     <nav class="sticky top-0 z-40 w-full border-b border-white/10 bg-black/90 backdrop-blur-lg">
         <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
@@ -33,7 +46,7 @@
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-8 fade-in">
         <header class="text-center py-6">
             <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-tighter text-white">智联全球，<span class="gold-text">洞察先机</span></h1>
-            <p class="text-zinc-500 text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold opacity-70">Global Commerce Intelligence Hub</p>
+            <p class="text-zinc-500 text-[10px] tracking-[0.4em] uppercase font-bold opacity-70">Commerce Intelligence Radar</p>
         </header>
 
         <div class="glass rounded-[2.5rem] p-6 shadow-2xl">
@@ -42,26 +55,22 @@
                     <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-orange-600"></span></span>
                     实时情报雷达
                 </h2>
-                <button onclick="refreshRadar()" class="text-[9px] text-zinc-500 font-bold hover:text-white transition">REFRESH</button>
+                <button onclick="refreshRadar()" class="text-[9px] text-zinc-500 font-bold hover:text-white transition">SHUFFLE</button>
             </div>
             <div id="trendList" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div id="section-intel" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
+            <div id="section-intel" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[650px]">
                 <h3 class="font-bold text-lg mb-6 text-white flex items-center gap-3"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 核心情报</h3>
-                <div id="topSection" class="mb-6 space-y-3 hidden">
-                    <div id="topList" class="space-y-3"></div>
-                    <div class="h-px bg-white/5 my-6"></div>
-                </div>
                 <div id="reportList" class="flex-grow space-y-3"></div>
-                <div id="reportPagination" class="flex justify-center gap-2 mt-8"></div>
+                <div id="reportPagination" class="flex flex-wrap justify-center gap-1 mt-8"></div>
             </div>
             
-            <div id="section-tools" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
+            <div id="section-tools" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[650px]">
                 <h3 class="font-bold text-lg mb-6 text-white flex items-center gap-3"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 生产力工具</h3>
                 <div id="toolList" class="flex-grow space-y-3"></div>
-                <div id="toolPagination" class="flex justify-center gap-2 mt-8"></div>
+                <div id="toolPagination" class="flex flex-wrap justify-center gap-1 mt-8"></div>
                 <button onclick="showPayModal()" id="proBtn" class="mt-8 w-full py-4 bg-orange-600 rounded-2xl text-[11px] font-black uppercase text-white shadow-lg">升级至 PRO 账户</button>
             </div>
         </div>
@@ -71,61 +80,59 @@
         <button onclick="scrollToId('section-intel')" class="text-[10px] font-black text-orange-500 uppercase tracking-widest">情报</button>
         <button onclick="scrollToId('section-tools')" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">工具</button>
         <button onclick="showPayModal()" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">激活</button>
+        <button onclick="toggleAdmin()" class="text-[10px] font-black text-zinc-800 uppercase tracking-widest">后台</button>
     </div>
 
     <div id="adminPanel" class="fixed inset-0 z-[60] hidden bg-black/98 items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md">
+        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-xl max-h-[90vh] overflow-y-auto custom-scroll">
             <div class="flex justify-between items-center mb-6">
-                <span class="text-white font-black text-xs uppercase tracking-widest">管理控制台</span>
+                <span class="text-white font-black text-xs uppercase tracking-widest">Manager Hub</span>
                 <button onclick="toggleAdmin()" class="text-zinc-500">✕</button>
             </div>
             <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500">
+                <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none">
                 <div class="flex gap-2">
                     <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">情报模式</button>
                     <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">工具模式</button>
                 </div>
-                <input type="text" id="quickTitle" placeholder="标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
-                <textarea id="quickContent" rows="4" placeholder="正文内容 (HTML)" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white"></textarea>
+                <input type="text" id="quickTitle" placeholder="文章标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
+                <textarea id="quickContent" rows="8" placeholder="正文内容 (代码请用 ``` 包裹)" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white font-mono"></textarea>
                 
-                <label class="flex items-center gap-2 px-2 text-[10px] text-zinc-400 font-bold uppercase cursor-pointer">
-                    <input type="checkbox" id="isTopCheck" class="w-4 h-4 accent-orange-600"> 置顶显示
-                </label>
+                <div class="flex justify-between items-center px-2">
+                    <label class="flex items-center gap-2 text-[10px] text-zinc-400 font-bold uppercase cursor-pointer">
+                        <input type="checkbox" id="isTopCheck" class="w-4 h-4 accent-orange-600"> 置顶显示
+                    </label>
+                    <div id="editModeIndicator" class="hidden text-[9px] text-orange-500 font-black italic">EDITING MODE...</div>
+                </div>
 
-                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 hover:bg-orange-600 rounded-2xl font-black text-xs text-white uppercase transition-all">同步至云端数据库</button>
-                
-                <div class="pt-6 border-t border-white/5 space-y-4">
-                    <p class="text-[9px] text-zinc-500 text-center font-bold uppercase">激活码生成</p>
-                    <div class="flex gap-2">
-                        <button onclick="generateCode('monthly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-300 font-bold">生成月码</button>
-                        <button onclick="generateCode('yearly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-300 font-bold">生成年码</button>
-                    </div>
-                    <input type="text" id="codeOutput" readonly placeholder="等待生成..." class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center text-orange-500 font-mono text-sm">
+                <div class="flex gap-2">
+                    <button onclick="quickPublish()" class="flex-[2] py-4 bg-orange-700 rounded-2xl font-black text-xs text-white uppercase">同步数据库</button>
+                    <button onclick="resetEdit()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-black text-xs text-white uppercase">取消</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="contentReader" class="fixed inset-0 z-[70] hidden bg-black items-center justify-center p-0 md:p-6">
+    <div id="contentReader" class="fixed inset-0 z-[70] hidden bg-black items-center justify-center">
         <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden">
-            <div class="p-6 border-b border-white/5 flex justify-between items-center bg-zinc-900/50">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center">
                 <h2 id="readerTitle" class="font-black text-xs uppercase text-orange-500 tracking-widest">Detail Insight</h2>
                 <button onclick="closeReader()" class="text-white p-2">✕</button>
             </div>
-            <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 leading-relaxed text-sm md:text-base custom-scroll select-text"></div>
+            <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 text-sm md:text-base custom-scroll select-text"></div>
         </div>
     </div>
 
     <div id="payModal" class="fixed inset-0 z-[80] hidden bg-black/95 items-center justify-center p-4">
         <div class="max-w-md w-full text-center">
-            <h2 class="text-3xl font-black text-white mb-4 uppercase">Identity Required</h2>
-            <p class="text-zinc-500 text-[11px] mb-8 uppercase tracking-[0.2em]">请输入授权码开启深度情报</p>
+            <h2 class="text-3xl font-black text-white mb-4">ACCESS DENIED</h2>
+            <p class="text-zinc-500 text-[11px] mb-8 uppercase tracking-widest">请输入授权码以解锁深度内容</p>
             <div class="space-y-4">
                 <input type="email" id="activeEmail" placeholder="授权邮箱" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
                 <input type="text" id="activeCode" placeholder="激活码" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
-                <button onclick="doActivate()" class="w-full py-4 bg-orange-600 rounded-2xl text-white font-black uppercase shadow-lg">验证并开启权限</button>
+                <button onclick="doActivate()" class="w-full py-4 bg-orange-600 rounded-2xl text-white font-black uppercase">激活 PRO 权限</button>
             </div>
-            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-600 text-[10px] font-black uppercase tracking-widest">暂时返回</button>
+            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-700 text-[10px] font-black uppercase">返回终端</button>
         </div>
     </div>
 
@@ -135,69 +142,84 @@
         let fullData = { reports: [], tools: [] };
         let editTargetId = null;
 
-        // 初始化加载
+        // 雷达备用情报库
+        const RADAR_DATABASE = [
+            {t:"TikTok Shop Policy", s:"UPDATED"}, {t:"Amazon Logistics", s:"-2.8%"}, {t:"US Customs Alert", s:"HIGH"},
+            {t:"EU VAT Compliance", s:"STRICT"}, {t:"TEMU Semi-Managed", s:"HOT"}, {t:"Global Exchange", s:"FLOAT"},
+            {t:"SEA Market Index", s:"GROWTH"}, {t:"CN Export Data", s:"STABLE"}, {t:"AI Sourcing Tool", s:"BETA"},
+            {t:"Warehouse Stock", s:"ALERT"}, {t:"Shipping Freight", s:"RISING"}, {t:"AD Efficiency", s:"OPTIMIZED"}
+        ];
+
+        function refreshRadar() {
+            const shuffled = RADAR_DATABASE.sort(() => 0.5 - Math.random()).slice(0, 6);
+            document.getElementById('trendList').innerHTML = shuffled.map(i => `
+                <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center fade-in">
+                    <span class="text-[11px] text-zinc-300 font-bold">${i.t}</span>
+                    <span class="text-[9px] text-orange-500 font-mono font-black">${i.s}</span>
+                </div>
+            `).join('');
+        }
+
         async function loadContent() {
             try {
                 const res = await fetch(`${API_BASE}/api/reports/list`);
                 const data = await res.json();
-                fullData.reports = data.filter(i => i.category !== 'tool');
-                fullData.tools = data.filter(i => i.category === 'tool');
+                fullData.reports = data.filter(i => i.category !== 'tool').sort((a,b) => b.is_top - a.is_top || b.id - a.id);
+                fullData.tools = data.filter(i => i.category === 'tool').sort((a,b) => b.is_top - a.is_top || b.id - a.id);
                 renderReports(1);
                 renderTools(1);
             } catch (e) { console.error("Load Failed"); }
         }
 
+        // 统一分页渲染逻辑 (含 始/末/上页/下页)
         function renderPagination(targetId, total, size, current, func) {
             const pages = Math.ceil(total / size);
             const container = document.getElementById(targetId);
             if (!container || pages <= 1) { if(container) container.innerHTML=''; return; }
-            let html = '';
+            
+            let html = `<button onclick="${func}(1)" class="px-2 h-7 rounded bg-white/5 text-[9px] font-bold text-zinc-500">始</button>`;
+            if(current > 1) html += `<button onclick="${func}(${current-1})" class="w-7 h-7 rounded bg-white/5 text-[9px]"><</button>`;
+            
             for (let i = 1; i <= pages; i++) {
-                html += `<button onclick="${func}(${i})" class="w-8 h-8 rounded-lg text-[10px] font-black ${i === current ? 'bg-orange-600 text-white' : 'bg-white/5 text-zinc-600'}">${i}</button>`;
+                if (Math.abs(i - current) < 2 || i === 1 || i === pages) {
+                    html += `<button onclick="${func}(${i})" class="w-7 h-7 rounded text-[9px] font-black ${i === current ? 'bg-orange-600 text-white' : 'bg-white/5 text-zinc-600'}">${i}</button>`;
+                }
             }
+
+            if(current < pages) html += `<button onclick="${func}(${current+1})" class="w-7 h-7 rounded bg-white/5 text-[9px]">></button>`;
+            html += `<button onclick="${func}(${pages})" class="px-2 h-7 rounded bg-white/5 text-[9px] font-bold text-zinc-500">End</button>`;
             container.innerHTML = html;
         }
 
         function renderReports(page) {
-            const size = 10;
-            const tops = fullData.reports.filter(r => r.is_top == 1);
-            const normals = fullData.reports.filter(r => r.is_top != 1);
-            const paged = normals.slice((page-1)*size, page*size);
-
-            if (tops.length > 0 && page === 1) {
-                document.getElementById('topSection').classList.remove('hidden');
-                document.getElementById('topList').innerHTML = tops.map(r => `
-                    <div class="flex justify-between items-center p-5 bg-orange-600/5 border border-orange-500/30 rounded-2xl relative group">
-                        <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer pl-2">
-                            <span class="text-white font-bold text-sm group-hover:text-orange-400 transition-colors">${r.title}</span>
-                            <span class="ml-2 text-[8px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-black uppercase">Pin</span>
-                        </div>
-                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-700 hover:text-white uppercase">Edit</button>
-                    </div>
-                `).join('');
-            }
-
+            const size = 11;
+            const paged = fullData.reports.slice((page-1)*size, page*size);
             document.getElementById('reportList').innerHTML = paged.map(r => `
-                <div class="flex justify-between items-center p-5 glass rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all group">
+                <div class="flex justify-between items-center p-5 glass rounded-2xl border ${r.is_top ? 'border-orange-500/30 bg-orange-600/5' : 'border-white/5'} hover:border-orange-500/30 transition-all group">
                     <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer">
-                        <div class="text-sm text-zinc-200 group-hover:text-orange-400 transition-colors">${r.title}</div>
+                        <div class="text-sm ${r.is_top ? 'text-orange-400 font-bold' : 'text-zinc-200'}">${r.title} ${r.is_top ? '🚩' : ''}</div>
                         <div class="text-[9px] text-zinc-600 mt-1 uppercase font-mono">${new Date(r.created_at).toLocaleDateString()}</div>
                     </div>
-                    <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-800 hover:text-zinc-500 uppercase">Edit</button>
+                    <div class="flex gap-2">
+                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-800 hover:text-white uppercase font-black">Edit</button>
+                        <button onclick="handleDelete(${r.id})" class="text-[9px] text-zinc-900 hover:text-red-500 uppercase font-black">Del</button>
+                    </div>
                 </div>
-            `).join('') || '<p class="text-zinc-800 text-xs text-center py-10 uppercase tracking-widest">No Intelligence Data</p>';
-            
-            renderPagination('reportPagination', normals.length, size, page, 'renderReports');
+            `).join('') || '<p class="text-center py-10 text-xs text-zinc-800">NO DATA</p>';
+            renderPagination('reportPagination', fullData.reports.length, size, page, 'renderReports');
         }
 
         function renderTools(page) {
-            const size = 6;
+            const size = 10;
             const paged = fullData.tools.slice((page-1)*size, page*size);
             document.getElementById('toolList').innerHTML = paged.map(r => `
-                <div class="flex items-center gap-4 p-5 glass rounded-2xl border border-white/5 hover:bg-white/10 transition-all group">
-                    <div onclick="openItem(${r.id})" class="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-all cursor-pointer">⚡</div>
-                    <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer font-bold text-sm group-hover:text-orange-400">${r.title}</div>
-                    <button onclick="handleEdit(${r.id}, 'tool')" class="text-[9px] text-zinc-800 uppercase font-black">Edit</button>
+                <div class="flex items-center gap-4 p-5 glass rounded-2xl border ${r.is_top ? 'border-orange-500/30' : 'border-white/5'} hover:bg-white/10 transition-all group">
+                    <div onclick="openItem(${r.id})" class="w-10 h-10 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-all cursor-pointer">⚡</div>
+                    <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer font-bold text-sm ${r.is_top ? 'text-orange-400' : 'text-zinc-200'}">${r.title} ${r.is_top ? '🚩' : ''}</div>
+                    <div class="flex gap-2">
+                        <button onclick="handleEdit(${r.id}, 'tool')" class="text-[9px] text-zinc-800 hover:text-white font-black">Edit</button>
+                        <button onclick="handleDelete(${r.id})" class="text-[9px] text-zinc-900 hover:text-red-500 font-black">Del</button>
+                    </div>
                 </div>
             `).join('');
             renderPagination('toolPagination', fullData.tools.length, size, page, 'renderTools');
@@ -208,68 +230,72 @@
             if (!token) return showPayModal();
             try {
                 const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
-                if (res.status === 403) return showPayModal();
                 const result = await res.json();
-                document.getElementById('readerBody').innerHTML = result.data;
+                
+                // 渲染引擎：支持代码块和分行
+                let html = result.data.replace(/```([\s\S]*?)```/g, '<code>$1</code>');
+                
+                document.getElementById('readerBody').innerHTML = html;
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
                 document.body.style.overflow = 'hidden';
-            } catch (e) { alert("获取详情失败，请检查网络"); }
+            } catch (e) { alert("无权访问或网络异常"); }
         }
 
-        // 核心同步逻辑
+        // 修改：自动填充内容
+        async function handleEdit(id, cat) {
+            const item = (cat === 'tool' ? fullData.tools : fullData.reports).find(i => i.id === id);
+            editTargetId = id;
+            setCategory(cat);
+            document.getElementById('quickTitle').value = item.title;
+            document.getElementById('isTopCheck').checked = item.is_top == 1;
+            document.getElementById('editModeIndicator').classList.remove('hidden');
+            
+            // 核心：从库里拉取完整原文填入
+            const token = localStorage.getItem('ymtea_token') || document.getElementById('adminPass').value;
+            try {
+                const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
+                const result = await res.json();
+                document.getElementById('quickContent').value = result.data;
+            } catch (e) { console.warn("无法预填内容"); }
+            
+            toggleAdmin();
+        }
+
+        async function handleDelete(id) {
+            const pass = prompt("⚠️ 确认删除？请输入 Admin Secret：");
+            if(!pass) return;
+            const sql = `DELETE FROM reports WHERE id=${id};`;
+            const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                method: 'POST',
+                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql })
+            });
+            if(res.ok) { alert("已删除"); location.reload(); }
+        }
+
         async function quickPublish() {
             const pass = document.getElementById('adminPass').value;
             const title = document.getElementById('quickTitle').value;
             const content = document.getElementById('quickContent').value;
             const isTop = document.getElementById('isTopCheck').checked ? 1 : 0;
-            if(!pass) return alert("错误: 请先输入管理端 Secret");
+            if(!pass) return alert("Secret Required");
 
             let sql = editTargetId 
                 ? `UPDATE reports SET title='${title.replace(/'/g, "''")}', content='${content.replace(/'/g, "''")}', category='${currentCategory}', is_top=${isTop} WHERE id=${editTargetId};`
                 : `INSERT INTO reports (title, content, category, is_top) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}', ${isTop});`;
             
-            try {
-                const res = await fetch(`${API_BASE}/api/admin/publish`, {
-                    method: 'POST',
-                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sql })
-                });
-                if (res.ok) { alert("同步成功！内容已上线。"); location.reload(); }
-                else { 
-                    const msg = await res.text();
-                    alert("同步失败: " + (msg || "口令验证不通过")); 
-                }
-            } catch(e) { alert("网络异常，无法连接同步接口"); }
-        }
-
-        // 核心激活码生成逻辑
-        async function generateCode(type) {
-            const pass = document.getElementById('adminPass').value;
-            if(!pass) return alert("错误: 生成激活码需要输入 Admin Secret");
-            const code = `YMTEA-${Math.random().toString(36).substring(7).toUpperCase()}`;
-            // 确保后端数据库有 active_codes 表
-            const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('${code}', '${type}', 0);`;
-            
-            try {
-                const res = await fetch(`${API_BASE}/api/admin/publish`, {
-                    method: 'POST',
-                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sql })
-                });
-                if (res.ok) {
-                    document.getElementById('codeOutput').value = code;
-                    alert("激活码生成并已存入数据库！");
-                } else {
-                    const msg = await res.text();
-                    alert("生成失败 (后端拒绝): " + msg);
-                }
-            } catch(e) { alert("网络异常"); }
+            const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                method: 'POST',
+                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sql })
+            });
+            if (res.ok) { alert("同步成功！"); location.reload(); }
+            else alert("同步失败");
         }
 
         async function doActivate() {
             const email = document.getElementById('activeEmail').value;
             const code = document.getElementById('activeCode').value;
-            if(!email || !code) return alert("请完整输入邮箱和激活码");
             const res = await fetch(`${API_BASE}/api/pay/success`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -277,28 +303,14 @@
             });
             const data = await res.json();
             if (data.success) { localStorage.setItem('ymtea_token', data.token); location.reload(); }
-            else alert(data.msg || "激活码无效或已被使用");
+            else alert("无效激活码");
         }
 
-        function refreshRadar() {
-            const trendList = document.getElementById('trendList');
-            const data = [
-                {t:"TikTok Shop Policy", s:"UPDATED"}, {t:"Amazon Logistics Index", s:"-2.8%"}, {t:"US Customs Alert", s:"HIGH"}
-            ];
-            trendList.innerHTML = data.map(i => `
-                <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center fade-in">
-                    <span class="text-[11px] text-zinc-300 font-bold">${i.t}</span>
-                    <span class="text-[9px] text-orange-500 font-mono font-black">${i.s}</span>
-                </div>
-            `).join('');
-        }
-
-        function handleEdit(id, cat) {
-            const item = (cat === 'tool' ? fullData.tools : fullData.reports).find(i => i.id === id);
-            editTargetId = id;
-            setCategory(cat);
-            document.getElementById('quickTitle').value = item.title;
-            document.getElementById('isTopCheck').checked = item.is_top == 1;
+        function resetEdit() {
+            editTargetId = null;
+            document.getElementById('quickTitle').value = '';
+            document.getElementById('quickContent').value = '';
+            document.getElementById('editModeIndicator').classList.add('hidden');
             toggleAdmin();
         }
 
@@ -317,10 +329,8 @@
             refreshRadar();
             loadContent();
             if(localStorage.getItem('ymtea_token')) {
-                const label = document.getElementById('statusLabel');
-                label.innerText = "PRO_SUBSCRIPTION";
-                label.classList.replace('text-zinc-400', 'text-orange-500');
-                if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
+                document.getElementById('statusLabel').innerText = "PRO_ACTIVE";
+                document.getElementById('statusLabel').classList.replace('text-zinc-400', 'text-orange-500');
             }
         };
     </script>
