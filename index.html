@@ -15,9 +15,8 @@
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
         #readerBody img { max-width: 100%; height: auto; border-radius: 1rem; margin: 1.5rem 0; display: block; }
-        #readerBody p { margin-bottom: 1.2rem; line-height: 1.8; }
-        /* 底部固定导航样式 */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(10,10,10,0.95); backdrop-blur: 20px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 50; display: flex; align-items: center; justify-content: space-around; }
+        /* 底部导航固定 */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(10,10,10,0.98); backdrop-blur: 20px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 50; display: flex; align-items: center; justify-content: space-around; }
     </style>
 </head>
 <body>
@@ -32,109 +31,101 @@
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-8 fade-in">
-        <section class="text-center py-6">
+        <header class="text-center py-6">
             <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-tighter text-white">智联全球，<span class="gold-text">洞察先机</span></h1>
-            <p class="text-zinc-400 text-[10px] md:text-xs tracking-[0.3em] uppercase font-bold opacity-80">Real-time Trade Intelligence & Pro Tools</p>
-        </section>
+            <p class="text-zinc-500 text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold opacity-70">Global Commerce Intelligence Hub</p>
+        </header>
 
-        <div class="glass rounded-[2rem] p-6 shadow-inner">
+        <div class="glass rounded-[2.5rem] p-6 shadow-2xl">
             <div class="flex justify-between items-center mb-5">
-                <h2 class="text-xs font-bold text-orange-500 flex items-center gap-2 uppercase tracking-widest">
+                <h2 class="text-[11px] font-bold text-orange-500 flex items-center gap-2 uppercase tracking-[0.2em]">
                     <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-orange-600"></span></span>
-                    实时情报雷达 (Live)
+                    实时情报雷达
                 </h2>
-                <button onclick="refreshRadar()" class="text-[10px] text-zinc-500 font-bold uppercase">Manual Sync</button>
+                <button onclick="refreshRadar()" class="text-[9px] text-zinc-500 font-bold hover:text-white transition">REFRESH</button>
             </div>
             <div id="trendList" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div id="section-intel" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
-                <h3 class="font-bold text-xl mb-6 text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 核心情报</h3>
-                
+                <h3 class="font-bold text-lg mb-6 text-white flex items-center gap-3"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 核心情报</h3>
                 <div id="topSection" class="mb-6 space-y-3 hidden">
                     <div id="topList" class="space-y-3"></div>
-                    <div class="border-b border-white/5 pt-4"></div>
+                    <div class="h-px bg-white/5 my-6"></div>
                 </div>
-
                 <div id="reportList" class="flex-grow space-y-3"></div>
-                <div id="reportPagination" class="flex justify-center gap-2 mt-8 pt-6 border-t border-white/5"></div>
+                <div id="reportPagination" class="flex justify-center gap-2 mt-8"></div>
             </div>
             
             <div id="section-tools" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
-                <h3 class="font-bold text-xl mb-6 text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 生产力工具</h3>
+                <h3 class="font-bold text-lg mb-6 text-white flex items-center gap-3"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 生产力工具</h3>
                 <div id="toolList" class="flex-grow space-y-3"></div>
-                <div id="toolPagination" class="flex justify-center gap-2 mt-8 pt-6 border-t border-white/5"></div>
-                <button onclick="showPayModal()" id="proBtn" class="mt-8 w-full py-4 bg-orange-600 rounded-2xl text-[11px] font-black uppercase text-white shadow-lg shadow-orange-900/20 hover:bg-orange-500 transition-all">Unlock Premium</button>
+                <div id="toolPagination" class="flex justify-center gap-2 mt-8"></div>
+                <button onclick="showPayModal()" id="proBtn" class="mt-8 w-full py-4 bg-orange-600 rounded-2xl text-[11px] font-black uppercase text-white shadow-lg">升级至 PRO 账户</button>
             </div>
         </div>
     </main>
 
     <div class="bottom-nav">
-        <button onclick="scrollToId('section-intel')" class="flex flex-col items-center">
-            <span class="text-[11px] font-black text-orange-500 uppercase tracking-tighter">情报 Intel</span>
-        </button>
-        <button onclick="scrollToId('section-tools')" class="flex flex-col items-center">
-            <span class="text-[11px] font-black text-zinc-500 uppercase tracking-tighter">工具 Tools</span>
-        </button>
-        <button onclick="showPayModal()" class="flex flex-col items-center">
-            <span class="text-[11px] font-black text-zinc-500 uppercase tracking-tighter">授权 Active</span>
-        </button>
+        <button onclick="scrollToId('section-intel')" class="text-[10px] font-black text-orange-500 uppercase tracking-widest">情报</button>
+        <button onclick="scrollToId('section-tools')" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">工具</button>
+        <button onclick="showPayModal()" class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">激活</button>
     </div>
 
-    <div id="adminPanel" class="fixed inset-0 z-[60] hidden bg-black/98 items-center justify-center p-4 backdrop-blur-md">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md shadow-2xl">
+    <div id="adminPanel" class="fixed inset-0 z-[60] hidden bg-black/98 items-center justify-center p-4">
+        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md">
             <div class="flex justify-between items-center mb-6">
-                <span id="adminTitle" class="text-white font-black text-xs uppercase tracking-widest">Admin Terminal</span>
-                <button onclick="toggleAdmin()" class="text-zinc-500 hover:text-white">✕</button>
+                <span class="text-white font-black text-xs uppercase tracking-widest">管理控制台</span>
+                <button onclick="toggleAdmin()" class="text-zinc-500">✕</button>
             </div>
             <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white focus:border-orange-500 outline-none">
+                <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white outline-none focus:border-orange-500">
                 <div class="flex gap-2">
-                    <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">发布情报</button>
-                    <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">发布工具</button>
+                    <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">情报模式</button>
+                    <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">工具模式</button>
                 </div>
-                <input type="text" id="quickTitle" placeholder="Title" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
-                <textarea id="quickContent" rows="4" placeholder="Body Content (HTML)" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white"></textarea>
+                <input type="text" id="quickTitle" placeholder="标题" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
+                <textarea id="quickContent" rows="4" placeholder="正文内容 (HTML)" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white"></textarea>
                 
-                <div class="flex items-center gap-2 px-2">
-                    <input type="checkbox" id="isTopCheck" class="w-4 h-4 accent-orange-600">
-                    <label for="isTopCheck" class="text-[10px] text-zinc-400 font-bold uppercase">置顶显示 (Pin to Top)</label>
-                </div>
+                <label class="flex items-center gap-2 px-2 text-[10px] text-zinc-400 font-bold uppercase cursor-pointer">
+                    <input type="checkbox" id="isTopCheck" class="w-4 h-4 accent-orange-600"> 置顶显示
+                </label>
 
-                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 hover:bg-orange-600 rounded-2xl font-black text-xs text-white uppercase">Sync Database</button>
+                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 hover:bg-orange-600 rounded-2xl font-black text-xs text-white uppercase transition-all">同步至云端数据库</button>
                 
-                <div class="pt-4 border-t border-white/5 space-y-3">
+                <div class="pt-6 border-t border-white/5 space-y-4">
+                    <p class="text-[9px] text-zinc-500 text-center font-bold uppercase">激活码生成</p>
                     <div class="flex gap-2">
-                        <button onclick="generateCode('monthly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400 font-bold">MONTHLY</button>
-                        <button onclick="generateCode('yearly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400 font-bold">YEARLY</button>
+                        <button onclick="generateCode('monthly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-300 font-bold">生成月码</button>
+                        <button onclick="generateCode('yearly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-300 font-bold">生成年码</button>
                     </div>
-                    <input type="text" id="codeOutput" readonly placeholder="Generated Code" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center text-orange-500 font-mono text-sm">
+                    <input type="text" id="codeOutput" readonly placeholder="等待生成..." class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center text-orange-500 font-mono text-sm">
                 </div>
             </div>
         </div>
     </div>
 
     <div id="contentReader" class="fixed inset-0 z-[70] hidden bg-black items-center justify-center p-0 md:p-6">
-        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden shadow-2xl">
+        <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden">
             <div class="p-6 border-b border-white/5 flex justify-between items-center bg-zinc-900/50">
-                <h2 id="readerTitle" class="font-black text-sm uppercase text-orange-500">YMTEA Hub Insight</h2>
-                <button onclick="closeReader()" class="text-white text-xl p-2">✕</button>
+                <h2 id="readerTitle" class="font-black text-xs uppercase text-orange-500 tracking-widest">Detail Insight</h2>
+                <button onclick="closeReader()" class="text-white p-2">✕</button>
             </div>
-            <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 leading-relaxed select-text text-sm md:text-base custom-scroll"></div>
+            <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 leading-relaxed text-sm md:text-base custom-scroll select-text"></div>
         </div>
     </div>
 
     <div id="payModal" class="fixed inset-0 z-[80] hidden bg-black/95 items-center justify-center p-4">
         <div class="max-w-md w-full text-center">
-            <h2 class="text-3xl font-black text-white mb-4 uppercase">Unlock Content</h2>
-            <p class="text-zinc-500 text-[11px] mb-8 uppercase tracking-[0.2em]">请输入激活码或联系客服获取授权</p>
-            <div class="space-y-3">
-                <input type="email" id="activeEmail" placeholder="Your Email" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
-                <input type="text" id="activeCode" placeholder="Activation Code" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
-                <button onclick="doActivate()" class="w-full py-4 bg-orange-600 rounded-2xl text-white font-black uppercase shadow-lg shadow-orange-900/20">Verify Access</button>
+            <h2 class="text-3xl font-black text-white mb-4 uppercase">Identity Required</h2>
+            <p class="text-zinc-500 text-[11px] mb-8 uppercase tracking-[0.2em]">请输入授权码开启深度情报</p>
+            <div class="space-y-4">
+                <input type="email" id="activeEmail" placeholder="授权邮箱" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
+                <input type="text" id="activeCode" placeholder="激活码" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
+                <button onclick="doActivate()" class="w-full py-4 bg-orange-600 rounded-2xl text-white font-black uppercase shadow-lg">验证并开启权限</button>
             </div>
-            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-600 text-[10px] font-black uppercase">Close Window</button>
+            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-600 text-[10px] font-black uppercase tracking-widest">暂时返回</button>
         </div>
     </div>
 
@@ -144,6 +135,7 @@
         let fullData = { reports: [], tools: [] };
         let editTargetId = null;
 
+        // 初始化加载
         async function loadContent() {
             try {
                 const res = await fetch(`${API_BASE}/api/reports/list`);
@@ -152,16 +144,16 @@
                 fullData.tools = data.filter(i => i.category === 'tool');
                 renderReports(1);
                 renderTools(1);
-            } catch (e) { console.error("Fetch Failed", e); }
+            } catch (e) { console.error("Load Failed"); }
         }
 
         function renderPagination(targetId, total, size, current, func) {
             const pages = Math.ceil(total / size);
             const container = document.getElementById(targetId);
-            if (!container || pages <= 1) { if(container) container.innerHTML = ''; return; }
+            if (!container || pages <= 1) { if(container) container.innerHTML=''; return; }
             let html = '';
             for (let i = 1; i <= pages; i++) {
-                html += `<button onclick="${func}(${i})" class="w-8 h-8 rounded-lg text-[10px] font-mono font-black transition-all ${i === current ? 'bg-orange-600 text-white shadow-lg' : 'bg-white/5 text-zinc-600'}">${i}</button>`;
+                html += `<button onclick="${func}(${i})" class="w-8 h-8 rounded-lg text-[10px] font-black ${i === current ? 'bg-orange-600 text-white' : 'bg-white/5 text-zinc-600'}">${i}</button>`;
             }
             container.innerHTML = html;
         }
@@ -175,26 +167,25 @@
             if (tops.length > 0 && page === 1) {
                 document.getElementById('topSection').classList.remove('hidden');
                 document.getElementById('topList').innerHTML = tops.map(r => `
-                    <div class="flex justify-between items-center p-5 bg-orange-600/5 border border-orange-500/20 rounded-2xl relative group">
-                        <div class="absolute top-0 left-0 w-1.5 h-full bg-orange-600 rounded-l-2xl"></div>
-                        <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer pl-4">
-                            <span class="text-[13px] text-white font-bold group-hover:text-orange-400 transition-colors">${r.title}</span>
-                            <span class="ml-2 text-[8px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-black tracking-tighter uppercase">Pin</span>
+                    <div class="flex justify-between items-center p-5 bg-orange-600/5 border border-orange-500/30 rounded-2xl relative group">
+                        <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer pl-2">
+                            <span class="text-white font-bold text-sm group-hover:text-orange-400 transition-colors">${r.title}</span>
+                            <span class="ml-2 text-[8px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-black uppercase">Pin</span>
                         </div>
-                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-600 hover:text-white uppercase">Edit</button>
+                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-700 hover:text-white uppercase">Edit</button>
                     </div>
                 `).join('');
-            } else if (page === 1) document.getElementById('topSection').classList.add('hidden');
+            }
 
             document.getElementById('reportList').innerHTML = paged.map(r => `
-                <div class="flex justify-between items-center p-5 glass rounded-2xl border border-white/5 hover:border-orange-500/30 group transition-all">
+                <div class="flex justify-between items-center p-5 glass rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all group">
                     <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer">
-                        <div class="text-[13px] text-zinc-200 group-hover:text-orange-400 transition-colors">${r.title}</div>
+                        <div class="text-sm text-zinc-200 group-hover:text-orange-400 transition-colors">${r.title}</div>
                         <div class="text-[9px] text-zinc-600 mt-1 uppercase font-mono">${new Date(r.created_at).toLocaleDateString()}</div>
                     </div>
-                    <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-800 hover:text-zinc-400 transition-colors uppercase">Edit</button>
+                    <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-800 hover:text-zinc-500 uppercase">Edit</button>
                 </div>
-            `).join('') || '<p class="text-zinc-800 text-xs text-center py-10 uppercase tracking-widest">Directory Empty</p>';
+            `).join('') || '<p class="text-zinc-800 text-xs text-center py-10 uppercase tracking-widest">No Intelligence Data</p>';
             
             renderPagination('reportPagination', normals.length, size, page, 'renderReports');
         }
@@ -205,7 +196,7 @@
             document.getElementById('toolList').innerHTML = paged.map(r => `
                 <div class="flex items-center gap-4 p-5 glass rounded-2xl border border-white/5 hover:bg-white/10 transition-all group">
                     <div onclick="openItem(${r.id})" class="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-all cursor-pointer">⚡</div>
-                    <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer font-bold text-[13px] group-hover:text-orange-400">${r.title}</div>
+                    <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer font-bold text-sm group-hover:text-orange-400">${r.title}</div>
                     <button onclick="handleEdit(${r.id}, 'tool')" class="text-[9px] text-zinc-800 uppercase font-black">Edit</button>
                 </div>
             `).join('');
@@ -222,15 +213,16 @@
                 document.getElementById('readerBody').innerHTML = result.data;
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
                 document.body.style.overflow = 'hidden';
-            } catch (e) { alert("FETCH ERROR"); }
+            } catch (e) { alert("获取详情失败，请检查网络"); }
         }
 
+        // 核心同步逻辑
         async function quickPublish() {
             const pass = document.getElementById('adminPass').value;
             const title = document.getElementById('quickTitle').value;
             const content = document.getElementById('quickContent').value;
             const isTop = document.getElementById('isTopCheck').checked ? 1 : 0;
-            if(!pass) return alert("Secret Required");
+            if(!pass) return alert("错误: 请先输入管理端 Secret");
 
             let sql = editTargetId 
                 ? `UPDATE reports SET title='${title.replace(/'/g, "''")}', content='${content.replace(/'/g, "''")}', category='${currentCategory}', is_top=${isTop} WHERE id=${editTargetId};`
@@ -242,31 +234,42 @@
                     headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ sql })
                 });
-                if (res.ok) { alert("SUCCESS"); location.reload(); }
-                else alert("FAILED: Check your Secret Key");
-            } catch(e) { alert("NETWORK ERROR"); }
+                if (res.ok) { alert("同步成功！内容已上线。"); location.reload(); }
+                else { 
+                    const msg = await res.text();
+                    alert("同步失败: " + (msg || "口令验证不通过")); 
+                }
+            } catch(e) { alert("网络异常，无法连接同步接口"); }
         }
 
+        // 核心激活码生成逻辑
         async function generateCode(type) {
             const pass = document.getElementById('adminPass').value;
-            if(!pass) return alert("Secret Required");
+            if(!pass) return alert("错误: 生成激活码需要输入 Admin Secret");
             const code = `YMTEA-${Math.random().toString(36).substring(7).toUpperCase()}`;
+            // 确保后端数据库有 active_codes 表
             const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('${code}', '${type}', 0);`;
+            
             try {
                 const res = await fetch(`${API_BASE}/api/admin/publish`, {
                     method: 'POST',
                     headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ sql })
                 });
-                if (res.ok) document.getElementById('codeOutput').value = code;
-                else alert("FAILED");
-            } catch(e) { alert("ERROR"); }
+                if (res.ok) {
+                    document.getElementById('codeOutput').value = code;
+                    alert("激活码生成并已存入数据库！");
+                } else {
+                    const msg = await res.text();
+                    alert("生成失败 (后端拒绝): " + msg);
+                }
+            } catch(e) { alert("网络异常"); }
         }
 
         async function doActivate() {
             const email = document.getElementById('activeEmail').value;
             const code = document.getElementById('activeCode').value;
-            if(!email || !code) return alert("Please fill all fields");
+            if(!email || !code) return alert("请完整输入邮箱和激活码");
             const res = await fetch(`${API_BASE}/api/pay/success`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -274,13 +277,13 @@
             });
             const data = await res.json();
             if (data.success) { localStorage.setItem('ymtea_token', data.token); location.reload(); }
-            else alert(data.msg || "Invalid Code");
+            else alert(data.msg || "激活码无效或已被使用");
         }
 
         function refreshRadar() {
             const trendList = document.getElementById('trendList');
             const data = [
-                {t:"TikTok Shop Policy", s:"Live"}, {t:"Global Logistics Rate", s:"-4.2%"}, {t:"US Port Status", s:"Normal"}
+                {t:"TikTok Shop Policy", s:"UPDATED"}, {t:"Amazon Logistics Index", s:"-2.8%"}, {t:"US Customs Alert", s:"HIGH"}
             ];
             trendList.innerHTML = data.map(i => `
                 <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center fade-in">
@@ -314,8 +317,9 @@
             refreshRadar();
             loadContent();
             if(localStorage.getItem('ymtea_token')) {
-                document.getElementById('statusLabel').innerText = "PRO_SUBSCRIPTION";
-                document.getElementById('statusLabel').classList.replace('text-zinc-400', 'text-orange-500');
+                const label = document.getElementById('statusLabel');
+                label.innerText = "PRO_SUBSCRIPTION";
+                label.classList.replace('text-zinc-400', 'text-orange-500');
                 if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
             }
         };
