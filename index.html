@@ -203,35 +203,65 @@
         }
 
         async function openItem(id, cat) {
-            const t = localStorage.getItem('ymtea_token'), p = document.getElementById('adminPass').value;
+            const t = localStorage.getItem('ymtea_token');
+            const p = document.getElementById('adminPass').value;
+            
+            // 如果既没有 Token 也没有密钥，直接弹出支付框
             if(!t && !p) return showPayModal();
+            
             curList = (cat === 'tool' ? fullData.tools : fullData.reports);
             curIdx = curList.findIndex(i => i.id === id);
             
             document.getElementById('contentReader').classList.remove('hidden');
-            document.getElementById('readerTitle').innerText = "Decrypting Data...";
+            document.getElementById('readerTitle').innerText = "Establishing Secure Connection...";
             document.getElementById('readerBody').innerHTML = "<div class='flex items-center justify-center h-40'><div class='animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500'></div></div>";
 
             try {
                 const headers = { 'Content-Type': 'application/json' };
-                if(t) headers['Authorization'] = t;
-                if(p) headers['Admin-Key'] = p;
+                // 重要：如果填了 Admin-Key，则该项优先级最高
+                if(p) {
+                    headers['Admin-Key'] = p;
+                } else if(t) {
+                    headers['Authorization'] = t;
+                }
 
                 const res = await fetch(`${API}/api/reports/view/${id}`, { headers });
+                
+                // 处理 401/403 权限错误
+                if (!res.ok) {
+                    const errStatus = res.status;
+                    document.getElementById('readerBody').innerHTML = `
+                        <div class='text-center p-8'>
+                            <div class='text-orange-500 text-4xl mb-4'>⚠️</div>
+                            <div class='text-white font-bold mb-2 uppercase tracking-widest text-xs'>Authentication Denied</div>
+                            <div class='text-zinc-500 text-[10px] leading-relaxed'>
+                                权限验证失败 (Error: ${errStatus})。<br>
+                                请确保您的“管理密钥”正确无误，<br>
+                                或激活码尚未过期。
+                            </div>
+                            <button onclick="closeReader(); showPayModal();" class="mt-6 px-6 py-2 bg-white text-black text-[9px] font-black rounded-full uppercase">去激活权限</button>
+                        </div>`;
+                    return;
+                }
+
                 const r = await res.json();
-                if(r.data) {
+                // 根据后端返回的字段渲染内容 (支持 data 或 content 字段名)
+                const content = r.data || r.content;
+                
+                if(content) {
                     document.getElementById('readerTitle').innerText = curList[curIdx].title;
-                    document.getElementById('readerBody').innerHTML = r.data.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
+                    document.getElementById('readerBody').innerHTML = content.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
+                    
                     const pb = document.getElementById('prevBtn'), nb = document.getElementById('nextBtn');
                     pb.style.opacity = curIdx > 0 ? "1" : "0.1"; 
                     nb.style.opacity = curIdx < curList.length-1 ? "1" : "0.1";
                     pb.onclick = curIdx > 0 ? () => openItem(curList[curIdx-1].id, curList[curIdx-1].category) : null;
                     nb.onclick = curIdx < curList.length-1 ? () => openItem(curList[curIdx+1].id, curList[curIdx+1].category) : null;
                 } else { 
-                    document.getElementById('readerBody').innerHTML = "<div class='text-red-500 text-center font-bold'>权限验证未通过，请确保密钥正确或激活码有效</div>";
+                    throw new Error("EMPTY_DATA");
                 }
             } catch(e) { 
-                document.getElementById('readerBody').innerHTML = "<div class='text-red-500 text-center font-bold'>网络链路中断</div>";
+                document.getElementById('readerBody').innerHTML = "<div class='text-red-500 text-center font-bold p-10 text-xs uppercase'>Link Interrupted or Forbidden</div>";
             }
         }
 
@@ -321,8 +351,9 @@
             try {
                 const r = await fetch(`${API}/api/reports/view/${id}`, { headers:{'Admin-Key':p, 'Authorization': localStorage.getItem('ymtea_token')||""} });
                 const d = await r.json(); 
-                if(d.data) { 
-                    document.getElementById('quickContent').value = d.data; 
+                const content = d.data || d.content;
+                if(content) { 
+                    document.getElementById('quickContent').value = content; 
                     document.getElementById('cancelBtn').classList.remove('hidden'); 
                     document.getElementById('publishBtn').innerText = "UPDATE_ENTRY"; 
                     document.getElementById('isTopCheck').checked = item.is_top === 1;
