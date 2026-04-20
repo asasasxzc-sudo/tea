@@ -210,7 +210,6 @@
             document.getElementById('readerBody').innerHTML = "<div class='flex items-center justify-center h-40'><div class='animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500'></div></div>";
 
             try {
-                // 修复：同时携带 Token 和 AdminKey 确保权限最高
                 const headers = { 'Content-Type': 'application/json' };
                 if(t) headers['Authorization'] = t;
                 if(p) headers['Admin-Key'] = p;
@@ -244,17 +243,44 @@
         }
 
         async function publish() {
-            const p = document.getElementById('adminPass').value, t = document.getElementById('quickTitle').value, c = document.getElementById('quickContent').value, top = document.getElementById('isTopCheck').checked ? 1 : 0;
-            if(!p) return alert("请在上方输入管理员密钥");
-            if(!t || !c) return alert("请补全内容标题");
+            const p = document.getElementById('adminPass').value;
+            const t = document.getElementById('quickTitle').value;
+            const c = document.getElementById('quickContent').value;
+            const top = document.getElementById('isTopCheck').checked ? 1 : 0;
             
-            const sql = curEid ? "UPDATE reports SET title=?, content=?, category=?, is_top=? WHERE id=?" : "INSERT INTO reports (title, content, category, is_top) VALUES (?,?,?,?)";
-            const params = curEid ? [t, c, curCat, top, curEid] : [t, c, curCat, top];
+            if(!p) return alert("鉴权失败：请在 Authentication 框中输入管理员密钥");
+            if(!t || !c) return alert("发布失败：标题和内容不能为空");
+            
+            // 构造 SQL 和 参数
+            let sql, params;
+            if (curEid) {
+                sql = "UPDATE reports SET title=?, content=?, category=?, is_top=? WHERE id=?";
+                params = [t, c, curCat, top, curEid];
+            } else {
+                sql = "INSERT INTO reports (title, content, category, is_top) VALUES (?,?,?,?)";
+                params = [t, c, curCat, top];
+            }
             
             try {
-                const r = await fetch(`${API}/api/admin/publish`, { method:'POST', headers:{'Admin-Key':p,'Content-Type':'application/json'}, body:JSON.stringify({sql, params}) });
-                if(r.ok) { alert("Data Synced."); location.reload(); } else alert("Update Denied.");
-            } catch(e) { alert("Network Error."); }
+                const r = await fetch(`${API}/api/admin/publish`, { 
+                    method: 'POST', 
+                    headers: {
+                        'Admin-Key': p,
+                        'Content-Type': 'application/json'
+                    }, 
+                    body: JSON.stringify({ sql, params }) 
+                });
+                
+                if(r.ok) { 
+                    alert("同步成功：数据中心已更新"); 
+                    location.reload(); 
+                } else {
+                    const errorMsg = await r.text();
+                    alert(`同步失败 (Denied)：${r.status === 401 || r.status === 403 ? "管理员密钥无效或权限不足" : "服务器拒绝请求 - " + errorMsg}`);
+                }
+            } catch(e) { 
+                alert("网络连接失败：请检查网络环境或服务器状态"); 
+            }
         }
 
         async function doAct() {
@@ -291,7 +317,6 @@
             if(document.getElementById('adminPanel').classList.contains('hidden')) toggleAdmin();
             
             try {
-                // 修复：编辑拉取原始内容时带上管理员密钥头
                 const r = await fetch(`${API}/api/reports/view/${id}`, { headers:{'Admin-Key':p, 'Authorization': localStorage.getItem('ymtea_token')||""} });
                 const d = await r.json(); 
                 if(d.data) { 
@@ -301,9 +326,9 @@
                     document.getElementById('isTopCheck').checked = item.is_top === 1;
                     scrollToId('adminPanel');
                 } else {
-                    alert("内容读取受限，请确认密钥");
+                    alert("内容读取受限，请确认密钥有效性");
                 }
-            } catch(e) { alert("Read Failed."); }
+            } catch(e) { alert("数据拉取失败"); }
         }
 
         function renderReports(p) { render('reportList', fullData.reports, p, 'renderReports'); }
