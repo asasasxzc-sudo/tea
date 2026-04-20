@@ -7,135 +7,134 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 70px; }
+        body { background-color: #050505; color: #e4e4e7; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 80px; }
         .glass { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); }
         .gold-text { background: linear-gradient(135deg, #fb923c, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .modal-active { overflow: hidden; height: 100vh; }
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
-        .nav-btn { @apply flex-1 py-5 text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:bg-white/5 disabled:opacity-10; }
-        #readerBody img { max-width: 100%; height: auto; border-radius: 1rem; margin: 1.5rem 0; }
+        #readerBody img { max-width: 100%; height: auto; border-radius: 1rem; margin: 1.5rem 0; display: block; }
         #readerBody p { margin-bottom: 1.2rem; line-height: 1.8; }
-        /* 底部移动端导航 */
-        .mobile-nav { display: none; }
-        @media (max-width: 768px) {
-            .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(10,10,10,0.95); backdrop-blur: 20px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 45; }
-        }
+        /* 底部固定导航样式 */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(10,10,10,0.95); backdrop-blur: 20px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 50; display: flex; align-items: center; justify-content: space-around; }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
 
     <nav class="sticky top-0 z-40 w-full border-b border-white/10 bg-black/90 backdrop-blur-lg">
         <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
             <div class="text-xl font-black tracking-tighter cursor-pointer" ondblclick="toggleAdmin()">
                 <span class="gold-text">YMTEA</span> <span class="text-white">HUB</span>
             </div>
-            <div id="statusLabel" class="text-[9px] font-mono px-2 py-1 rounded bg-zinc-800 text-zinc-400 border border-white/10">GUEST_MODE</div>
+            <div id="statusLabel" class="text-[9px] font-mono px-2 py-1 rounded bg-zinc-800 text-zinc-400 border border-white/10 uppercase">GUEST_MODE</div>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-8 fade-in">
+        <section class="text-center py-6">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight tracking-tighter text-white">智联全球，<span class="gold-text">洞察先机</span></h1>
+            <p class="text-zinc-400 text-[10px] md:text-xs tracking-[0.3em] uppercase font-bold opacity-80">Real-time Trade Intelligence & Pro Tools</p>
+        </section>
+
         <div class="glass rounded-[2rem] p-6 shadow-inner">
             <div class="flex justify-between items-center mb-5">
                 <h2 class="text-xs font-bold text-orange-500 flex items-center gap-2 uppercase tracking-widest">
                     <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-orange-600"></span></span>
-                    Live Radar
+                    实时情报雷达 (Live)
                 </h2>
-                <button onclick="refreshRadar()" class="text-[10px] text-zinc-500 uppercase font-bold">Refresh</button>
+                <button onclick="refreshRadar()" class="text-[10px] text-zinc-500 font-bold uppercase">Manual Sync</button>
             </div>
             <div id="trendList" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div id="section_report" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div id="section-intel" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
                 <h3 class="font-bold text-xl mb-6 text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 核心情报</h3>
                 
                 <div id="topSection" class="mb-6 space-y-3 hidden">
                     <div id="topList" class="space-y-3"></div>
-                    <div class="border-b border-white/5 my-6"></div>
+                    <div class="border-b border-white/5 pt-4"></div>
                 </div>
 
                 <div id="reportList" class="flex-grow space-y-3"></div>
-                <div id="reportPagination" class="flex justify-center gap-2 mt-8 pt-4 border-t border-white/5"></div>
+                <div id="reportPagination" class="flex justify-center gap-2 mt-8 pt-6 border-t border-white/5"></div>
             </div>
             
-            <div id="section_tool" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
+            <div id="section-tools" class="glass p-6 md:p-8 rounded-[2.5rem] flex flex-col min-h-[500px]">
                 <h3 class="font-bold text-xl mb-6 text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-orange-600 rounded-full"></span> 生产力工具</h3>
                 <div id="toolList" class="flex-grow space-y-3"></div>
-                <div id="toolPagination" class="flex justify-center gap-2 mt-8 pt-4 border-t border-white/5"></div>
-                <button onclick="showPayModal()" id="proBtn" class="mt-8 w-full py-4 bg-orange-600 rounded-2xl text-[11px] font-black uppercase text-white shadow-lg shadow-orange-900/20">Upgrade to Pro</button>
+                <div id="toolPagination" class="flex justify-center gap-2 mt-8 pt-6 border-t border-white/5"></div>
+                <button onclick="showPayModal()" id="proBtn" class="mt-8 w-full py-4 bg-orange-600 rounded-2xl text-[11px] font-black uppercase text-white shadow-lg shadow-orange-900/20 hover:bg-orange-500 transition-all">Unlock Premium</button>
             </div>
         </div>
     </main>
 
-    <div class="mobile-nav">
-        <button onclick="document.getElementById('section_report').scrollIntoView({behavior:'smooth'})" class="flex-1 flex flex-col items-center justify-center gap-1 text-white">
-            <span class="text-[10px] font-black uppercase tracking-tighter">情报</span>
+    <div class="bottom-nav">
+        <button onclick="scrollToId('section-intel')" class="flex flex-col items-center">
+            <span class="text-[11px] font-black text-orange-500 uppercase tracking-tighter">情报 Intel</span>
         </button>
-        <button onclick="document.getElementById('section_tool').scrollIntoView({behavior:'smooth'})" class="flex-1 flex flex-col items-center justify-center gap-1 text-zinc-500">
-            <span class="text-[10px] font-black uppercase tracking-tighter">工具</span>
+        <button onclick="scrollToId('section-tools')" class="flex flex-col items-center">
+            <span class="text-[11px] font-black text-zinc-500 uppercase tracking-tighter">工具 Tools</span>
+        </button>
+        <button onclick="showPayModal()" class="flex flex-col items-center">
+            <span class="text-[11px] font-black text-zinc-500 uppercase tracking-tighter">授权 Active</span>
         </button>
     </div>
 
-    <div id="adminPanel" class="fixed inset-0 z-50 hidden bg-black/98 items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md">
-            <div class="flex justify-between items-center mb-6 text-white font-black text-xs uppercase tracking-widest">
-                <span id="adminTitle">Admin Terminal</span>
-                <button onclick="toggleAdmin()">✕</button>
+    <div id="adminPanel" class="fixed inset-0 z-[60] hidden bg-black/98 items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-zinc-900 border border-white/10 p-8 rounded-[3rem] w-full max-w-md shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <span id="adminTitle" class="text-white font-black text-xs uppercase tracking-widest">Admin Terminal</span>
+                <button onclick="toggleAdmin()" class="text-zinc-500 hover:text-white">✕</button>
             </div>
             <div class="space-y-4">
-                <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
+                <input type="password" id="adminPass" placeholder="Admin Secret" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white focus:border-orange-500 outline-none">
                 <div class="flex gap-2">
                     <button onclick="setCategory('report')" id="cat_report" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-orange-600 text-white">发布情报</button>
                     <button onclick="setCategory('tool')" id="cat_tool" class="flex-1 py-3 rounded-xl text-[10px] font-bold bg-zinc-800 text-zinc-500">发布工具</button>
                 </div>
                 <input type="text" id="quickTitle" placeholder="Title" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white">
-                <textarea id="quickContent" rows="4" placeholder="Content (HTML)" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white"></textarea>
+                <textarea id="quickContent" rows="4" placeholder="Body Content (HTML)" class="w-full bg-black border border-white/10 p-4 rounded-2xl text-xs text-white"></textarea>
                 
                 <div class="flex items-center gap-2 px-2">
                     <input type="checkbox" id="isTopCheck" class="w-4 h-4 accent-orange-600">
-                    <label for="isTopCheck" class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">Pin to Top (置顶)</label>
+                    <label for="isTopCheck" class="text-[10px] text-zinc-400 font-bold uppercase">置顶显示 (Pin to Top)</label>
                 </div>
 
-                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 rounded-2xl font-black text-xs text-white uppercase">Sync To Cloud</button>
-                <div class="pt-4 border-t border-white/5 flex gap-2">
-                    <button onclick="generateTestCode('monthly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400 font-bold uppercase">Code (M)</button>
-                    <button onclick="generateTestCode('yearly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400 font-bold uppercase">Code (Y)</button>
+                <button onclick="quickPublish()" class="w-full py-4 bg-orange-700 hover:bg-orange-600 rounded-2xl font-black text-xs text-white uppercase">Sync Database</button>
+                
+                <div class="pt-4 border-t border-white/5 space-y-3">
+                    <div class="flex gap-2">
+                        <button onclick="generateCode('monthly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400 font-bold">MONTHLY</button>
+                        <button onclick="generateCode('yearly')" class="flex-1 py-2 bg-zinc-800 rounded-xl text-[9px] text-zinc-400 font-bold">YEARLY</button>
+                    </div>
+                    <input type="text" id="codeOutput" readonly placeholder="Generated Code" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center text-orange-500 font-mono text-sm">
                 </div>
-                <input type="text" id="codeOutput" readonly class="w-full bg-white/5 border border-white/10 p-3 rounded-xl text-center text-orange-500 font-mono text-sm">
             </div>
         </div>
     </div>
 
-    <div id="contentReader" class="fixed inset-0 z-[60] hidden bg-black items-center justify-center p-0 md:p-6 backdrop-blur-3xl">
+    <div id="contentReader" class="fixed inset-0 z-[70] hidden bg-black items-center justify-center p-0 md:p-6">
         <div class="bg-zinc-900 w-full h-full md:max-w-4xl md:h-[85vh] md:rounded-[3rem] flex flex-col border border-white/10 overflow-hidden shadow-2xl">
-            <div class="p-6 border-b border-white/5 flex justify-between items-center text-white">
-                <h2 id="readerTitle" class="font-black text-sm uppercase truncate pr-4 text-orange-500">Detail</h2>
-                <button onclick="closeReader()" class="text-xl">✕</button>
+            <div class="p-6 border-b border-white/5 flex justify-between items-center bg-zinc-900/50">
+                <h2 id="readerTitle" class="font-black text-sm uppercase text-orange-500">YMTEA Hub Insight</h2>
+                <button onclick="closeReader()" class="text-white text-xl p-2">✕</button>
             </div>
             <div id="readerBody" class="flex-grow overflow-y-auto p-8 md:p-12 text-zinc-200 leading-relaxed select-text text-sm md:text-base custom-scroll"></div>
-            <div class="flex border-t border-white/5 bg-black/40 justify-between items-center">
-                <button id="prevBtn" class="nav-btn border-r border-white/5">← PREV</button>
-                <button id="nextBtn" class="nav-btn">NEXT →</button>
-            </div>
         </div>
     </div>
 
-    <div id="payModal" class="fixed inset-0 z-50 hidden bg-black/95 items-center justify-center p-4">
-        <div class="max-w-xl w-full text-center">
-            <h2 class="text-3xl font-black text-white uppercase tracking-tighter mb-4">Access Denied</h2>
-            <p class="text-zinc-500 text-xs mb-8 uppercase">请联系客服支付并获取授权码</p>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="glass p-6 rounded-[2rem]" onclick="startPay('monthly')">
-                    <div class="text-2xl font-black text-white">¥78</div><div class="text-[9px] mt-2 text-zinc-500">Monthly</div>
-                </div>
-                <div class="border-2 border-orange-600 p-6 rounded-[2rem]" onclick="startPay('yearly')">
-                    <div class="text-2xl font-black text-orange-500">¥730</div><div class="text-[9px] mt-2 text-orange-400">Yearly</div>
-                </div>
+    <div id="payModal" class="fixed inset-0 z-[80] hidden bg-black/95 items-center justify-center p-4">
+        <div class="max-w-md w-full text-center">
+            <h2 class="text-3xl font-black text-white mb-4 uppercase">Unlock Content</h2>
+            <p class="text-zinc-500 text-[11px] mb-8 uppercase tracking-[0.2em]">请输入激活码或联系客服获取授权</p>
+            <div class="space-y-3">
+                <input type="email" id="activeEmail" placeholder="Your Email" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
+                <input type="text" id="activeCode" placeholder="Activation Code" class="w-full bg-zinc-900 border border-white/10 p-4 rounded-2xl text-white outline-none">
+                <button onclick="doActivate()" class="w-full py-4 bg-orange-600 rounded-2xl text-white font-black uppercase shadow-lg shadow-orange-900/20">Verify Access</button>
             </div>
-            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-600 text-[10px] font-black uppercase">Close</button>
+            <button onclick="closeModal('payModal')" class="mt-8 text-zinc-600 text-[10px] font-black uppercase">Close Window</button>
         </div>
     </div>
 
@@ -151,99 +150,78 @@
                 const data = await res.json();
                 fullData.reports = data.filter(i => i.category !== 'tool');
                 fullData.tools = data.filter(i => i.category === 'tool');
-                renderReportPage(1);
-                renderToolPage(1);
-            } catch (e) { console.error("Load failed", e); }
+                renderReports(1);
+                renderTools(1);
+            } catch (e) { console.error("Fetch Failed", e); }
         }
 
-        // 分页渲染逻辑：关键修复
-        function renderPagination(targetId, total, size, current, funcName) {
+        function renderPagination(targetId, total, size, current, func) {
             const pages = Math.ceil(total / size);
             const container = document.getElementById(targetId);
-            if (!container) return;
-            
-            if (pages <= 1) { 
-                container.innerHTML = `<span class="text-zinc-600 text-[10px] font-mono">END OF LIST</span>`; 
-                return; 
-            }
-
+            if (!container || pages <= 1) { if(container) container.innerHTML = ''; return; }
             let html = '';
             for (let i = 1; i <= pages; i++) {
-                html += `<button onclick="${funcName}(${i})" class="px-4 py-2 rounded-xl text-[10px] font-mono font-black transition-all ${i === current ? 'bg-orange-600 text-white shadow-lg' : 'bg-white/5 text-zinc-500'}">${i}</button>`;
+                html += `<button onclick="${func}(${i})" class="w-8 h-8 rounded-lg text-[10px] font-mono font-black transition-all ${i === current ? 'bg-orange-600 text-white shadow-lg' : 'bg-white/5 text-zinc-600'}">${i}</button>`;
             }
             container.innerHTML = html;
         }
 
-        function renderReportPage(page) {
+        function renderReports(page) {
             const size = 10;
-            const container = document.getElementById('reportList');
-            const topListContainer = document.getElementById('topList');
-            const topSection = document.getElementById('topSection');
+            const tops = fullData.reports.filter(r => r.is_top == 1);
+            const normals = fullData.reports.filter(r => r.is_top != 1);
+            const paged = normals.slice((page-1)*size, page*size);
 
-            const topData = fullData.reports.filter(r => r.is_top == 1);
-            const normalData = fullData.reports.filter(r => r.is_top != 1);
-            const pageData = normalData.slice((page-1)*size, page*size);
-
-            if (topData.length > 0 && page === 1) {
-                topSection.classList.remove('hidden');
-                topListContainer.innerHTML = topData.map(r => `
-                    <div class="flex justify-between items-center p-5 bg-orange-600/5 rounded-2xl border border-orange-500/30 relative">
-                        <div class="absolute top-0 left-0 w-1 h-full bg-orange-600"></div>
-                        <div onclick="openReport(${r.id}, 'report')" class="flex-grow cursor-pointer pl-2">
-                            <div class="flex items-center gap-2">
-                                <span class="text-[13px] text-white font-bold">${r.title}</span>
-                                <span class="text-[9px] bg-orange-600 text-white px-1 py-0.5 rounded font-black">TOP</span>
-                            </div>
+            if (tops.length > 0 && page === 1) {
+                document.getElementById('topSection').classList.remove('hidden');
+                document.getElementById('topList').innerHTML = tops.map(r => `
+                    <div class="flex justify-between items-center p-5 bg-orange-600/5 border border-orange-500/20 rounded-2xl relative group">
+                        <div class="absolute top-0 left-0 w-1.5 h-full bg-orange-600 rounded-l-2xl"></div>
+                        <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer pl-4">
+                            <span class="text-[13px] text-white font-bold group-hover:text-orange-400 transition-colors">${r.title}</span>
+                            <span class="ml-2 text-[8px] bg-orange-600 text-white px-1.5 py-0.5 rounded font-black tracking-tighter uppercase">Pin</span>
                         </div>
-                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-500">EDIT</button>
+                        <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-600 hover:text-white uppercase">Edit</button>
                     </div>
                 `).join('');
-            } else {
-                topSection.classList.add('hidden');
-            }
+            } else if (page === 1) document.getElementById('topSection').classList.add('hidden');
 
-            container.innerHTML = pageData.map(r => `
-                <div class="flex justify-between items-center p-5 glass rounded-2xl border border-white/5">
-                    <div onclick="openReport(${r.id}, 'report')" class="flex-grow cursor-pointer">
-                        <span class="text-[13px] text-zinc-200">${r.title}</span>
-                        <div class="text-[9px] text-zinc-600 mt-1">${new Date(r.created_at).toLocaleDateString()}</div>
+            document.getElementById('reportList').innerHTML = paged.map(r => `
+                <div class="flex justify-between items-center p-5 glass rounded-2xl border border-white/5 hover:border-orange-500/30 group transition-all">
+                    <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer">
+                        <div class="text-[13px] text-zinc-200 group-hover:text-orange-400 transition-colors">${r.title}</div>
+                        <div class="text-[9px] text-zinc-600 mt-1 uppercase font-mono">${new Date(r.created_at).toLocaleDateString()}</div>
                     </div>
-                    <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-700">EDIT</button>
+                    <button onclick="handleEdit(${r.id}, 'report')" class="text-[9px] text-zinc-800 hover:text-zinc-400 transition-colors uppercase">Edit</button>
                 </div>
-            `).join('') || '<p class="text-zinc-700 text-xs text-center py-4">NO DATA</p>';
+            `).join('') || '<p class="text-zinc-800 text-xs text-center py-10 uppercase tracking-widest">Directory Empty</p>';
             
-            renderPagination('reportPagination', normalData.length, size, page, 'renderReportPage');
+            renderPagination('reportPagination', normals.length, size, page, 'renderReports');
         }
 
-        function renderToolPage(page) {
-            const size = 8;
-            const container = document.getElementById('toolList');
-            const pageData = fullData.tools.slice((page-1)*size, page*size);
-            
-            container.innerHTML = pageData.map(r => `
-                <div class="flex items-center gap-4 p-4 glass rounded-2xl">
-                    <div onclick="openReport(${r.id}, 'tool')" class="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center text-white cursor-pointer">⚡</div>
-                    <div onclick="openReport(${r.id}, 'tool')" class="flex-grow cursor-pointer">
-                        <div class="text-[13px] text-zinc-100 font-bold">${r.title}</div>
-                    </div>
-                    <button onclick="handleEdit(${r.id}, 'tool')" class="text-[9px] text-zinc-700">EDIT</button>
+        function renderTools(page) {
+            const size = 6;
+            const paged = fullData.tools.slice((page-1)*size, page*size);
+            document.getElementById('toolList').innerHTML = paged.map(r => `
+                <div class="flex items-center gap-4 p-5 glass rounded-2xl border border-white/5 hover:bg-white/10 transition-all group">
+                    <div onclick="openItem(${r.id})" class="w-12 h-12 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-all cursor-pointer">⚡</div>
+                    <div onclick="openItem(${r.id})" class="flex-grow cursor-pointer font-bold text-[13px] group-hover:text-orange-400">${r.title}</div>
+                    <button onclick="handleEdit(${r.id}, 'tool')" class="text-[9px] text-zinc-800 uppercase font-black">Edit</button>
                 </div>
             `).join('');
-            
-            renderPagination('toolPagination', fullData.tools.length, size, page, 'renderToolPage');
+            renderPagination('toolPagination', fullData.tools.length, size, page, 'renderTools');
         }
 
-        async function openReport(id, cat) {
+        async function openItem(id) {
             const token = localStorage.getItem('ymtea_token');
             if (!token) return showPayModal();
             try {
                 const res = await fetch(`${API_BASE}/api/reports/view/${id}`, { headers: { 'Authorization': token } });
                 if (res.status === 403) return showPayModal();
                 const result = await res.json();
-                document.getElementById('readerTitle').innerText = "CONTENT";
                 document.getElementById('readerBody').innerHTML = result.data;
                 document.getElementById('contentReader').classList.replace('hidden', 'flex');
-                document.body.classList.add('modal-active');
+                document.body.style.overflow = 'hidden';
             } catch (e) { alert("FETCH ERROR"); }
         }
 
@@ -258,51 +236,67 @@
                 ? `UPDATE reports SET title='${title.replace(/'/g, "''")}', content='${content.replace(/'/g, "''")}', category='${currentCategory}', is_top=${isTop} WHERE id=${editTargetId};`
                 : `INSERT INTO reports (title, content, category, is_top) VALUES ('${title.replace(/'/g, "''")}', '${content.replace(/'/g, "''")}', '${currentCategory}', ${isTop});`;
             
-            const res = await fetch(`${API_BASE}/api/admin/publish`, { 
-                method: 'POST', 
-                headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' }, 
-                body: JSON.stringify({ sql }) 
-            });
-            if (res.ok) { alert("DONE"); location.reload(); }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                    method: 'POST',
+                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sql })
+                });
+                if (res.ok) { alert("SUCCESS"); location.reload(); }
+                else alert("FAILED: Check your Secret Key");
+            } catch(e) { alert("NETWORK ERROR"); }
         }
 
-        async function handleEdit(id, cat) {
+        async function generateCode(type) {
+            const pass = document.getElementById('adminPass').value;
+            if(!pass) return alert("Secret Required");
+            const code = `YMTEA-${Math.random().toString(36).substring(7).toUpperCase()}`;
+            const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('${code}', '${type}', 0);`;
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/publish`, {
+                    method: 'POST',
+                    headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sql })
+                });
+                if (res.ok) document.getElementById('codeOutput').value = code;
+                else alert("FAILED");
+            } catch(e) { alert("ERROR"); }
+        }
+
+        async function doActivate() {
+            const email = document.getElementById('activeEmail').value;
+            const code = document.getElementById('activeCode').value;
+            if(!email || !code) return alert("Please fill all fields");
+            const res = await fetch(`${API_BASE}/api/pay/success`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, type: 'manual', code })
+            });
+            const data = await res.json();
+            if (data.success) { localStorage.setItem('ymtea_token', data.token); location.reload(); }
+            else alert(data.msg || "Invalid Code");
+        }
+
+        function refreshRadar() {
+            const trendList = document.getElementById('trendList');
+            const data = [
+                {t:"TikTok Shop Policy", s:"Live"}, {t:"Global Logistics Rate", s:"-4.2%"}, {t:"US Port Status", s:"Normal"}
+            ];
+            trendList.innerHTML = data.map(i => `
+                <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex justify-between items-center fade-in">
+                    <span class="text-[11px] text-zinc-300 font-bold">${i.t}</span>
+                    <span class="text-[9px] text-orange-500 font-mono font-black">${i.s}</span>
+                </div>
+            `).join('');
+        }
+
+        function handleEdit(id, cat) {
             const item = (cat === 'tool' ? fullData.tools : fullData.reports).find(i => i.id === id);
             editTargetId = id;
             setCategory(cat);
             document.getElementById('quickTitle').value = item.title;
             document.getElementById('isTopCheck').checked = item.is_top == 1;
             toggleAdmin();
-        }
-
-        function refreshRadar() {
-            const trendList = document.getElementById('trendList');
-            const data = [
-                {t:"TikTok Shop Policy", s:"Live"}, {t:"US Port Congestion", s:"Alert"}, {t:"AI Ad ROAS Index", s:"+15%"}
-            ];
-            trendList.innerHTML = data.map(i => `
-                <div class="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center">
-                    <span class="text-[11px] text-zinc-300 font-bold truncate">${i.t}</span>
-                    <span class="text-[9px] text-orange-500 font-mono">${i.s}</span>
-                </div>
-            `).join('');
-        }
-
-        async function generateTestCode(type) {
-            const pass = document.getElementById('adminPass').value;
-            const code = `T-${Math.random().toString(36).substring(7).toUpperCase()}`;
-            const sql = `INSERT INTO active_codes (code, type, is_used) VALUES ('${code}', '${type}', 0);`;
-            const res = await fetch(`${API_BASE}/api/admin/publish`, { method: 'POST', headers: { 'Admin-Key': pass, 'Content-Type': 'application/json' }, body: JSON.stringify({ sql }) });
-            if(res.ok) document.getElementById('codeOutput').value = code;
-        }
-
-        async function startPay(type) {
-            const email = prompt("Email:");
-            const code = prompt("Code:");
-            if(!email || !code) return;
-            const res = await fetch(`${API_BASE}/api/pay/success`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, type, code }) });
-            const data = await res.json();
-            if (data.success) { localStorage.setItem('ymtea_token', data.token); location.reload(); } else alert(data.msg);
         }
 
         function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); document.getElementById('adminPanel').classList.toggle('flex'); }
@@ -313,16 +307,15 @@
         }
         function showPayModal() { document.getElementById('payModal').classList.replace('hidden', 'flex'); }
         function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); }
-        function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); document.body.classList.remove('modal-active'); }
+        function closeReader() { document.getElementById('contentReader').classList.replace('flex', 'hidden'); document.body.style.overflow = 'auto'; }
+        function scrollToId(id) { document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
 
         window.onload = () => {
             refreshRadar();
             loadContent();
-            const token = localStorage.getItem('ymtea_token');
-            if(token) {
-                const label = document.getElementById('statusLabel');
-                label.innerText = "PRO_ACCESS";
-                label.className = "text-[9px] font-mono px-2 py-1 rounded bg-orange-500/10 text-orange-500 border border-orange-500/20";
+            if(localStorage.getItem('ymtea_token')) {
+                document.getElementById('statusLabel').innerText = "PRO_SUBSCRIPTION";
+                document.getElementById('statusLabel').classList.replace('text-zinc-400', 'text-orange-500');
                 if(document.getElementById('proBtn')) document.getElementById('proBtn').style.display = 'none';
             }
         };
