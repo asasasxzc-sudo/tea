@@ -204,7 +204,7 @@
 
         async function openItem(id, cat) {
             const t = localStorage.getItem('ymtea_token');
-            const p = document.getElementById('adminPass').value;
+            const p = document.getElementById('adminPass').value.trim(); // 自动去除首尾空格
             
             // 如果既没有 Token 也没有密钥，直接弹出支付框
             if(!t && !p) return showPayModal();
@@ -230,12 +230,16 @@
                 // 处理 401/403 权限错误
                 if (!res.ok) {
                     const errStatus = res.status;
+                    let reason = "权限验证失败";
+                    if(errStatus === 403) reason = p ? "管理密钥(Admin-Key)错误或已失效" : "激活码(Token)已过期或无效";
+                    if(errStatus === 401) reason = "未授权：请先输入密钥或激活码";
+
                     document.getElementById('readerBody').innerHTML = `
                         <div class='text-center p-8'>
                             <div class='text-orange-500 text-4xl mb-4'>⚠️</div>
                             <div class='text-white font-bold mb-2 uppercase tracking-widest text-xs'>Authentication Denied</div>
                             <div class='text-zinc-500 text-[10px] leading-relaxed'>
-                                权限验证失败 (Error: ${errStatus})。<br>
+                                ${reason} (Error: ${errStatus})。<br>
                                 请确保您的“管理密钥”正确无误，<br>
                                 或激活码尚未过期。
                             </div>
@@ -266,17 +270,17 @@
         }
 
         async function genKey() {
-            const p = document.getElementById('adminPass').value, note = document.getElementById('codeEmail').value || 'Licence';
+            const p = document.getElementById('adminPass').value.trim(), note = document.getElementById('codeEmail').value || 'Licence';
             if(!p) return alert("AUTH_REQUIRED: 密钥缺失");
             const k = 'YM' + Math.random().toString(36).substring(2, 12).toUpperCase();
             try {
                 const r = await fetch(`${API}/api/admin/publish`, { method:'POST', headers:{'Admin-Key':p,'Content-Type':'application/json'}, body:JSON.stringify({sql:"INSERT INTO codes (email, code, type) VALUES (?, ?, ?)", params:[note, k, curKeyType]}) });
-                if(r.ok) { document.getElementById('lastCode').innerText = k; alert(`License (${curKeyType}) Synced.`); } else alert("Access Denied.");
+                if(r.ok) { document.getElementById('lastCode').innerText = k; alert(`License (${curKeyType}) Synced.`); } else alert("Access Denied: 密钥不匹配。");
             } catch(e) { alert("Server Error."); }
         }
 
         async function publish() {
-            const p = document.getElementById('adminPass').value;
+            const p = document.getElementById('adminPass').value.trim();
             const t = document.getElementById('quickTitle').value;
             const c = document.getElementById('quickContent').value;
             const top = document.getElementById('isTopCheck').checked ? 1 : 0;
@@ -326,18 +330,18 @@
         }
 
         async function handleDel(id) { 
-            const p = document.getElementById('adminPass').value || prompt("管理密钥:");
-            if(!p) return;
+            const p = document.getElementById('adminPass').value.trim();
+            if(!p) { toggleAdmin(); alert("请输入管理密钥"); return; }
             if(confirm("Wipe this record permanently?")) { 
                 try {
                     const r = await fetch(`${API}/api/admin/publish`, { method:'POST', headers:{'Admin-Key':p,'Content-Type':'application/json'}, body:JSON.stringify({sql:"DELETE FROM reports WHERE id=?", params:[id]}) });
-                    if(r.ok) location.reload();
+                    if(r.ok) location.reload(); else alert("删除失败：权限不足");
                 } catch(e) { alert("Del Failed."); }
             } 
         }
 
         async function prepareEdit(id, cat) {
-            const p = document.getElementById('adminPass').value; 
+            const p = document.getElementById('adminPass').value.trim(); 
             if(!p) { toggleAdmin(); alert("请输入管理密钥以开启编辑权限"); return; }
             
             const item = (cat==='tool'?fullData.tools:fullData.reports).find(i=>i.id===id);
